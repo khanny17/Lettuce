@@ -3,6 +3,7 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.4.3",
+    "bower":"^1.6.5",
     "bson": "^0.4.19",
     "express": "^4.5.1",
     "method-override": "^2.0.2",
