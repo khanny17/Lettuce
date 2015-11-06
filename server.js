@@ -10,6 +10,7 @@ var methodOverride = require('method-override');
     
 // config files
 var db = require('./config/db');
+var config = require('./config/config')
 
 // set our port
 var port = process.env.PORT || 8080; 
@@ -36,6 +37,13 @@ app.use(express.static(__dirname + '/public'));
 
 // routes ==================================================
 require('./app/routes')(app); // configure our routes
+
+// Set up Services
+
+//CronJob to update our database with info from rito
+riot = require('./app/services/riot.js');
+riot.init(config.riot.updateInterval);
+
 
 // start app ===============================================
 // startup our app at http://localhost:8080

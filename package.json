@@ -3,8 +3,9 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.4.3",
-    "bower":"^1.6.5",
+    "bower": "^1.6.5",
     "bson": "^0.4.19",
+    "cron": "^1.0.9",
     "express": "^4.5.1",
     "method-override": "^2.0.2",
     "mongoose": "^3.8.36"
