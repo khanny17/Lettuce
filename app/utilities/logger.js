@@ -27,7 +27,7 @@ var log = function(msg, level){
     }
 
     //If its more severe than a warning, print using console.error
-    if(level < WARN){
+    if(level < levels.WARN){
         console.log(msg);
     } else {
         console.error(msg);
