@@ -13,8 +13,8 @@ var mongoose       = require('mongoose');
 // configuration ===========================================
     
 // config files
-var db = require('./config/db');
-var config = require('./config/config');
+var db = require(__dirname + '/config/db');
+var config = require(__dirname + '/config/config');
 
 // set our port
 var port = process.env.PORT || 8080; 
@@ -38,18 +38,18 @@ app.use(express.static(__dirname + '/public'));
 // Set up Services
 
 //CronJob to update our database with info from rito
-var riot = require('./app/services/riot.js');
+var riot = require(__dirname + '/app/services/riot.js');
 riot.init(config.riot.updateInterval);
 
 
 
 
 // routes ==================================================
-require('./app/routes')(app); // configure our routes
+require(__dirname + '/app/routes')(app); // configure our routes
 
 // List of api service modules and the route to mount them on
 var apiServices = [
-    { route: '/riot', service: require('./app/api/riot') }
+    { route: '/riot', service: require(__dirname + '/app/api/riot') }
 ];
 
 //For each sub-api:
@@ -62,7 +62,7 @@ apiServices.forEach(function(api){
 
 //Default route that sends our angular application
 app.get('*', function(req, res) {
-    res.sendFile('./public/views/index.html'); // load our public/index.html file
+    res.sendFile(__dirname + '/public/views/index.html'); // load our public/index.html file
 });
 
 
