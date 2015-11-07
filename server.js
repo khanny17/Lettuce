@@ -19,7 +19,7 @@ var config = require('./config/config');
 // set our port
 var port = process.env.PORT || 8080; 
 // connect to our mongoDB database 
-mongoose.connect(db.url); 
+mongoose.connect(db.url, {authMechanism: 'ScramSHA1'}); 
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json 
