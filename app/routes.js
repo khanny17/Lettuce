@@ -1,4 +1,5 @@
 // app/routes.js
+'use strict';
 
 // grab the nerd model we just created
 var Nerd = require('./models/nerd');
@@ -16,8 +17,9 @@ module.exports = function(app) {
 
             // if there is an error retrieving, send the error. 
             // nothing after res.send(err) will execute
-            if (err)
+            if (err) {
                 res.send(err);
+            }
 
             res.json(nerds); // return all nerds in JSON format
         });

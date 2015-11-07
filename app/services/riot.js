@@ -1,3 +1,4 @@
+'use strict';
 /**
  *	Service to handle pulling data from riot
  */
@@ -11,7 +12,7 @@ var init = function(updateRate){
 
     if(!updateRate){
         //we need an update rate, this is not good!
-        logger.error('No update rate provided, unable to start CronJob')
+        logger.error('No update rate provided, unable to start CronJob');
         return;
     }
 

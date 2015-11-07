@@ -1,4 +1,5 @@
 // server.js
+'use strict';
 
 // modules =================================================
 var express        = require('express');
@@ -41,7 +42,7 @@ require('./app/routes')(app); // configure our routes
 // Set up Services
 
 //CronJob to update our database with info from rito
-riot = require('./app/services/riot.js');
+var riot = require('./app/services/riot.js');
 riot.init(config.riot.updateInterval);
 
 
@@ -50,7 +51,7 @@ riot.init(config.riot.updateInterval);
 app.listen(port);               
 
 // shoutout to the user                     
-console.log('Magic happens on port ' + port);
+console.log('Server running on port ' + port);
 
 // expose app           
 exports = module.exports = app;

@@ -1,3 +1,4 @@
+'use strict';
 //Logger module (in case we ever want to do something fancy like upload somewhere)
 
 
@@ -8,7 +9,7 @@ var levels = {
     INFO  : {  val: 1, name: 'Info'  },
     WARN  : {  val: 2, name: 'Warn'  },
     ERROR : {  val: 3, name: 'Error' }
-}
+};
 
 /* Need to figure out how to connect the minlevel to the config file
 var init = function(config){
