@@ -11,20 +11,27 @@ var Summoner = mongoose.model('Summoner', {
 
 
 var methods = {
+    //Creates Summoner or updates if already exists
     create: function(id, name){
         var deferred = q.defer();
-        Summoner.create({
+        //Params: query, object, options, callback
+        Summoner.update({
+            name: name
+        },{
             id: id,
             name: name
-        }, function(err, summoner){
+        },{
+            upsert: true //Create if it doesn't exist
+        }, function(err){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
+                return;
             }
-            logger.info('Created summoner: ' + summoner);
-            deferred.resolve(summoner);
+            logger.info('Created/Updated summoner: ' + name);
+            deferred.resolve();
         });
-        return deferred;
+        return deferred.promise;
     },
 
     getOneByName: function(name){
@@ -41,7 +48,20 @@ var methods = {
 
             deferred.resolve(summoners[0]); //only return ONE
         });
-        return deferred;
+        return deferred.promise;
+    },
+
+    getAll: function(){
+        var deferred = q.defer();
+
+        Summoner.find({}, function(err, summoners){
+            if(err){
+                deferred.reject(err);
+            }
+            deferred.resolve(summoners);
+        });
+
+        return deferred.promise;
     }
 };
 

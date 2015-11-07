@@ -1,9 +1,8 @@
+//Service to handle pulling data from riot
 'use strict';
-/**
- *	Service to handle pulling data from riot
- */
 
 var https = require('https');
+var q = require('q');
 var logger = require('../utilities/logger');
 var config = require('../../config/config.js');
 var _ = require('lodash');
@@ -22,14 +21,16 @@ var init = function(updateRate){
     //Start the job to pull our data
     new CronJob(updateRate, function(){
         logger.info('Riot update job is running');
-        update.summoners(['khanny17', 'crappycupojoe']);
+        update.summoners(config.riot.ourTeam);
 
 
-    }, null, true, "America/Los_Angeles");
+    }, null, true);
 };
 
 //Collection of all the different update functions for various data types
 var update = {
+
+    //Update our summoner data
     summoners: function(names){
         if(!names){
             logger.warn('No summoner names provided, not updating any!');
@@ -39,13 +40,24 @@ var update = {
             logger.error('Names is not an array!');
         }
 
-        console.log("yoooo");
         //convert array to csv list
         names = names.join(',');
         
         var base = config.riot.endpointUrls.summoner;
         var url = base + names + '?api_key=' + config.riot.apiKey;
 
+        helpers.getJSON(url)
+        .then(function(summonerData){
+            summonerData.forEach(function(summoner){
+                Summoner.create(summoner.id, summoner.name);
+            });
+        });
+    }
+};
+
+var helpers = {
+    getJSON: function(url){
+        var deferred = q.defer();
         //Make the request to Rito
         https.get(url, function(res){
             //String to hold our data as we get it
@@ -57,14 +69,17 @@ var update = {
 
             //The actual logic
             res.on('end', function(){
+                //Take the string response and convert to JSON
                 var object = JSON.parse(body);
-                var summonerData = _.values(object);
+                //Convert json object with key-value to an array of just values
+                var values = _.values(object);
                 //Now we have an array of the summoner objects
-                Summoner.create(summonerData[0]);
+                deferred.resolve(values);
             });
         });
+        return deferred.promise;
     }
-}
+};
 
 
 
