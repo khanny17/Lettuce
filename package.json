@@ -1,6 +1,12 @@
 {
   "name": "Lettuce",
   "main": "server.js",
+  "author": "The Fighting Lettuce",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/khanny17/Lettuce.git"
+  },
   "dependencies": {
     "body-parser": "^1.4.3",
     "bower": "^1.6.5",
