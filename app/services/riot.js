@@ -23,6 +23,7 @@ var init = function(updateRate){
     new CronJob(updateRate, function(){
         logger.info('Riot update job is running');
         update.summoners(config.riot.ourTeam);
+        update.teamMatches(config.riot.teamId);
 
 
     }, null, true);
@@ -30,6 +31,27 @@ var init = function(updateRate){
 
 //Collection of all the different update functions for various data types
 var update = {
+
+    champion: function(){
+        var url = config.riot.endpointUrls.champion;
+
+        helpers.getJSON(url)
+        .then(function(championData){
+            logger.debug(JSON.stringify(championData, null, 4));
+/*
+            var matches = teamData[teamId].matchHistory;
+            logger.debug(JSON.stringify(teamData,null,4));
+            _.forEach(matches, function(match){
+                //Now modify the match data to work with our schema
+                var modelData = match;
+                modelData.date = new Date(modelData.date); //change epoch millis to Date
+                modelData.id = modelData.gameId; //make the "id" the game id
+                modelData.teamId = teamId;
+                delete modelData.gameId;
+                TeamMatch.create(modelData);
+            });
+*/        });
+    },
 
     //Update our summoner data
     summoners: function(names){
@@ -45,11 +67,13 @@ var update = {
         names = names.join(',');
         
         var base = config.riot.endpointUrls.summoner;
-        var url = base + names + '?api_key=' + config.riot.apiKey;
+        var url = base + names;
 
         helpers.getJSON(url)
         .then(function(summonerData){
-            summonerData.forEach(function(summoner){
+            //Convert json object with key-value to an array of just values
+            var values = _.values(summonerData);
+            _.forEach(values, function(summoner){
                 Summoner.create(summoner.id, summoner.name);
             });
         });
@@ -65,12 +89,14 @@ var update = {
 
         helpers.getJSON(url)
         .then(function(teamData){
-            var matches = teamData.matchHistory;
+            var matches = teamData[teamId].matchHistory;
+            logger.debug(JSON.stringify(teamData,null,4));
             _.forEach(matches, function(match){
                 //Now modify the match data to work with our schema
                 var modelData = match;
                 modelData.date = new Date(modelData.date); //change epoch millis to Date
-                modelData.id = modelData.gameId;
+                modelData.id = modelData.gameId; //make the "id" the game id
+                modelData.teamId = teamId;
                 delete modelData.gameId;
                 TeamMatch.create(modelData);
             });
@@ -82,7 +108,7 @@ var helpers = {
     getJSON: function(url){
         var deferred = q.defer();
         //Make the request to Rito
-        https.get(url, function(res){
+        https.get(url + '?api_key=' + config.riot.apiKey, function(res){
             //String to hold our data as we get it
             var body = '';
             res.on('data', function(d){
@@ -94,10 +120,7 @@ var helpers = {
             res.on('end', function(){
                 //Take the string response and convert to JSON
                 var object = JSON.parse(body);
-                //Convert json object with key-value to an array of just values
-                var values = _.values(object);
-                //Now we have an array of the summoner objects
-                deferred.resolve(values);
+                deferred.resolve(object);
             });
         });
         return deferred.promise;

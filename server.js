@@ -62,7 +62,7 @@ apiServices.forEach(function(api){
 
 //Default route that sends our angular application
 app.get('*', function(req, res) {
-    res.sendFile(__dirname + '/public/views/index.html'); // load our public/index.html file
+    res.sendfile(__dirname + '/public/index.html'); // load our public/index.html file
 });
 
 

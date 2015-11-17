@@ -35,7 +35,7 @@ var methods = {
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated Match: ' + name);
+            logger.info('Created/Updated Match: ' + modelData.id);
             deferred.resolve();
         });
         return deferred.promise;
@@ -74,5 +74,5 @@ var methods = {
 
 module.exports = {
     create: methods.create,
-    getOneByName: methods.getOneByName
+    getOneById: methods.getOneById
 };
