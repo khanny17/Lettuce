@@ -13,8 +13,11 @@ module.exports = {
 
         ourTeam: ['khanny17', 'crappycupojoe', 'jaysig112', 'Evlzilla', 'TheHasbrouck'],
 
+        teamId: 'TEAM-fb806f80-0020-11e5-aaad-c81f66dcfb5a',
+
         endpointUrls: {
-            summoner: 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/'
+            summoner: 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/',
+            team: 'https://na.api.pvp.net/api/lol/na/v2.4/team/'
         }
     }
 

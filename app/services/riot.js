@@ -6,6 +6,7 @@ var q = require('q');
 var logger = require('../utilities/logger');
 var config = require('../../config/config.js');
 var _ = require('lodash');
+var TeamMatch = require('../models/teamMatch');
 var Summoner = require('../models/summoner');
 //Read the docs: https://www.npmjs.com/package/cron
 var CronJob = require('cron').CronJob;
@@ -50,6 +51,28 @@ var update = {
         .then(function(summonerData){
             summonerData.forEach(function(summoner){
                 Summoner.create(summoner.id, summoner.name);
+            });
+        });
+    },
+
+    teamMatches: function(teamId){
+        if(!teamId){
+            logger.warn('No team ID provided, not updating the team matches!');
+            return;
+        }
+
+        var url = config.riot.endpointUrls.team + teamId;
+
+        helpers.getJSON(url)
+        .then(function(teamData){
+            var matches = teamData.matchHistory;
+            _.forEach(matches, function(match){
+                //Now modify the match data to work with our schema
+                var modelData = match;
+                modelData.date = new Date(modelData.date); //change epoch millis to Date
+                modelData.id = modelData.gameId;
+                delete modelData.gameId;
+                TeamMatch.create(modelData);
             });
         });
     }
