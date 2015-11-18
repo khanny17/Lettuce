@@ -20,19 +20,29 @@ var init = function(updateRate){
         return;
     }
     //Start the job to pull our data
-    new CronJob(updateRate, function(){
-        logger.info('Riot update job is running');
-        update.summoners(config.riot.ourTeam);
-        update.teamMatches(config.riot.teamId);
+    new CronJob(updateRate, RunUpdate, null, true);
+};
 
+//The main method that runs all our other updates
+var RunUpdate = function(){
+    logger.info('Riot update job is running');
+    var promises = [
+        update.summoners(config.riot.ourTeam),
+        update.teamMatches(config.riot.teamId)
+    ];
 
-    }, null, true);
+    //Save our promises and print any errors we have
+    q.all(promises)
+    .fail(function(error){
+        logger.error(error);
+    });
 };
 
 //Collection of all the different update functions for various data types
 var update = {
 
     champion: function(){
+        var deferred = q.defer();
         var url = config.riot.endpointUrls.champion;
 
         helpers.getJSON(url)
@@ -50,17 +60,26 @@ var update = {
                 delete modelData.gameId;
                 TeamMatch.create(modelData);
             });
-*/        });
+*/       })
+        .fail(deferred.reject);
+        return deferred.promise;
     },
 
     //Update our summoner data
     summoners: function(names){
+        var deferred = q.defer();
+        var error;
         if(!names){
-            logger.warn('No summoner names provided, not updating any!');
-            return;
+            error = 'No summoner names provided, not updating any!';
+            logger.warn(error);
+            deferred.reject(error);
+            return deferred.promise;
         }
         if(!names.length){
-            logger.error('Names is not an array!');
+            error = 'Names is not an array!';
+            logger.error(error);
+            deferred.reject(error);
+            return deferred.promise;
         }
 
         //convert array to csv list
@@ -76,13 +95,21 @@ var update = {
             _.forEach(values, function(summoner){
                 Summoner.create(summoner.id, summoner.name);
             });
-        });
+            deferred.resolve();
+        })
+        .fail(deferred.reject);
+        return deferred.promise;
     },
 
+
+    //Gets a summary of the team's matches and stored in db
     teamMatches: function(teamId){
+        var deferred = q.defer();
         if(!teamId){
-            logger.warn('No team ID provided, not updating the team matches!');
-            return;
+            var error = 'No team ID provided, i\'m not updating the team matches';
+            logger.warn(error);
+            deferred.reject(error);
+            return deferred.promise;
         }
 
         var url = config.riot.endpointUrls.team + teamId;
@@ -99,8 +126,11 @@ var update = {
                 modelData.teamId = teamId;
                 delete modelData.gameId;
                 TeamMatch.create(modelData);
+                deferred.resolve();
             });
-        });
+        })
+        .fail(deferred.reject);
+        return deferred.promise;
     }
 };
 
@@ -114,6 +144,8 @@ var helpers = {
             res.on('data', function(d){
                 body += d;
             });
+
+            res.on('error', deferred.reject);
 
 
             //The actual logic
@@ -131,5 +163,6 @@ var helpers = {
 
 //Set which functions to make available
 module.exports = {
-    init: init
+    init: init,
+    update: update
 };
