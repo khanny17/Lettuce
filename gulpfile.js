@@ -4,6 +4,7 @@ var nodemon = require('gulp-nodemon');
 var jshint  = require('gulp-jshint');
 var sass    = require('gulp-sass');
 var mocha   = require('gulp-mocha');
+require('dotenv').load();
 
 
 //Run mocha tests
@@ -21,7 +22,7 @@ gulp.task('sass', function() {
 
 //Run jshint on our javascript files
 gulp.task('jshint', function(){
-    return gulp.src('./app/**/*.js')
+    return gulp.src(['./app/**/*.js', './test/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });

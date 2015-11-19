@@ -6,20 +6,22 @@ var logger = require('../utilities/logger');
 var q = require('q');
 var Champion = mongoose.model('Champion', {
     id: Number, //This is taken from the "gameId" field
-    name: String
+    name: String,
+    title: String //eg "The Dark Child"
 });
 
 
 var methods = {
     //Creates Champion or updates if already exists
-    create: function(id, name){
+    createOrUpdate: function(id, name, title){
         var deferred = q.defer();
         //Params: query, object, options, callback
         Champion.update({
             id: id
         }, {
             id: id,
-            name: name
+            name: name,
+            title: title
         } ,{
             upsert: true //Create if it doesn't exist
         }, function(err){
@@ -53,6 +55,6 @@ var methods = {
 };
 
 module.exports = {
-    create: methods.create,
+    createOrUpdate: methods.createOrUpdate,
     getOneById: methods.getOneById
 };

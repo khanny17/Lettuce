@@ -6,8 +6,14 @@ var q = require('q');
 var logger = require('../utilities/logger');
 var config = require('../../config/config.js');
 var _ = require('lodash');
+
+//All the models we will be updating
 var TeamMatch = require('../models/teamMatch');
 var Summoner = require('../models/summoner');
+var Champion = require('../models/champion');
+var Version = require('../models/version');
+
+
 //Read the docs: https://www.npmjs.com/package/cron
 var CronJob = require('cron').CronJob;
 
@@ -28,7 +34,8 @@ var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
         update.summoners(config.riot.ourTeam),
-        update.teamMatches(config.riot.teamId)
+        update.teamMatches(config.riot.teamId),
+        update.champions()
     ];
 
     //Save our promises and print any errors we have
@@ -41,26 +48,30 @@ var RunUpdate = function(){
 //Collection of all the different update functions for various data types
 var update = {
 
-    champion: function(){
+    champions: function(){
         var deferred = q.defer();
         var url = config.riot.endpointUrls.champion;
 
         helpers.getJSON(url)
         .then(function(championData){
-            logger.debug(JSON.stringify(championData, null, 4));
-/*
-            var matches = teamData[teamId].matchHistory;
-            logger.debug(JSON.stringify(teamData,null,4));
-            _.forEach(matches, function(match){
-                //Now modify the match data to work with our schema
-                var modelData = match;
-                modelData.date = new Date(modelData.date); //change epoch millis to Date
-                modelData.id = modelData.gameId; //make the "id" the game id
-                modelData.teamId = teamId;
-                delete modelData.gameId;
-                TeamMatch.create(modelData);
+            var thisVersionNumber = championData.version;
+            //compare version to the one we have - save us from updating unnecessarily
+            Version.getVersionNumber(config.riot.versionNames.champion)
+            .then(function(ourVersionNumber){
+                //If our versions match, don't bother updating!
+                if(thisVersionNumber !== ourVersionNumber){
+                    //Okay, we need to update then.
+                    //Create or update each champion
+                    _.forEach(championData.data, function(champion){
+                        Champion.createOrUpdate(champion.id, champion.name, champion.title);
+                    }); 
+                    //Then save the new version
+                    //return so the chain will pass on the failure if it happens
+                    return Version.saveVersionNumber(config.riot.versionNames.champion);
+                }
             });
-*/       })
+
+        })
         .fail(deferred.reject);
         return deferred.promise;
     },
@@ -137,6 +148,7 @@ var update = {
 var helpers = {
     getJSON: function(url){
         var deferred = q.defer();
+        logger.debug(url + '?api_key=' + config.riot.apiKey);
         //Make the request to Rito
         https.get(url + '?api_key=' + config.riot.apiKey, function(res){
             //String to hold our data as we get it
