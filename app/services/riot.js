@@ -51,26 +51,26 @@ var update = {
     champions: function(){
         var deferred = q.defer();
         var url = config.riot.endpointUrls.champion;
-
+        var thisVersionNumber, champions;
         helpers.getJSON(url)
         .then(function(championData){
-            var thisVersionNumber = championData.version;
+            champions = championData.data;
+            thisVersionNumber = championData.version;
             //compare version to the one we have - save us from updating unnecessarily
-            Version.getVersionNumber(config.riot.versionNames.champion)
-            .then(function(ourVersionNumber){
-                //If our versions match, don't bother updating!
-                if(thisVersionNumber !== ourVersionNumber){
-                    //Okay, we need to update then.
-                    //Create or update each champion
-                    _.forEach(championData.data, function(champion){
-                        Champion.createOrUpdate(champion.id, champion.name, champion.title);
-                    }); 
-                    //Then save the new version
-                    //return so the chain will pass on the failure if it happens
-                    return Version.saveVersionNumber(config.riot.versionNames.champion);
-                }
-            });
-
+            return Version.getVersionNumber(config.riot.versionNames.champion);
+        })
+        .then(function(ourVersionNumber){
+            //If our versions match, don't bother updating!
+            if(thisVersionNumber !== ourVersionNumber){
+                //Okay, we need to update then.
+                //Create or update each champion
+                _.forEach(champions, function(champion){
+                    Champion.createOrUpdate(champion.id, champion.name, champion.title);
+                }); 
+                //Then save the new version
+                //return so the chain will pass on the failure if it happens
+                return Version.saveVersionNumber(config.riot.versionNames.champion);
+            }
         })
         .fail(deferred.reject);
         return deferred.promise;
