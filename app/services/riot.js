@@ -69,7 +69,7 @@ var update = {
                 }); 
                 //Then save the new version
                 //return so the chain will pass on the failure if it happens
-                return Version.saveVersionNumber(config.riot.versionNames.champion);
+                return Version.saveVersionNumber(config.riot.versionNames.champion, thisVersionNumber);
             }
         })
         .fail(deferred.reject);
