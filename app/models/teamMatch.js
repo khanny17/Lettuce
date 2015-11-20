@@ -1,6 +1,12 @@
 'use strict';
 //models/teamMatch.js
 
+/**
+ * This model holds a short summary of the matches for a given team
+ * More detailed information is stored in a MatchDetail object
+ * in a separate table
+ */
+
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');

@@ -12,6 +12,7 @@ var TeamMatch = require('../models/teamMatch');
 var Summoner = require('../models/summoner');
 var Champion = require('../models/champion');
 var Version = require('../models/version');
+var MatchDetail = require('../models/matchDetail');
 
 
 //Read the docs: https://www.npmjs.com/package/cron
@@ -73,6 +74,30 @@ var update = {
             }
         })
         .fail(deferred.reject);
+        return deferred.promise;
+    },
+
+    match: function(id, winningTeamName, losingTeamName){
+        var deferred = q.defer();
+        var error;
+        if(!id) {
+            error = 'No match id provided';
+            logger.error(error);
+            deferred.reject(error);
+            return deferred.promise;
+        }
+
+        var url = config.riot.endpointUrls.match;
+        url += id; //append id to url
+
+        helpers.getJSON(url)
+        .then(function(matchDetails){
+            //create the match detail object in db
+            return MatchDetail.create(id, matchDetails, winningTeamName, losingTeamName);
+        })
+        .then(deferred.resolve)
+        .fail(deferred.reject);
+
         return deferred.promise;
     },
 
