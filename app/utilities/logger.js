@@ -1,8 +1,9 @@
 'use strict';
 //Logger module (in case we ever want to do something fancy like upload somewhere)
+var config = require('../../config/config.js');
 
 
-var minlevel = 0;   //By default show everything
+var minlevel = config.logging.minlevel || 0;   //By default show everything
 
 var levels = {
     DEBUG : {  val: 0, name: 'Debug' }, 
@@ -11,16 +12,7 @@ var levels = {
     ERROR : {  val: 3, name: 'Error' }
 };
 
-/* Need to figure out how to connect the minlevel to the config file
-var init = function(config){
-    if(config.maxlevel){
-        maxlevel = config.minlevel;
-    } else {
-        console.log("No min level set, all error messages will be shown by default");
-    }
-}; */
-
-//Controls log statements - they only output if severity greater than minimum set in config
+//Controls log statements - they only output if severity greater than min set in config
 var log = function(msg, level){
     //Don't show if below minimum
     if(level < minlevel){

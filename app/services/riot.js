@@ -70,7 +70,8 @@ var update = {
                 }); 
                 //Then save the new version
                 //return so the chain will pass on the failure if it happens
-                return Version.saveVersionNumber(config.riot.versionNames.champion, thisVersionNumber);
+                return Version.saveVersionNumber(config.riot.versionNames.champion,
+                                                 thisVersionNumber);
             }
         })
         .fail(deferred.reject);
@@ -139,7 +140,7 @@ var update = {
 
 
     //Gets a summary of the team's matches and stored in db
-    teamMatches: function(teamId){
+    teamMatches: function(teamId, teamName){
         var deferred = q.defer();
         if(!teamId){
             var error = 'No team ID provided, i\'m not updating the team matches';
@@ -161,9 +162,18 @@ var update = {
                 modelData.id = modelData.gameId; //make the "id" the game id
                 modelData.teamId = teamId;
                 delete modelData.gameId;
-                TeamMatch.create(modelData);
-                deferred.resolve();
+                //Create the summary
+                TeamMatch.create(modelData)
+                .then(function(){
+                    //if we succeeded:, get the DETAILED match info:
+                    if(match.win){ //figure out which team won/lost
+                        update.match(match.gameId, teamName, match.opposingTeamName);
+                    } else {
+                        update.match(match.gameId, match.opposingTeamName, teamName);
+                    }
+                });                
             });
+            deferred.resolve();
         })
         .fail(deferred.reject);
         return deferred.promise;

@@ -11,15 +11,12 @@ var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
 
 // configuration ===========================================
-    
-// config files
-var db = require(__dirname + '/config/db');
 var config = require(__dirname + '/config/config');
 
 // set our port
 var port = process.env.PORT || 8080; 
 // connect to our mongoDB database 
-mongoose.connect(db.url, {authMechanism: 'ScramSHA1'}); 
+mongoose.connect(config.db.url, {authMechanism: 'ScramSHA1'}); 
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json 

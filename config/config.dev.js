@@ -3,6 +3,14 @@
 
 module.exports = {
 
+    db: {
+        url : 'mongodb://' + process.env.DB_USER + ':' + process.env.DB_PASS +
+                                 '@ds049864.mongolab.com:49864/lettuce'
+    },
+
+    logging: {
+        minlevel: 0,
+    },
 
 
     //Configuration for riot services

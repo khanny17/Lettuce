@@ -11,7 +11,7 @@ var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');
 var TeamMatch = mongoose.model('Match', {
-    id: Number, //This is taken from the "gameId" field
+    id: { type: Number, unique: true }, //This is taken from the "gameId" field
     teamId: String, //The Id of our team (or whatever team this game was played by)
     gameMode: String, //Type of game (typically CLASSIC)
     mapId: Number, //not sure...
@@ -21,27 +21,23 @@ var TeamMatch = mongoose.model('Match', {
     deaths: Number,
     kills: Number,
     win: Boolean,
-    date: Date, //This comes from riot as epoch milliseconds, so we convert BEFORE it comes to this module
+    date: Date, //Comes from riot as epoch milliseconds -> convert BEFORE it comes here
     opposingTeamKills: Number
 });
 
 
 var methods = {
-    //Creates Summoner or updates if already exists
+    //Creates a match if possible or rejects promise if there was an error
     create: function(modelData){
         var deferred = q.defer();
         //Params: query, object, options, callback
-        TeamMatch.update({
-            id: modelData.id
-        }, modelData ,{
-            upsert: true //Create if it doesn't exist
-        }, function(err){
+        TeamMatch.create(modelData, function(err){
             if(err){
-                logger.error(err);
+                logger.warn(err);
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated Match: ' + modelData.id);
+            logger.info('Created Match Summary: ' + modelData.id);
             deferred.resolve();
         });
         return deferred.promise;

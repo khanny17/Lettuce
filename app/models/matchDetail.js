@@ -13,7 +13,7 @@ var q = require('q');
  *        - removing the match specific id
  *        - storing the summoner name and summoner id
  *    - Take the Team[] array from the api and convert it into two objects.
- *    - For each Team object, remove the id and replace with the ranked team name (or null if none)
+ *    - For each Team object, remove id, replace with ranked team name (or null if none)
  */
 var MatchDetail = mongoose.model('MatchDetail', {
     id: Number, //Taken from the matchId field
