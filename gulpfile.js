@@ -23,6 +23,7 @@ var paths = {
     backendJS: './app/**/*.js',
     configDev: './config/config.dev.js',
     configProd: './config/config.prod.js',
+    frontEnd: './public/**/*',
     sass: './public/sass/**/*.scss',
     tests: './dist/test/**/*.js'
 };
@@ -37,6 +38,7 @@ var dest = {
     config: './dist/config',
     configName: 'config.js',
     css: './dist/public/css',
+    frontEnd: './dist/public/**/*',
     server: './dist',
     tests: './dist/test'
 };
@@ -72,6 +74,11 @@ gulp.task('sass', function() {
 gulp.task('app', function(){
     return gulp.src(paths.backendJS)
     .pipe(gulp.dest(dest.app));
+});
+
+gulp.task('frontEnd', function(){
+    return gulp.src(sources.frontEnd)
+    .pipe(gulp.dest(dest.frontEnd));
 });
 
 gulp.task('server', function(){
