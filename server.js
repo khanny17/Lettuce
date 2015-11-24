@@ -11,6 +11,7 @@ var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
 
 // configuration ===========================================
+console.log(__dirname);
 var config = require(__dirname + '/config/config');
 
 // set our port
