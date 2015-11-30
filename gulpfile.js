@@ -30,7 +30,7 @@ var paths = {
 var sources = {
     frontEnd: ['./public/**/*'],
     server: './server.js',
-    tests: './test'
+    tests: './test/**/*.js'
 };
 
 var dest = {
@@ -47,7 +47,7 @@ var dest = {
 //Tests/Linting
 
 //Run mocha tests
-gulp.task('mocha', ['test'], function(){
+gulp.task('mocha', ['compile'], function(){
     return gulp.src(paths.tests, {read: false})
     .pipe(mocha({reporter: 'nyan'}));
 });
