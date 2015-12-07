@@ -23,6 +23,7 @@ var paths = {
     backendJS: './app/**/*.js',
     configDev: './config/config.dev.js',
     configProd: './config/config.prod.js',
+    frontendJS: './public/js/**/*.js',
     sass: './public/sass/**/*.scss',
     tests: './dist/test/**/*.js'
 };
@@ -54,7 +55,7 @@ gulp.task('mocha', ['compile'], function(){
 
 //Run jshint on our javascript files
 gulp.task('jshint', function(){
-    return gulp.src([paths.backendJS, paths.tests])
+    return gulp.src([paths.backendJS, paths.tests, paths.frontendJS])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -136,4 +137,4 @@ gulp.task('run', ['build','watch'], function(){
     nodemon({
         script: 'dist/server.js'
     });
-})
+});

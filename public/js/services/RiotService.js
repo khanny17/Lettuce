@@ -1,3 +1,4 @@
+'use strict';
 // public/js/services/RiotService.js
 angular.module('RiotService', [])
 .factory('Riot', ['$http', '$q', function($http, q) {
@@ -12,6 +13,6 @@ angular.module('RiotService', [])
             });
             return deferred.promise;
         }
-    }       
+    };       
 
 }]);

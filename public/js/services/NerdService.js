@@ -1,3 +1,4 @@
+'use strict';
 // public/js/services/NerdService.js
 angular.module('NerdService', []).factory('Nerd', ['$http', function($http) {
 
@@ -8,7 +9,7 @@ angular.module('NerdService', []).factory('Nerd', ['$http', function($http) {
         },
 
 
-                // these will work when more API routes are defined on the Node side of things
+        // these will work when more API routes are defined on the Node side of things
         // call to POST and create a new nerd
         create : function(nerdData) {
             return $http.post('/api/nerds', nerdData);
@@ -18,6 +19,6 @@ angular.module('NerdService', []).factory('Nerd', ['$http', function($http) {
         delete : function(id) {
             return $http.delete('/api/nerds/' + id);
         }
-    }       
+    };       
 
 }]);

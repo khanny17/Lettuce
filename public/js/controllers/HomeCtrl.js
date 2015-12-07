@@ -1,3 +1,4 @@
+'use strict';
 // public/js/controllers/HomeCtrl.js
 angular.module('HomeCtrl', ['RiotService'])
 .controller('HomeController', ['$scope', 'Riot', function($scope, Riot) {
@@ -5,7 +6,7 @@ angular.module('HomeCtrl', ['RiotService'])
     $scope.matchSummaries = [];
     Riot.getMatches()
     .then(function(matches){
-        $scope.matchSummaries = matches;
-    }); 
+        $scope.matchSummaries = _.sortBy(matches, 'date').reverse();
+    });
 
 }]);
