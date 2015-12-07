@@ -122,9 +122,18 @@ gulp.task('clean', function(){
 
 
 
+gulp.task('watch', function() {
+  gulp.watch(paths.sass, ['sass']);
+});
 
 //Run any tasks involved with building the code
 gulp.task('build', ['jshint', 'compile', 'mocha']);
 
 //Build and start server
 gulp.task('default', ['build']);
+
+gulp.task('run', ['build','watch'], function(){
+    nodemon({
+        script: 'dist/server.js'
+    });
+})

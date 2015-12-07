@@ -6,7 +6,6 @@
  * More detailed information is stored in a MatchDetail object
  * in a separate table
  */
-
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');
@@ -62,12 +61,13 @@ var methods = {
 
     getAll: function(){
         var deferred = q.defer();
-
-        TeamMatch.find({}, function(err, summoners){
+        //Get all, stripping out the db id
+        TeamMatch.find({},'-_id', function(err, matches){
             if(err){
                 deferred.reject(err);
             }
-            deferred.resolve(summoners);
+            //else we gucci, send it
+            deferred.resolve(matches);
         });
 
         return deferred.promise;
@@ -76,5 +76,6 @@ var methods = {
 
 module.exports = {
     create: methods.create,
-    getOneById: methods.getOneById
+    getOneById: methods.getOneById,
+    getAll: methods.getAll
 };
