@@ -127,8 +127,4 @@ gulp.task('clean', function(){
 gulp.task('build', ['jshint', 'compile', 'mocha']);
 
 //Build and start server
-gulp.task('default', ['build'], function(){
-    nodemon({
-        script: 'dist/server.js'
-    });
-});
+gulp.task('default', ['build']);
