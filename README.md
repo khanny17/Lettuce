@@ -1,3 +1,6 @@
+Lettuce    <img src="https://travis-ci.org/khanny17/Lettuce.svg?branch=master" />
+=======
+
 Someday maybe this will be a glorius readme.
 This is not that day
 
