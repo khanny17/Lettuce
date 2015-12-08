@@ -211,5 +211,5 @@ var helpers = {
 //Set which functions to make available
 module.exports = {
     init: init,
-    update: update
+    update: RunUpdate
 };
