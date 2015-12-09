@@ -156,6 +156,10 @@ gulp.task('run', ['build','watch'], function(){
     });
 });
 
-gulp.task('runUpdates', ['moveRunUpdates','config','app'], function(){
-    exec('node dist/runUpdates');
+gulp.task('runUpdates', ['moveRunUpdates','config','app'], function(cb){
+    exec('node dist/runUpdates', function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
 })
