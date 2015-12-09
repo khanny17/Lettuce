@@ -1,11 +1,11 @@
 //Service to handle pulling data from riot
 'use strict';
 
-var https = require('https');
 var q = require('q');
 var logger = require('../utilities/logger');
 var config = require('../../config/config.js');
-var _ = require('lodash');
+var lodash = require('lodash');
+var apiCall = require('../utilities/apiHandler.js');
 
 //All the models we will be updating
 var TeamMatch = require('../models/teamMatch');
@@ -35,15 +35,12 @@ var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
         update.summoners(config.riot.ourTeam),
-        update.teamMatches(config.riot.teamId),
+        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
         update.champions()
     ];
 
     //Save our promises and print any errors we have
-    q.all(promises)
-    .fail(function(error){
-        logger.error(error);
-    });
+    return q.allSettled(promises);
 };
 
 //Collection of all the different update functions for various data types
@@ -53,7 +50,7 @@ var update = {
         var deferred = q.defer();
         var url = config.riot.endpointUrls.champion;
         var thisVersionNumber, champions;
-        helpers.getJSON(url)
+        apiCall(url)
         .then(function(championData){
             champions = championData.data;
             thisVersionNumber = championData.version;
@@ -65,7 +62,7 @@ var update = {
             if(thisVersionNumber !== ourVersionNumber){
                 //Okay, we need to update then.
                 //Create or update each champion
-                _.forEach(champions, function(champion){
+                lodash.forEach(champions, function(champion){
                     Champion.createOrUpdate(champion.id, champion.name, champion.title);
                 }); 
                 //Then save the new version
@@ -73,7 +70,11 @@ var update = {
                 return Version.saveVersionNumber(config.riot.versionNames.champion,
                                                  thisVersionNumber);
             }
+            var d = q.defer();
+            d.resolve('Same Version numbers, no need to update');
+            return d.promise;
         })
+        .then(deferred.resolve)
         .fail(deferred.reject);
         return deferred.promise;
     },
@@ -91,7 +92,7 @@ var update = {
         var url = config.riot.endpointUrls.match;
         url += id; //append id to url
 
-        helpers.getJSON(url)
+        apiCall(url)
         .then(function(matchDetails){
             //create the match detail object in db
             return MatchDetail.create(id, matchDetails, winningTeamName, losingTeamName);
@@ -118,22 +119,23 @@ var update = {
             deferred.reject(error);
             return deferred.promise;
         }
-
         //convert array to csv list
         names = names.join(',');
         
         var base = config.riot.endpointUrls.summoner;
         var url = base + names;
 
-        helpers.getJSON(url)
+        apiCall(url)
         .then(function(summonerData){
             //Convert json object with key-value to an array of just values
-            var values = _.values(summonerData);
-            _.forEach(values, function(summoner){
-                Summoner.create(summoner.id, summoner.name);
+            var values = lodash.values(summonerData);
+            var promises = [];
+            lodash.forEach(values, function(summoner){
+                promises.push(Summoner.create(summoner.id, summoner.name));
             });
-            deferred.resolve();
+            return q.all(promises);
         })
+        .then(deferred.resolve)
         .fail(deferred.reject);
         return deferred.promise;
     },
@@ -151,11 +153,11 @@ var update = {
 
         var url = config.riot.endpointUrls.team + teamId;
 
-        helpers.getJSON(url)
+        apiCall(url)
         .then(function(teamData){
             var matches = teamData[teamId].matchHistory;
-            logger.debug(JSON.stringify(teamData,null,4));
-            _.forEach(matches, function(match){
+            var promises = [];
+            lodash.forEach(matches, function(match){
                 //Now modify the match data to work with our schema
                 var modelData = match;
                 modelData.date = new Date(modelData.date); //change epoch millis to Date
@@ -163,45 +165,36 @@ var update = {
                 modelData.teamId = teamId;
                 delete modelData.gameId;
                 //Create the summary
-                TeamMatch.create(modelData)
-                .then(function(){
-                    //if we succeeded:, get the DETAILED match info:
-                    if(match.win){ //figure out which team won/lost
-                        update.match(match.gameId, teamName, match.opposingTeamName);
-                    } else {
-                        update.match(match.gameId, match.opposingTeamName, teamName);
-                    }
-                });                
+                promises.push(TeamMatch.create(modelData));              
             });
-            deferred.resolve();
+            return q.allSettled(promises); //wait for all to finish
         })
+        .then(function(results){
+            var promises = [];
+            lodash.forEach(results, function(result){
+                //only create new details for matches we didn't have
+                if(result.state === 'fulfilled'){
+                    var modelData = result.value;
+                    //if we succeeded:, get the DETAILED match info:
+                    if(!modelData){
+                        logger.warn('Null match, not updating ');
+                    } else if(modelData === config.errors.alreadyExists){
+                        logger.debug('Match exists, not updating');
+                    } else if(modelData.win){ //figure out which team won/lost
+                        promises.push(
+                            update.match(
+                                modelData.id, teamName, modelData.opposingTeamName));
+                    } else {
+                        promises.push(
+                            update.match(
+                                modelData.id, modelData.opposingTeamName, teamName));
+                    }
+                }
+            });
+            return q.all(promises);
+        })
+        .then(deferred.resolve)
         .fail(deferred.reject);
-        return deferred.promise;
-    }
-};
-
-var helpers = {
-    getJSON: function(url){
-        var deferred = q.defer();
-        logger.debug(url + '?api_key=' + config.riot.apiKey);
-        //Make the request to Rito
-        https.get(url + '?api_key=' + config.riot.apiKey, function(res){
-            //String to hold our data as we get it
-            var body = '';
-            res.on('data', function(d){
-                body += d;
-            });
-
-            res.on('error', deferred.reject);
-
-
-            //The actual logic
-            res.on('end', function(){
-                //Take the string response and convert to JSON
-                var object = JSON.parse(body);
-                deferred.resolve(object);
-            });
-        });
         return deferred.promise;
     }
 };

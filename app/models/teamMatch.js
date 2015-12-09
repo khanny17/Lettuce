@@ -6,6 +6,7 @@
  * More detailed information is stored in a MatchDetail object
  * in a separate table
  */
+var config = require('../../config/config.js');
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');
@@ -32,12 +33,18 @@ var methods = {
         //Params: query, object, options, callback
         TeamMatch.create(modelData, function(err){
             if(err){
-                logger.warn(err);
-                deferred.reject(err);
-                return;
+                if(err.code === 11000){
+                    logger.info(modelData.id + ' already exists, not creating.');
+                    deferred.resolve(config.errors.alreadyExists);
+                    return;
+                } else {
+                    logger.error(err);
+                    deferred.reject(err);
+                    return;
+                }
             }
             logger.info('Created Match Summary: ' + modelData.id);
-            deferred.resolve();
+            deferred.resolve(modelData);
         });
         return deferred.promise;
     },

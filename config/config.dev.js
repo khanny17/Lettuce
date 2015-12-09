@@ -8,6 +8,10 @@ module.exports = {
                                  '@ds049864.mongolab.com:49864/lettuce'
     },
 
+    errors: {
+        alreadyExists: 'Already Exists'
+    },
+
     logging: {
         minlevel: 0,
     },
@@ -19,7 +23,13 @@ module.exports = {
         //The interval at which to pull data from riot
         updateInterval: '00 00 * * * *', //should hopefully execute every hour
 
+
+
         ourTeam: ['khanny17', 'crappycupojoe', 'jaysig112', 'Evlzilla', 'TheHasbrouck'],
+
+        ourTeamName : 'The Fighting Lettuce',
+
+        rateLimit : 1000, //rate limit in milliseconds
 
         teamId: 'TEAM-fb806f80-0020-11e5-aaad-c81f66dcfb5a',
 

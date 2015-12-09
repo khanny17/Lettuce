@@ -29,7 +29,7 @@ var methods = {
                 return;
             }
             logger.info('Created/Updated summoner: ' + name);
-            deferred.resolve();
+            deferred.resolve(name + ' updated');
         });
         return deferred.promise;
     },
