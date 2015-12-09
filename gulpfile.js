@@ -6,6 +6,7 @@ var nodemon = require('gulp-nodemon');
 var jshint  = require('gulp-jshint');
 var sass    = require('gulp-sass');
 var mocha   = require('gulp-mocha');
+var exec    = require('child_process').exec;
 
 //Types of environments
 var envs = {
@@ -154,3 +155,7 @@ gulp.task('run', ['build','watch'], function(){
         script: 'dist/server.js'
     });
 });
+
+gulp.task('runUpdates', ['moveRunUpdates','config','app'], function(){
+    exec('node dist/runUpdates');
+})
