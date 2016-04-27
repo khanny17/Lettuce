@@ -127,7 +127,8 @@ gulp.task('config', function(){
 });
 
 //Runs tasks associated with moving or compiling code
-gulp.task('compile', ['sass', 'app', 'config', 'test', 'frontEnd', 'server', 'moveRunUpdates']);
+gulp.task('compile', ['sass', 'app', 'config', 'test', 
+                      'frontEnd', 'server', 'moveRunUpdates']);
 
 
 
@@ -162,4 +163,4 @@ gulp.task('runUpdates', ['moveRunUpdates','config','app'], function(cb){
         console.log(stderr);
         cb(err);
     });
-})
+});
