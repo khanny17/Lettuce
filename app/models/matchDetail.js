@@ -18,10 +18,9 @@ var q = require('q');
 var MatchDetail = mongoose.model('MatchDetail', {
     id: Number, //Taken from the matchId field
     Detail: Object, //An object containing details about the match itself
-    Participants: [Object], //An array of details about the players in the match
+    Participants: Object, //An array of details about the players in the match
     BlueTeam: Object,
     PurpleTeam: Object
-
 });
 
 
@@ -29,11 +28,10 @@ var methods = {
     createFromApiData: function(id, apiData, winningTeamName, losingTeamName){
         var deferred = q.defer();
         var normalized = helpers.normalize(id,apiData,winningTeamName,losingTeamName);
-
         //DO THE THING
         MatchDetail.update({
             id: id
-        }, normalized ,{
+        }, normalized,{
             upsert: true //Create if it doesn't exist
         }, function(err){
             if(err){
@@ -42,7 +40,7 @@ var methods = {
                 return;
             }
             logger.info('Created/Updated Match: ' + id);
-            deferred.resolve();
+            deferred.resolve(normalized);
         });
 
         return deferred.promise;
@@ -76,7 +74,6 @@ var helpers = {
             normalized.BlueTeam = matchDetails.teams[1];
             normalized.PurpleTeam = matchDetails.teams[0];
         }
-
         return normalized;
     }
 

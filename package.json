@@ -35,5 +35,8 @@
   "scripts": {
     "start": "node server.js",
     "postinstall": "bower install"
+  },
+  "devDependencies": {
+    "node-debug": "^0.1.0"
   }
 }

@@ -6,6 +6,7 @@ var nodemon = require('gulp-nodemon');
 var jshint  = require('gulp-jshint');
 var sass    = require('gulp-sass');
 var mocha   = require('gulp-mocha');
+var exec    = require('child_process').exec;
 
 //Types of environments
 var envs = {
@@ -29,9 +30,11 @@ var paths = {
 };
 
 var sources = {
+    env: '.env',
     frontEnd: ['./public/**/*'],
     server: './server.js',
-    tests: './test/**/*.js'
+    tests: './test/**/*.js',
+    runUpdates: './runUpdates.js'
 };
 
 var dest = {
@@ -39,9 +42,11 @@ var dest = {
     config: './dist/config',
     configName: 'config.js',
     css: './dist/public/css',
+    env: './dist',
     frontEnd: './dist/public',
     server: './dist',
-    tests: './dist/test'
+    tests: './dist/test',
+    runUpdates: './dist'
 };
 
 
@@ -93,6 +98,18 @@ gulp.task('test', function(){
     .pipe(gulp.dest(dest.tests));
 });
 
+//Move runUpdate file
+gulp.task('moveRunUpdates', function(){
+    return gulp.src(sources.runUpdates)
+    .pipe(gulp.dest(dest.runUpdates));
+});
+
+//Move env file
+gulp.task('env', function(){
+    return gulp.src(sources.env)
+    .pipe(gulp.dest(dest.env));
+});
+
 //Select a config file
 gulp.task('config', function(){
     var src;
@@ -110,7 +127,7 @@ gulp.task('config', function(){
 });
 
 //Runs tasks associated with moving or compiling code
-gulp.task('compile', ['sass', 'app', 'config', 'test', 'frontEnd', 'server']);
+gulp.task('compile', ['sass', 'app', 'config', 'test', 'frontEnd', 'server', 'moveRunUpdates']);
 
 
 
@@ -138,3 +155,11 @@ gulp.task('run', ['build','watch'], function(){
         script: 'dist/server.js'
     });
 });
+
+gulp.task('runUpdates', ['moveRunUpdates','config','app'], function(cb){
+    exec('node dist/runUpdates', function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+})
