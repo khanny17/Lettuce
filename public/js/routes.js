@@ -34,8 +34,8 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
 
     $rootScope.$on('$stateChangeStart',
         function(event, toState){
-        //Check subdomain
-        if(teamName.val === null){
+        //Check subdomain - www is invalid team name
+        if(teamName.val === null || teamName.val === 'www'){
             //No team, send to generic site
             if(toState.name.split('.')[0] !== 'base'){
                 event.preventDefault();
