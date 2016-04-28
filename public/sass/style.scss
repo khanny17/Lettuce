@@ -70,6 +70,10 @@ html, body {
         width: auto;
         vertical-align: super;
         margin-right: 10px;
+
+        &:focus {
+            display: inline-block;
+        }
     }
 }
 
