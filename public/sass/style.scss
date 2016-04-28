@@ -1,11 +1,76 @@
 $bgColor: #eeffcc;
 
-body{
-    background: $bgColor;
+html, body {
+    height: 100%;
+    width: 100%;
 }
 
-.match-summary{
-    h1{
-        font-size: 2em;
+.full {
+    height: 100%;
+    width: 100%;
+}
+
+//Landing page 
+.landing-page{
+    background: 
+        linear-gradient(
+          rgba(50, 50, 50, 0.5), 
+          rgba(50, 50, 50, 0.5)
+        ),
+        url("../img/background.jpg");
+
+    height: 100%;
+    width: 100%;
+
+    .jumbotron {
+        background: rgba(255, 255, 255, 1);
+        width: 100%;
+        text-align: center;
     }
 }
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+.search {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    margin: 5px;
+    border-radius: 5px;
+
+    background: rgba(50, 50, 50, .8);
+    cursor: pointer;
+
+
+    &:hover {
+        transition: 1s;
+        background: rgba(255, 50, 50, .9);
+
+        input {
+            display: inline-block;
+        }
+    }
+
+    i {
+        display: inline-block;
+        color: white;
+        padding: 5px 6px;
+        margin: 5px 6px;
+    }
+
+    input {
+        display: none;
+        width: auto;
+        vertical-align: super;
+        margin-right: 10px;
+    }
+}
+
+//End Landing Page
