@@ -2,15 +2,15 @@
 
 angular.module('Lettuce', [
     'ui.router',
+    'ui.bootstrap',
 
     'BaseController', 
-    
 
-
-    'NerdService',
+    'TeamService',
     'RiotService',
-    'MatchDirectives'
-    ])
+    'MatchDirectives',
+    'OnEnterDirective'
+])
 
 //Get team name from subdomain (like slack!)
 .value('TeamName', {

@@ -1,12 +1,13 @@
 'use strict';
-var gulp    = require('gulp');
-var rename  = require('gulp-rename');
-var clean   = require('gulp-clean');
-var nodemon = require('gulp-nodemon');
-var jshint  = require('gulp-jshint');
-var sass    = require('gulp-sass');
-var mocha   = require('gulp-mocha');
-var exec    = require('child_process').exec;
+var gulp          = require('gulp');
+var rename        = require('gulp-rename');
+var clean         = require('gulp-clean');
+var spawn         = require('child_process').spawn;
+var runSequence   = require('run-sequence');
+var jshint        = require('gulp-jshint');
+var sass          = require('gulp-sass');
+var mocha         = require('gulp-mocha');
+var exec          = require('child_process').exec;
 
 //Types of environments
 var envs = {
@@ -25,13 +26,14 @@ var paths = {
     configDev: './config/config.dev.js',
     configProd: './config/config.prod.js',
     frontendJS: './public/js/**/*.js',
+    frontendHTML: './public/views/**/*.html',
     sass: './public/sass/**/*.scss',
     tests: './dist/test/**/*.js'
 };
 
 var sources = {
     env: '.env',
-    frontEnd: ['./public/**/*'],
+    frontEnd: './public/**/*',
     server: './server.js',
     tests: './test/**/*.js',
     runUpdates: './runUpdates.js'
@@ -59,8 +61,9 @@ gulp.task('mocha', ['compile'], function(){
 });
 
 //Run jshint on our javascript files
+var jshintPaths = [paths.backendJS, paths.tests, paths.frontendJS];
 gulp.task('jshint', function(){
-    return gulp.src([paths.backendJS, paths.tests, paths.frontendJS])
+    return gulp.src(jshintPaths)
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -128,7 +131,7 @@ gulp.task('config', function(){
 
 //Runs tasks associated with moving or compiling code
 gulp.task('compile', ['sass', 'app', 'config', 'test', 
-                      'frontEnd', 'server', 'moveRunUpdates']);
+  'frontEnd', 'server', 'moveRunUpdates']);
 
 
 
@@ -142,7 +145,23 @@ gulp.task('clean', function(){
 
 
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+    gulp.watch(paths.sass, function(){
+        runSequence('sass', 'startServer');
+    });
+
+    gulp.watch(jshintPaths, ['jshint']);
+
+    gulp.watch(paths.backendJS, function(){
+        runSequence('app', 'startServer');
+    });
+
+    gulp.watch(sources.server, function(){
+        runSequence('server', 'startServer');
+    });
+
+    gulp.watch(sources.frontEnd, function(){
+        runSequence('frontEnd', 'startServer');
+    });
 });
 
 //Run any tasks involved with building the code
@@ -151,9 +170,28 @@ gulp.task('build', ['jshint', 'compile', 'mocha']);
 //Build and start server
 gulp.task('default', ['build']);
 
-gulp.task('run', ['build','watch'], function(){
-    nodemon({
-        script: 'dist/server.js'
+
+gulp.task('run', function(){
+    runSequence(
+        'build',
+        'startServer',
+        'watch'
+    );
+});
+
+
+var nodeInstance;
+gulp.task('startServer', function(){
+    if (nodeInstance){
+        nodeInstance.kill();    
+    } 
+
+    nodeInstance = spawn('node', ['dist/server.js'], {stdio: 'inherit'});
+
+    nodeInstance.on('close', function (code) {
+        if (code === 8) {
+            gulp.log('Error detected, waiting for changes...');
+        }
     });
 });
 

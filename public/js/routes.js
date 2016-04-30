@@ -11,11 +11,16 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         //Base States
         .state('base', {
             abstract: true,
-            templateUrl: 'views/base/base.html'
+            templateUrl: 'views/base/base.html',
+            controller: 'baseController'
         })
         .state('base.landing', {
             url: '/',
             templateUrl: 'views/base/landing.html'
+        })
+        .state('base.search', {
+            url: '/search?query',
+            templateUrl: 'views/base/search.html'
         })
 
         //States for Team Sites

@@ -47,7 +47,8 @@ require(__dirname + '/app/routes')(app); // configure our routes
 
 // List of api service modules and the route to mount them on
 var apiServices = [
-    { route: '/riot', service: require(__dirname + '/app/api/riot') }
+    { route: '/riot', service: require(__dirname + '/app/api/riot') },
+    { route: '/team', service: require(__dirname + '/app/api/team') }
 ];
 
 //For each sub-api:
