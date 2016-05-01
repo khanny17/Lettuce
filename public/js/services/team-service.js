@@ -45,6 +45,12 @@ angular.module('TeamService', [])
         .then(function(resp){
             return cb(resp.data);
         })
-        .catch(errorCb);
+        .catch(function(error){
+            if(error && error.data){
+                errorCb(error.data);
+            } else {
+                errorCb('Sorry! An error has occurred');
+            }
+        });
     };
 }]);

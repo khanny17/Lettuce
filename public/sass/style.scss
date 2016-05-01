@@ -9,7 +9,6 @@ html, body {
 }
 
 .page-wrapper {
-    overflow: auto;
     height: 100%;
     width: 100%;
 }
@@ -21,6 +20,7 @@ html, body {
 
 //Base page 
 .base-page{
+    overflow: auto;
     background: 
         linear-gradient(
           rgba(50, 50, 50, 0.5), 
@@ -28,8 +28,8 @@ html, body {
         ),
         url("../img/background.jpg");
 
-    min-height: 100%;
-    min-width: 100%;
+    height: 100%;
+    width: 100%;
 
     .jumbotron {
         background: rgba(255, 255, 255, 1);

@@ -5,6 +5,6 @@
         <team-search-result ng-repeat="team in teams" team="team"></team-search-result>
 
         <i ng-if="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
-        <p class="error" ng-if="error" ng-bind="error"></p>
+        <p class="text-danger" ng-if="error" ng-bind="error"></p>
     </div>
 </div>
