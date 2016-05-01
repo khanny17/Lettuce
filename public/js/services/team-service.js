@@ -26,6 +26,7 @@ angular.module('TeamService', [])
 
         return $http.post('/api/team/create', teamData)
         .then(function(resp){
+            //Possibly add team to teamNames cache that we have?
             return cb(resp.data);
         })
         .catch(errorCb);
