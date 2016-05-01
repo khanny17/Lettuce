@@ -1,5 +1,6 @@
 @import 'team-search-result';
 @import 'inputs';
+@import 'twbscolor';
 
 $bgColor: #eeffcc;
 
@@ -11,6 +12,10 @@ html, body {
 .page-wrapper {
     height: 100%;
     width: 100%;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .full {
@@ -126,6 +131,14 @@ html, body {
 
 
 //Team Page
+
+.team-page {
+    background: #DADADA;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
 
 .navbar-offset {
     margin-top: 50px;

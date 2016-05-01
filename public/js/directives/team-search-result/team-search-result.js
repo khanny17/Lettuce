@@ -6,7 +6,8 @@ angular.module('TeamSearchResultDirective', [])
         replace: true,
         restrict: 'E',
         scope: {
-            team: '='
+            team: '=',
+            goToTeamPage: '&go'
         },
         templateUrl: 'js/directives/team-search-result/team-search-result.html'
     };

@@ -1,8 +1,8 @@
 'use strict';
 angular.module('SearchController', [])
 
-.controller('searchController', ['$scope', '$location', 'teamService',
-    function($scope, $location, teamService){
+.controller('searchController', ['$scope', '$location', 'teamService', 'TeamName',
+    function($scope, $location, teamService, teamName){
     
     $scope.searchQuery = ($location.search()).query;
 
@@ -15,4 +15,8 @@ angular.module('SearchController', [])
         $scope.error = error;
         $scope.loading = false;
     });
+
+    $scope.goToTeamPage = function goToTeamPage(name) {
+        window.location.replace(teamService.buildTeamUrl(name, teamName));
+    };
 }]);

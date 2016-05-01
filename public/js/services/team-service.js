@@ -1,7 +1,7 @@
 'use strict';
 angular.module('TeamService', [])
 
-.service('teamService', ['$http', function($http){
+.service('teamService', ['$http', '$location', function($http, $location){
     var teamNames;
 
 
@@ -63,5 +63,24 @@ angular.module('TeamService', [])
         .then(function(resp){
             return resp.data;
         });
+    };
+
+    this.buildTeamUrl = function(teamName, currentTeamName) {
+        var subdomain = $location.host().split('.')[0];
+        var newUrl = $location.absUrl();
+        newUrl = newUrl.replace($location.path(), ''); //remove path
+
+
+        if(subdomain === 'www' || subdomain === currentTeamName.toLowerCase()) {
+            newUrl = newUrl.replace(subdomain, teamName);
+            return newUrl;
+        } else { //this would imply no subdomain exists
+            var protocol = $location.protocol();
+            newUrl = newUrl.replace(protocol + '://', ''); //remove protocol
+            newUrl = protocol + '://' + teamName + '.' + newUrl;
+            return newUrl;
+        }
+
+        return newUrl;
     };
 }]);
