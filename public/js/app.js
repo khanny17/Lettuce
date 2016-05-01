@@ -7,6 +7,8 @@ angular.module('Lettuce', [
     'BaseController', 
     'SearchController', 
     'CreateController', 
+    'TeamController', 
+    'NotfoundController', 
 
     'TeamService',
     'OnEnterDirective',

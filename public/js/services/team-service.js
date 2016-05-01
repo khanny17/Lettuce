@@ -47,10 +47,21 @@ angular.module('TeamService', [])
         })
         .catch(function(error){
             if(error && error.data){
-                errorCb(error.data);
+                return errorCb(error.data);
             } else {
-                errorCb('Sorry! An error has occurred');
+                return errorCb('Sorry! An error has occurred');
             }
+        });
+    };
+
+    this.getTeam = function(teamName) {
+        return $http({
+            url: '/api/team/get',
+            method: 'GET',
+            params: { name: teamName }
+        })
+        .then(function(resp){
+            return resp.data;
         });
     };
 }]);

@@ -1,5 +1,10 @@
 <!-- The root template for the team specific pages -->
 
 <div class="team-page">
-    <div ui-view></div>
+    <ng-include src="'views/templates/navbar.html'"></ng-include>
+    
+    <div class="container navbar-offset">
+
+        <div ui-view></div>
+    </div>
 </div>

@@ -32,7 +32,28 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         //States for Team Sites
         .state('team', {
             abstract: true,
-            templateUrl: 'views/team/team.html'
+            templateUrl: 'views/team/team.html',
+            controller: 'teamController',
+            resolve: {
+                team: ['teamService', 'TeamName', '$state', '$q',
+                function(teamService, teamName, $state, $q){
+                    var deferred = $q.defer();
+
+                    teamService.getTeam(teamName.val)
+                    .then(deferred.resolve)
+                    .catch(function(err){
+                        $state.go('notfound', {error: err});
+                        deferred.reject(err);
+                    });
+                    
+                    return deferred.promise;
+                }]
+            }
+        })
+        .state('notfound', {
+            url: '/notfound',
+            templateUrl: 'views/team/notfound.html',
+            controller: 'notfoundController'
         })
         .state('team.home', {
             url: '/',
