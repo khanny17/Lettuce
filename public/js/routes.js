@@ -23,6 +23,11 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
             templateUrl: 'views/base/search.html',
             controller: 'searchController'
         })
+        .state('base.create', {
+            url: '/create',
+            templateUrl: 'views/base/create.html',
+            controller: 'createController'
+        })
 
         //States for Team Sites
         .state('team', {
