@@ -1,6 +1,14 @@
+@import 'team-search-result';
+
 $bgColor: #eeffcc;
 
 html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.page-wrapper {
+    overflow: auto;
     height: 100%;
     width: 100%;
 }
@@ -11,7 +19,7 @@ html, body {
 }
 
 //Base page 
-.landing-page{
+.base-page{
     background: 
         linear-gradient(
           rgba(50, 50, 50, 0.5), 
@@ -19,8 +27,8 @@ html, body {
         ),
         url("../img/background.jpg");
 
-    height: 100%;
-    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
 
     .jumbotron {
         background: rgba(255, 255, 255, 1);
@@ -94,6 +102,18 @@ html, body {
         -webkit-filter: blur();
         filter: blur();
         cursor: pointer;
+    }
+}
+
+.search-page {
+    .jumbotron {
+        margin-top: 100px;
+
+        h2 {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid gray;
+        }
     }
 }
 

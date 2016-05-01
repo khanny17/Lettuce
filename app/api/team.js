@@ -6,6 +6,7 @@ var Team = require('../models/team');
 var init = function(router){
     //These are mounted on /api/team
     router.get('/team-names', endpoints.getTeamNames);
+    router.get('/find', endpoints.find);
     router.post('/create', endpoints.createTeam);
 };
 
@@ -29,6 +30,14 @@ var endpoints = {
         Team.create(req.body.team)
         .then(function(team){
             res.send(team);
+        })
+        .catch(res.status(500).send);
+    },
+
+    find: function(req, res){
+        Team.findByName(req.query.name)
+        .then(function(teams){
+            res.status(200).send(teams);
         })
         .catch(res.status(500).send);
     }

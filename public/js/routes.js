@@ -20,7 +20,8 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         })
         .state('base.search', {
             url: '/search?query',
-            templateUrl: 'views/base/search.html'
+            templateUrl: 'views/base/search.html',
+            controller: 'searchController'
         })
 
         //States for Team Sites

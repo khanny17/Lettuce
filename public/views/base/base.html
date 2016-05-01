@@ -1,15 +1,10 @@
 <!-- The root template for the generic base site pages -->
 
-<div class="landing-page">
+<div class="base-page">
 
     <img class="lettuce-logo" ui-sref="base.landing" src="img/lettuce.png"></img>
 
-
-    <div class="container vertical-center">
-        <div class="jumbotron">
-            <div class="full" ui-view></div> 
-        </div>
-    </div>
+    <div class="full" ui-view></div> 
 
     <div class="search">
         <i class="fa fa-search fa-2x"></i>
@@ -17,4 +12,5 @@
                ng-model="query" on-enter="search()" 
                uib-typeahead="name for name in teamNames | filter:$viewValue | limitTo:8" />
     </div>
+    
 </div>

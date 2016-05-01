@@ -1,3 +1,9 @@
-<div>
-    Search Page
+<div class="container search-page">
+    <div class="jumbotron">
+        <h2>Search for {{searchQuery}}</h2>
+
+        <team-search-result ng-repeat="team in teams" team="team"></team-search-result>
+
+        <i ng-if="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+    </div>
 </div>

@@ -30,4 +30,20 @@ angular.module('TeamService', [])
         })
         .catch(errorCb);
     };
+
+    this.searchTeams = function(query, cb, errorCb){
+        if(!query){
+            return errorCb('No team name given');
+        }
+
+        return $http({
+            url: '/api/team/find',
+            method: 'GET',
+            params: { name: query } 
+        })
+        .then(function(resp){
+            return cb(resp.data);
+        })
+        .catch(errorCb);
+    };
 }]);

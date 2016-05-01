@@ -1,0 +1,30 @@
+.team-search-result {
+    position: relative;
+    text-align: left;
+    padding-bottom: 30px;
+
+    .team-icon {
+        display: inline-block;
+        height: 100px;
+        width: 100px;
+        vertical-align: top;
+    }
+
+    .team-info {
+        display: inline-block;
+
+        p {
+            display: inline-block;
+            margin: none;
+            font-size: 14px;
+        }
+    }
+
+    
+    .tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-weight: bold;
+    }
+}
