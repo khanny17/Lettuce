@@ -2,6 +2,7 @@
 @import 'inputs';
 @import 'twbscolor';
 @import 'builder-column';
+@import 'champion-option';
 
 $bgColor: #eeffcc;
 
@@ -168,3 +169,25 @@ html, body {
 }
 
 //End not found page
+
+//Builder page 
+
+.builder-page {
+    .panel-heading {
+        display: flex;
+        flex-flow: row;
+
+        p {
+            margin: 0;
+            display: inline-block;
+            flex: 1;
+        }
+
+        i {
+            display: inline-block;
+            flex: 0 0 auto;
+        }
+    }
+}
+
+//End builder page

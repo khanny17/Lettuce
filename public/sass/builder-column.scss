@@ -1,7 +1,16 @@
 .builder-column {
-    padding: 10px;
+    .filters {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #CCC;   
+    }
 }
 
 .builder-filter {
     margin-bottom: 5px;
+}
+
+.no-results {
+    margin: 0;
+    text-align: center;
 }

@@ -1,8 +1,20 @@
-<div>
+<div class="builder-page">
     Builder Page
     <div class="row">
         <div class="col-md-3">
-            <builder-column filters="filters"></builder-column>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>Top</p>
+                    <div title="Lock to external edits">
+                        <i class="fa clickable" ng-click="locked = !locked"
+                        ng-class="{'fa-unlock': !locked, 'fa-lock': locked}"></i>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <builder-column champions="champions"></builder-column>
+                </div>
+            </div>
         </div>
     </div>
 </div>

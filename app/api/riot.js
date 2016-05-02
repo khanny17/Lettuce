@@ -1,6 +1,7 @@
 //app/api/riot.js
 'use strict';
 var Summoner = require('../models/summoner');
+var Champion = require('../models/champion');
 var teamMatch = require('../models/teamMatch');
 
 //Maps functions to endpoints
@@ -8,6 +9,7 @@ var init = function(router){
     //These are mounted on /api/riot
     router.get('/getSummoners', endpoints.getSummoners);
     router.get('/getMatchSummaries', endpoints.getMatchSummaries);
+    router.get('/getChampions', endpoints.getChampions);
 };
 
 
@@ -22,7 +24,7 @@ var endpoints = {
             res.send(matches);
         })
         .fail(function(e){
-            res.send(e,500);
+            res.status(500).send(e);
         });
     },
 
@@ -33,7 +35,18 @@ var endpoints = {
             res.send(summoners);
         })
         .fail(function(e){
-            res.send(e,500);
+            res.status(500).send(e);
+        });
+    },
+
+    //Sends all champions we have in our db
+    getChampions: function(req, res) {
+        Champion.getAll()
+        .then(function(champions){
+            res.send(champions);
+        })
+        .fail(function(e){
+            res.status(500).send(e);
         });
     }
 

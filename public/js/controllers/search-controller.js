@@ -1,5 +1,5 @@
 'use strict';
-angular.module('SearchController', [])
+angular.module('SearchController', ['TeamService'])
 
 .controller('searchController', ['$scope', '$location', 'teamService', 'TeamName',
     function($scope, $location, teamService, teamName){

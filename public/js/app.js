@@ -12,7 +12,6 @@ angular.module('Lettuce', [
     'NavbarController', 
     'BuilderController', 
 
-    'TeamService',
     'OnEnterDirective',
     'TeamSearchResultDirective',
     'BuilderColumn',

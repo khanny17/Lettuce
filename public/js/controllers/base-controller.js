@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BaseController', [])
+angular.module('BaseController', ['TeamService'])
 
 .controller('baseController', ['$scope', '$state', 'teamService',
     function($scope, $state, teamService){

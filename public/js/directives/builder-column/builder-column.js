@@ -1,14 +1,17 @@
 'use strict';
-angular.module('BuilderColumn', ['BuilderFilterFactory'])
+angular.module('BuilderColumn',
+    ['BuilderFilterFactory', 'ChampionOption', 'SummonerService'])
 
 .directive('builderColumn', ['BuilderFilter', function(BuilderFilter){
     return {
         replace: true,
         restrict: 'E',
-        scope: {},
+        scope: {
+            champions: '='
+        },
         templateUrl: 'js/directives/builder-column/builder-column.html',
-        link: function(scope, elem, attrs) {
-            
+        link: function(scope) {
+
             //The different kinds of filters we can add
             scope.filterOptions = BuilderFilter.getOptions();
 
@@ -45,5 +48,39 @@ angular.module('BuilderColumn', ['BuilderFilterFactory'])
             }
 
         }
+    };
+}])
+
+.filter('champFilter', ['summonerService', 'BuilderFilter',
+    function(summonerService, BuilderFilter){
+
+    //champions: master list of champions
+    //filters: list of BuilderFilter objects
+    return function(champions, filters) {
+        var results = champions;
+
+        //Filter by Role
+
+        //Get all the role filters
+        var roleFilters = _.filter(filters, {type: BuilderFilter.getTypes().role});
+        //Get an array of just the role names
+        var roles = _.map(roleFilters, 'model'); 
+        //Remove champs that dont have matching roles
+        results = _.filter(results, function(champ){
+            return _.intersection(champ.Roles, roles);
+        });
+
+        //Sort by champion mastery if we have the summoner
+        var summonerFilter = _.find(filters, function(filter){
+            return filter.type === BuilderFilter.getTypes().summoner;
+        });
+
+        if(summonerFilter && summonerFilter.model){
+            results = _.sortBy(results, function(champ){
+                return summonerService.getMastery(summonerFilter.model, champ);
+            });    
+        }
+
+        return results;
     };
 }]);

@@ -40,15 +40,28 @@ var methods = {
         var deferred = q.defer();
         Champion.find({
             id: id
-        }, function(err, summoners){
+        }, function(err, champions){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
-            } else if(summoners > 1){
+            } else if(champions > 1){
                 logger.warn('More than one champ exists with id: ' + id);
             }
 
-            deferred.resolve(summoners[0]); //only return ONE
+            deferred.resolve(champions[0]); //only return ONE
+        });
+        return deferred.promise;
+    },
+
+    getAll: function() {
+        var deferred = q.defer();
+        Champion.find({}, function(err, champions){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            }
+
+            deferred.resolve(champions);
         });
         return deferred.promise;
     }
@@ -56,5 +69,6 @@ var methods = {
 
 module.exports = {
     createOrUpdate: methods.createOrUpdate,
-    getOneById: methods.getOneById
+    getOneById: methods.getOneById,
+    getAll: methods.getAll
 };

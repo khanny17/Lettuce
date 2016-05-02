@@ -1,4 +1,4 @@
-<div class="builder-column panel panel-default">
+<div class="builder-column">
     <div class="filters">
         <input type="text" placeholder="{{filter.placeholder}}" class="form-control builder-filter" 
                 ng-model="filter.model" ng-repeat="filter in filters" />
@@ -18,6 +18,10 @@
     </div>
 
     <div class="results">
+        <input type="text" placeholder="Champion Name" class="form-control builder-filter"
+                ng-model="championName" />
 
+        <champion-option champion="champ" ng-repeat="champ in champions | champFilter:champions:filters
+            | filter:championName | limitTo:8"></champion-option>
     </div>
 </div>

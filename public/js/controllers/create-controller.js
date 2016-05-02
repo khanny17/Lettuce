@@ -1,5 +1,5 @@
 'use strict';
-angular.module('CreateController', [])
+angular.module('CreateController', ['TeamService'])
 
 .controller('createController', ['$scope', 'teamService',
     function($scope, teamService){
