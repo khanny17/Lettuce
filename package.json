@@ -31,7 +31,9 @@
     "node-sass": "^3.4.2",
     "proxyquire": "^1.7.3",
     "q": "^1.4.1",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "passport": "^0.3.0",
+    "passport-local": "^1.0.0"
   },
   "scripts": {
     "start": "node server.js",
