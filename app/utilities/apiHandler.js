@@ -27,10 +27,18 @@ var enqueue = function(url){
 
 var getJSON = function(url){
     var deferred = q.defer();
-    logger.debug(url + '?api_key=' + config.riot.apiKey);
+    var fullUrl;
+    //if there is already a querystring, we append with &, not ?
+    if(url.indexOf('?') >= 0) {
+        fullUrl = url + '&api_key=' + config.riot.apiKey;
+    } else {
+        fullUrl = url + '?api_key=' + config.riot.apiKey;
+    }
+
+    logger.debug(fullUrl);
 
     //Make the request to Rito
-    https.get(url + '?api_key=' + config.riot.apiKey, function(res){
+    https.get(fullUrl, function(res){
         //String to hold our data as we get it
         var body = '';
         res.on('data', function(d){

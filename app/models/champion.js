@@ -7,13 +7,14 @@ var q = require('q');
 var Champion = mongoose.model('Champion', {
     id: Number, //This is taken from the "gameId" field
     name: String,
-    title: String //eg "The Dark Child"
+    title: String, //eg "The Dark Child"
+    image: Object
 });
 
 
 var methods = {
     //Creates Champion or updates if already exists
-    createOrUpdate: function(id, name, title){
+    createOrUpdate: function(id, name, title, image){
         var deferred = q.defer();
         //Params: query, object, options, callback
         Champion.update({
@@ -21,7 +22,8 @@ var methods = {
         }, {
             id: id,
             name: name,
-            title: title
+            title: title,
+            image: image
         } ,{
             upsert: true //Create if it doesn't exist
         }, function(err){

@@ -1,22 +1,37 @@
 'use strict';
 angular.module('SearchController', ['TeamService'])
 
+//Controller for "search.html"
+
 .controller('searchController', ['$scope', '$location', 'teamService', 'TeamName',
     function($scope, $location, teamService, teamName){
-    
-    $scope.searchQuery = ($location.search()).query;
 
-    $scope.loading = true;
-    $scope.teams = [];
-    teamService.searchTeams($scope.searchQuery, function(teams){
-        $scope.teams.push.apply($scope.teams, teams);
-        $scope.loading = false;
-    }, function(error){
-        $scope.error = error;
-        $scope.loading = false;
-    });
+        //This gets the query param from the url
+        //ex: if the url is this: http://localhost:8080/search?query=abcDEFghi
+        //    $scope.searchQuery will become "abcDEFghi"
+        $scope.searchQuery = ($location.search()).query; 
 
-    $scope.goToTeamPage = function goToTeamPage(name) {
-        window.location.replace(teamService.buildTeamUrl(name, teamName));
-    };
-}]);
+        //This variable is hooked up to a spinner icon
+        $scope.loading = true;
+        //An arry of the teams we've found. Its obviously empty to start
+        $scope.teams = [];
+        teamService.searchTeams($scope.searchQuery, function(teams){
+            //This line pushes the teams into the existing array. The alternative
+            //would be to just say $scope.teams = teams, but I think that causes
+            //an issue because it changes the object.
+            $scope.teams.push.apply($scope.teams, teams); 
+            $scope.loading = false; //Set this variable to false, hiding the spinner icon
+        }, function(error){
+            $scope.error = error;
+            $scope.loading = false;
+        });
+
+        //function to open a new tab to the "team specific" page
+        $scope.goToTeamPage = function goToTeamPage(name) {
+
+            //window.location.replace(teamService.buildTeamUrl(name, teamName.val));
+
+            //open in new tab/window
+            window.open(teamService.buildTeamUrl(name, teamName.val), '_blank'); 
+        };
+    }]);

@@ -67,7 +67,7 @@ angular.module('BuilderColumn',
         var roles = _.map(roleFilters, 'model'); 
         //Remove champs that dont have matching roles
         results = _.filter(results, function(champ){
-            return _.intersection(champ.Roles, roles);
+            return _.intersection(champ.Roles, roles); //TODO fix this
         });
 
         //Sort by champion mastery if we have the summoner
