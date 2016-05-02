@@ -58,6 +58,11 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         .state('team.home', {
             url: '/',
             templateUrl: 'views/team/home.html'
+        })
+        .state('team.builder', {
+            url: '/builder',
+            templateUrl: 'views/team/builder.html',
+            controller: 'builderController'
         });
 
 }])

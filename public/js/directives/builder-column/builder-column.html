@@ -1,0 +1,23 @@
+<div class="builder-column panel panel-default">
+    <div class="filters">
+        <input type="text" placeholder="{{filter.placeholder}}" class="form-control builder-filter" 
+                ng-model="filter.model" ng-repeat="filter in filters" />
+
+        <!-- Add Filter -->
+        <div class="input-group">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="addFilter(selectedFilter)"
+                        ng-disabled="isDisabled(selectedFilter)">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+
+            <select ng-model="selectedFilter" class="form-control"
+                    ng-options="f.placeholder for f in filterOptions track by f.type"></select>
+        </div>
+    </div>
+
+    <div class="results">
+
+    </div>
+</div>

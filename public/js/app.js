@@ -9,10 +9,13 @@ angular.module('Lettuce', [
     'CreateController', 
     'TeamController', 
     'NotfoundController', 
+    'NavbarController', 
+    'BuilderController', 
 
     'TeamService',
     'OnEnterDirective',
     'TeamSearchResultDirective',
+    'BuilderColumn',
     'Inputs'
 ])
 
