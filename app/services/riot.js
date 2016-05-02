@@ -73,6 +73,7 @@ var update = {
             }
             var d = q.defer();
             d.resolve('Same Version numbers, no need to update');
+            logger.debug('Not updating champions because we already have this version');
             return d.promise;
         })
         .then(deferred.resolve)
