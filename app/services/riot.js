@@ -63,7 +63,8 @@ var update = {
                 //Okay, we need to update then.
                 //Create or update each champion
                 lodash.forEach(champions, function(champion){
-                    Champion.createOrUpdate(champion.id, champion.name, champion.title);
+                    Champion.createOrUpdate(champion.id, champion.name,
+                        champion.title, champion.image);
                 }); 
                 //Then save the new version
                 //return so the chain will pass on the failure if it happens
