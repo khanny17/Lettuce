@@ -7,7 +7,7 @@ angular.module('Configuration', [])
     $http.get('/api/riot/getChampionVersion')
     .then(function(response){
         that.championImageUrlBase = 'http://ddragon.leagueoflegends.com/cdn/' +
-        response.data + '/img/champion/';    
+        response.data + '/img/champion/';
     });
     
 }]);

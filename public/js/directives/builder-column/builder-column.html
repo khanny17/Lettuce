@@ -21,7 +21,11 @@
         <input type="text" placeholder="Champion Name" class="form-control builder-filter"
                 ng-model="championName" />
 
-        <champion-option champion="champ" ng-repeat="champ in champions | champFilter:champions:filters
-            | filter:championName | limitTo:8"></champion-option>
+        <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
+                                                    | champFilter:champions:filters
+                                                    | filter:{name:championName}
+                                                    | limitTo:8)"></champion-option>
+
+        <p class="text-danger no-results" ng-if="!filteredChamps.length">No Results</p>
     </div>
 </div>
