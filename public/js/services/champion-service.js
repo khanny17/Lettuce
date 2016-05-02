@@ -1,9 +1,9 @@
 'use strict';
-angular.module('ChampionService', [])
+angular.module('ChampionService', ['Configuration'])
 
 //Handles champion data
 
-.service('championService', ['$http', function($http){
+.service('championService', ['$http', 'Config', function($http, Config){
     var champions; //local copy of the list of champions
 
     //This function gets the champion data once
@@ -20,5 +20,9 @@ angular.module('ChampionService', [])
         }
 
         return callback(champions);
+    };
+
+    this.getChampionImageUrl = function(champion) {
+        return Config.championImageUrlBase + champion.image.full;
     };
 }]);

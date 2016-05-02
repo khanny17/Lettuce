@@ -3,6 +3,8 @@
 var Summoner = require('../models/summoner');
 var Champion = require('../models/champion');
 var teamMatch = require('../models/teamMatch');
+var config = require('../../config/config.js');
+var Version = require('../models/version');
 
 //Maps functions to endpoints
 var init = function(router){
@@ -10,6 +12,7 @@ var init = function(router){
     router.get('/getSummoners', endpoints.getSummoners);
     router.get('/getMatchSummaries', endpoints.getMatchSummaries);
     router.get('/getChampions', endpoints.getChampions);
+    router.get('/getChampionVersion', endpoints.getChampionVersion);
 };
 
 
@@ -44,6 +47,16 @@ var endpoints = {
         Champion.getAll()
         .then(function(champions){
             res.send(champions);
+        })
+        .fail(function(e){
+            res.status(500).send(e);
+        });
+    },
+
+    getChampionVersion: function(req, res) {
+        Version.getVersionNumber(config.riot.versionNames.champion)
+        .then(function(version){
+            res.send(version);
         })
         .fail(function(e){
             res.status(500).send(e);
