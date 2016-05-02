@@ -22,7 +22,7 @@
                 ng-model="championName" />
 
         <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
-                                                    | champFilter:champions:filters
+                                                    | champFilter:filters
                                                     | filter:{name:championName}
                                                     | limitTo:8)"></champion-option>
 
