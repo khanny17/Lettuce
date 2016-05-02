@@ -66,12 +66,18 @@ angular.module('TeamService', [])
     };
 
     this.buildTeamUrl = function(teamName, currentTeamName) {
-        var subdomain = $location.host().split('.')[0];
+        var domains = $location.host().split('.');
+
+        var subdomain;
+        if(domains.length >= 2) {
+            subdomain = $location.host().split('.')[0];
+        }        
+
         var newUrl = $location.absUrl();
         newUrl = newUrl.replace($location.path(), ''); //remove path
 
-
-        if(subdomain === 'www' || subdomain === currentTeamName.toLowerCase()) {
+        if(currentTeamName && 
+            (subdomain === 'www' || subdomain === currentTeamName.toLowerCase())) {
             newUrl = newUrl.replace(subdomain, teamName);
             return newUrl;
         } else { //this would imply no subdomain exists
