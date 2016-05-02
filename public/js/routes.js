@@ -29,31 +29,26 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
             controller: 'createController'
         })
 
-        //States for Team Sites
+        //Team-specific states
         .state('team', {
             abstract: true,
             templateUrl: 'views/team/team.html',
             controller: 'teamController',
             resolve: {
                 team: ['teamService', 'TeamName', '$state', '$q',
-                function(teamService, teamName, $state, $q){
-                    var deferred = $q.defer();
+                    function(teamService, teamName, $state, $q){
+                        var deferred = $q.defer();
 
-                    teamService.getTeam(teamName.val)
-                    .then(deferred.resolve)
-                    .catch(function(err){
-                        $state.go('notfound', {error: err});
-                        deferred.reject(err);
-                    });
-                    
-                    return deferred.promise;
+                        teamService.getTeam(teamName.val)
+                        .then(deferred.resolve)
+                        .catch(function(err){
+                            $state.go('notfound', {error: err});
+                            deferred.reject(err);
+                        });
+                        
+                        return deferred.promise;
                 }]
             }
-        })
-        .state('notfound', {
-            url: '/notfound',
-            templateUrl: 'views/team/notfound.html',
-            controller: 'notfoundController'
         })
         .state('team.home', {
             url: '/',
@@ -63,10 +58,29 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
             url: '/builder',
             templateUrl: 'views/team/builder.html',
             controller: 'builderController'
+        })
+
+
+
+
+        //This state is a special case - its the one where we dont actually have a team
+        //with the subdomain that you gave us. So if someone types in 
+        //http://somethingrandomblahblah.lettucelol.com
+        //this is where they go
+        //...
+        //Unless someone actually has a league team called somethingrandomblahblah.
+        //But you get the point.
+        .state('notfound', { 
+            url: '/notfound',
+            templateUrl: 'views/team/notfound.html',
+            controller: 'notfoundController'
         });
 
 }])
 
+
+//This guy handles the subdomain routing. This is where we look at the subdomain 
+//and figure out if you're trying to get to the base, non-team page, or the team page
 .run(['$rootScope', 'TeamName', '$state', function($rootScope, teamName, $state){
 
     $rootScope.$on('$stateChangeStart',

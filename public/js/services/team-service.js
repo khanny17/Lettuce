@@ -1,10 +1,12 @@
 'use strict';
 angular.module('TeamService', [])
 
+//This service handles all the server calls related to the team
+
 .service('teamService', ['$http', '$location', function($http, $location){
     var teamNames;
 
-
+    //Get a list of all the team names that have registered with our site
     this.getTeamNames = function(callback){
         if(!teamNames){
             return $http.get('/api/team/team-names')
@@ -17,6 +19,7 @@ angular.module('TeamService', [])
         return callback(teamNames);
     };
 
+    //Create a team with the given data
     this.createTeam = function(teamData, cb, errorCb){
         if(!teamData){
             return errorCb('No team data given');
@@ -32,6 +35,7 @@ angular.module('TeamService', [])
         .catch(errorCb);
     };
 
+    //Find all teams matching the given string
     this.searchTeams = function(query, cb, errorCb){
         if(!query){
             return errorCb('No team name given');
@@ -54,6 +58,7 @@ angular.module('TeamService', [])
         });
     };
 
+    //Get a team with the matching teamname
     this.getTeam = function(teamName) {
         return $http({
             url: '/api/team/get',
@@ -65,6 +70,15 @@ angular.module('TeamService', [])
         });
     };
 
+    //This doesnt actually hit the server. This is some complicated bullshit
+    //because of the subdomain thing.
+    //It takes a teamname and the current team name (ie the current subdomain)
+    //and makes the url to the other team
+    //ie:
+    //http://www.lettucelol.com -> http://myteam.lettucelol.com
+    //The reason its so complicated is because sometimes our url is localhost,
+    //and sometimes our url is lettucelol.com
+    //#struggle
     this.buildTeamUrl = function(teamName, currentTeamName) {
         var domains = $location.host().split('.');
 

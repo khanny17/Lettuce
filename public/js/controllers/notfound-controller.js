@@ -5,6 +5,10 @@ angular.module('NotfoundController', [])
     function($scope, teamName, $location){
     $scope.teamName = teamName.val;
 
+    //This clusterfuck is making a link to the create page
+    //Yes, its because of the subdomain thing we are doing,
+    //and yes, I still think the subdomain is cool enough to
+    //be worth this trouble.
     var subdomain = $location.host().split('.')[0];
     var protocol = $location.protocol();
     var newUrl = $location.absUrl();
