@@ -26,7 +26,7 @@ angular.module('NavbarController', ['AuthService'])
     			$modalScope.login = function() {
                     AuthService.login($modalScope.user)
                     .then(function(msg) {
-                        modalInstance.close();
+                        modalInstance.close(msg);
                     }, function(errMsg) {
                         console.error(errMsg);
                     });

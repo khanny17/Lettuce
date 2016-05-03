@@ -9,10 +9,7 @@ var app            = express();
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
-var LocalStrategy  = require('passport-local');
 var passport 	   = require('passport');
-var jwt			   = require('jwt-simple');
-var User           = require('./app/models/user');
 require('./config/passport')(passport);
 // configuration ===========================================
 console.log(__dirname);
