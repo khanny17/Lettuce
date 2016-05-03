@@ -7,5 +7,13 @@ angular.module('BuilderController', ['ChampionService'])
     championService.getChampions(function(champions){
         $scope.champions = champions;
     });
+
+    $scope.lanes = [
+        { name: 'Top' },
+        { name: 'Jungle' },
+        { name: 'Middle' },
+        { name: 'ADC' },
+        { name: 'Support' }
+    ];
     
 }]);

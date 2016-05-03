@@ -188,6 +188,15 @@ html, body {
             flex: 0 0 auto;
         }
     }
+
+    .lanes {
+        display: flex;
+
+        .lane {
+            flex: 1;
+            margin: 0 2.5px;
+        }
+    }
 }
 
 //End builder page

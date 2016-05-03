@@ -1,10 +1,10 @@
 <div class="builder-page">
     Builder Page
-    <div class="row">
-        <div class="col-md-3">
+    <div class="lanes">
+        <div class="lane" ng-repeat="lane in lanes">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p>Top</p>
+                    <p>{{lane.name}}</p>
                     <div title="Lock to external edits">
                         <i class="fa clickable" ng-click="locked = !locked"
                         ng-class="{'fa-unlock': !locked, 'fa-lock': locked}"></i>

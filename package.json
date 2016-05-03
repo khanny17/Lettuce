@@ -34,7 +34,8 @@
     "passport-local": "^1.0.0",
     "proxyquire": "^1.7.3",
     "q": "^1.4.1",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "socket.io": "^1.4.6"
   },
   "scripts": {
     "start": "node server.js",
