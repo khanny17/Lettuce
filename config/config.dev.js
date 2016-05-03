@@ -2,10 +2,11 @@
 //This makes it easy to swap out constants throughout the app
 
 module.exports = {
-
     db: {
         url : 'mongodb://' + process.env.DB_USER + ':' + process.env.DB_PASS +
-                                 '@ds049864.mongolab.com:49864/lettuce'
+                                 '@ds049864.mongolab.com:49864/lettuce',
+        secret: 'FIGHTINGLETTUCE'
+
     },
 
     errors: {

@@ -36,7 +36,8 @@ var sources = {
     frontEnd: './public/**/*',
     server: './server.js',
     tests: './test/**/*.js',
-    runUpdates: './runUpdates.js'
+    runUpdates: './runUpdates.js',
+    passportConfig: './config/passport.js'
 };
 
 var dest = {
@@ -48,7 +49,8 @@ var dest = {
     frontEnd: './dist/public',
     server: './dist',
     tests: './dist/test',
-    runUpdates: './dist'
+    runUpdates: './dist',
+
 };
 
 
@@ -129,8 +131,13 @@ gulp.task('config', function(){
     .pipe(gulp.dest(dest.config));
 });
 
+gulp.task('config-passport', function(){
+    return gulp.src(sources.passportConfig)
+    .pipe(gulp.dest(dest.config));
+})
+
 //Runs tasks associated with moving or compiling code
-gulp.task('compile', ['sass', 'app', 'config', 'test', 
+gulp.task('compile', ['sass', 'app','config-passport', 'config', 'test', 
   'frontEnd', 'server', 'moveRunUpdates']);
 
 

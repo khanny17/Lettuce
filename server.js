@@ -11,7 +11,9 @@ var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
 var LocalStrategy  = require('passport-local');
 var passport 	   = require('passport');
-
+var jwt			   = require('jwt-simple');
+var User           = require('./app/models/user');
+require('./config/passport')(passport);
 // configuration ===========================================
 console.log(__dirname);
 var config = require(__dirname + '/config/config');
@@ -32,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override')); 
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public')); 
+//Uses the passport package in our application
+app.use(passport.initialize());
 
 
 
@@ -50,7 +54,8 @@ require(__dirname + '/app/routes')(app); // configure our routes
 // List of api service modules and the route to mount them on
 var apiServices = [
     { route: '/riot', service: require(__dirname + '/app/api/riot') },
-    { route: '/team', service: require(__dirname + '/app/api/team') }
+    { route: '/team', service: require(__dirname + '/app/api/team') },
+    { route: '/auth', service: require(__dirname + '/app/api/auth') }
 ];
 
 //For each sub-api:
