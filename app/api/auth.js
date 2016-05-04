@@ -17,11 +17,16 @@ var endpoints = {
         } else {
             var newUser = new User({
                 name: req.body.name,
+                summoner: req.body.summoner,
+                teamname: req.body.teamname,
                 password: req.body.password
+                
             });
+            logger.debug(newUser);
     // save the user
             newUser.save(function(err) {
                 if (err) {
+                    logger.debug(err);
                     return res.json({success: false, msg: 'Username already exists.'});
                 }
                 res.json({success: true, msg: 'Successful created new user.'});

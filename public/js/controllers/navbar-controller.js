@@ -46,6 +46,7 @@ angular.module('NavbarController', ['AuthService'])
             function($modalScope, AuthService){
                 $modalScope.user = {
                     name: '',
+                    summoner:'',
                     password: ''
                 };
                 $modalScope.register = function() {

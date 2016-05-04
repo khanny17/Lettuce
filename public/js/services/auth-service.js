@@ -2,8 +2,8 @@
 
 angular.module('AuthService', [])
  
-.service('AuthService', ['$q', '$http',
-  function($q, $http) {
+.service('AuthService', ['$q', '$http','TeamName',
+  function($q, $http, TeamName) {
   var API_ENDPOINT    = 'api/auth';
   var LOCAL_TOKEN_KEY = 'yourTokenKey';
   var isAuthenticated = false;
@@ -37,6 +37,7 @@ angular.module('AuthService', [])
   }
  
   var register = function(user) {
+    user.teamname = TeamName.val;
     return $q(function(resolve, reject) {
       $http.post(API_ENDPOINT + '/signup', user).then(function(result) {
         if (result.data.success) {
