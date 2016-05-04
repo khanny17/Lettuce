@@ -12,7 +12,6 @@ angular.module('Lettuce', [
     'TeamController', 
     'NotfoundController', 
     'NavbarController', 
-    'BuilderController', 
     'CompsController', 
     'CompController', 
 
