@@ -74,7 +74,12 @@ app.get('*', function(req, res) {
 
 // start app ===============================================
 // startup our app at http://localhost:8080
-app.listen(port);               
+var server = app.listen(port);               
+//Setup Socket
+var io = require('socket.io').listen(server);
+io.sockets.on('connection', function(socket){
+    require(__dirname + '/app/sockets/filter-socket')(socket);
+});
 
 // shoutout to the user                     
 console.log('Server running on port ' + port);

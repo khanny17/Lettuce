@@ -1,6 +1,6 @@
 'use strict';
 angular.module('BuilderColumn',
-    ['BuilderFilterFactory', 'ChampionOption', 'SummonerService'])
+    ['BuilderFilterFactory', 'ChampionOption', 'SummonerService', 'BuilderColumnFilter'])
 
 .directive('builderColumn', ['BuilderFilter', function(BuilderFilter){
     return {
@@ -47,7 +47,6 @@ angular.module('BuilderColumn',
                 //No max means no max!
                 return (filterOption.max && existingNumberOfType >= filterOption.max);
             }
-
         }
     };
 }])

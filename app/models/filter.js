@@ -66,6 +66,24 @@ var methods = {
             deferred.resolve(filters); 
         });
         return deferred.promise;
+    },
+    updateModel: function(id, model) {
+        var deferred = q.defer();
+        //Params: query, object, options, callback
+        Filter.update({
+            _id: id
+        }, {
+            model: model
+        }, function(err){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+                return;
+            }
+            logger.debug('Updated Filter: ' + id);
+            deferred.resolve();
+        });
+        return deferred.promise;
     }
 };
 
@@ -73,5 +91,6 @@ var methods = {
 module.exports = {
     create: methods.create,
     get: methods.get,
-    getByLaneID: methods.getByLaneID
+    getByLaneID: methods.getByLaneID,
+    updateModel: methods.updateModel
 };
