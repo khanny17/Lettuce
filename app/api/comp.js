@@ -1,21 +1,24 @@
 'use strict';
 
-var Filter     = require('../models/filter');
-var Lane      = require('../models/lane');
-var Comp    = require('../models/comp');
+var Filter      = require('../models/filter');
+var Lane        = require('../models/lane');
+var Comp        = require('../models/comp');
 var q           = require('q');
+var logger = require('../utilities/logger');
 
 
 
 var init = function(router){
-    router.get('/create', endpoints.createComp);
+    router.post('/create', endpoints.createComp);
+    router.get('/get', endpoints.get);
 };
 
 
 var endpoints = {
     createComp: function(req, res){
         var compID;
-        Comp.create(req.body.comp) 
+
+        Comp.create(req.body.comp.name) 
         .then(function(comp){
             compID = comp._id;
             var promises = [
@@ -38,17 +41,34 @@ var endpoints = {
             return getFullComp(compID);
         })
         .then(function(fullComp){
-            res.send(fullComp);
+            logger.debug(fullComp);
+            res.status(200).send(fullComp);
         })
-        .catch(res.status(500));
+        .catch(function(reason){
+            res.status(500).send(reason);
+        });
+    },
+    get: function(req, res) {
+        getFullComp(req.query.id)
+        .then(function(comp){
+            res.send(comp);
+        })
+        .catch(function(reason){
+            res.status(500).send(reason);
+        });
     }
 };
 
 
 //i still love you
 function getFullComp(compID){
-    var fullComp ;
-    return Comp.get(compID)
+    if(!compID) {
+        return q.reject('No Comp ID given');
+    }
+
+    logger.debug('Getting full comp for ' + compID);
+    var fullComp, deferred = q.defer();
+    Comp.get(compID)
     .then(function(comp){
         fullComp = comp;
         return Lane.getByCompID(compID);
@@ -59,16 +79,18 @@ function getFullComp(compID){
         fullComp.lanes.forEach(function(lane){
             lane.filters = [];
             promises.push(Filter.getByLaneID(lane._id)
-            .then(function(filter){
-                lane.filters.push(filter);
-                return filter;
+            .then(function(filters){
+                lane.filters.push.apply(lane.filters, filters);
+                return filters;
             }));
         });
         return q.all(promises);
     })
     .then(function(){
-        return fullComp;
+        console.log(fullComp.lanes[0]);
+        deferred.resolve(fullComp);
     });
+    return deferred.promise;
 }
 
 module.exports = {

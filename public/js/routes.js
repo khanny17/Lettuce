@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Lettuce')
+angular.module('LettuceRoutes', ['CompService'])
 
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
 function( $stateProvider,   $urlRouterProvider, $locationProvider) {
@@ -62,7 +62,12 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         .state('team.comp', {
             url: '/comp/:compID',
             templateUrl: 'views/team/comp.html',
-            controller: 'compController'
+            controller: 'compController',
+            resolve: {
+                comp: ['compService', '$stateParams', function(compService, $stateParams){
+                    return compService.get($stateParams.compID);
+                }]
+            }
         })
 
 

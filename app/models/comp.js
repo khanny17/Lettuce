@@ -7,7 +7,7 @@ var q = require('q');
 //Set up a mongoose model
 
 var Comp = mongoose.model('comp', {
-        name: String
+    name: String
 });
 
 
@@ -16,14 +16,14 @@ var methods = {
         var deferred  = q.defer();      
         Comp.create({
             name: name,
-        },  function(err){
+        }, function(err, comp){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated Lane: ' + name);
-            deferred.resolve(name + ' updated');
+            logger.debug('Created comp: ' + name);
+            deferred.resolve(comp.toObject());
         });
         return deferred.promise;            
     },
@@ -31,12 +31,12 @@ var methods = {
         var deferred = q.defer();
         Comp.findOne({
             _id: compID
-        }, function(err, comp){
+        }).lean().exec(function(err, comp){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
             } 
-            deferred.resolve(comp); //only return ONE NO
+            deferred.resolve(comp);
         });
         return deferred.promise;
     }

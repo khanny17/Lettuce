@@ -4,6 +4,8 @@ angular.module('Lettuce', [
     'ui.router',
     'ui.bootstrap',
 
+    'LettuceRoutes', 
+
     'BaseController', 
     'SearchController', 
     'CreateController', 

@@ -8,7 +8,8 @@ angular.module('BuilderColumn',
         restrict: 'E',
         scope: {
             champions: '=',
-            filters: '='
+            filters: '=',
+            championName: '='
         },
         templateUrl: 'js/directives/builder-column/builder-column.html',
         link: function(scope) {

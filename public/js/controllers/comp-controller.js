@@ -1,9 +1,12 @@
 'use strict';
-angular.module('CompController', [])
+angular.module('CompController', ['ChampionService'])
 
-.controller('compController', ['$scope', 'comp',
-    function($scope, comp) {
+.controller('compController', ['$scope', 'comp', 'championService',
+    function($scope, comp, championService) {
         
     $scope.comp = comp;
     
+    championService.getChampions(function(champions){
+        $scope.champions = champions;
+    });
 }]);

@@ -7,11 +7,12 @@ var q = require('q');
 //Set up a mongoose model
 
 var Filter = mongoose.model('Filter', {
-        type: String,
-        model: String,
-        max: Number,
-        laneID: Number
+    type: String,
+    model: String,
+    max: Number,
+    laneID: String
 });
+
 var types = {
     summoner: {
         max: 1
@@ -22,21 +23,21 @@ var types = {
 };
 
 var methods = {
-    create:function(type,laneID){
+    create:function(type, laneID){
         var deferred  = q.defer();      
         Filter.create( {
             type: type,
             model: null,
             max: types[type].max,
             laneID: laneID
-        },  function(err){
+        }, function(err, filter){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated filter ' + type);
-            deferred.resolve(type + ' updated');
+            logger.info('Created filter');
+            deferred.resolve(filter.toObject());
         });
         return deferred.promise;            
     },
@@ -44,12 +45,12 @@ var methods = {
         var deferred = q.defer();
         Filter.findOne({
             _id: filterID
-        }, function(err, filter){
+        }).lean().exec(function(err, filter){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
             } 
-            deferred.resolve(filter); //only return ONE NO
+            deferred.resolve(filter);
         });
         return deferred.promise;
     },
@@ -57,12 +58,12 @@ var methods = {
         var deferred = q.defer();
         Filter.find({
             laneID: laneID
-        }, function(err, lanes){
+        }).lean().exec(function(err, filters){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
             } 
-            deferred.resolve(lanes); 
+            deferred.resolve(filters); 
         });
         return deferred.promise;
     }

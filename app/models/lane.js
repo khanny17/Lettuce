@@ -6,8 +6,9 @@ var q = require('q');
 //Set up a mongoose model
 
 var Lane = mongoose.model('Lane', {
-        name: String,
-        compID: Number
+    name: String,
+    compID: String,
+    championNameFilter: String
 });
 
 
@@ -17,14 +18,14 @@ var methods = {
         Lane.create({
             name: name,
             compID: compID
-        },  function(err){
+        }, function(err, lane){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated Lane: ' + name);
-            deferred.resolve(name + ' updated');
+            logger.debug('Created Lane: ' + name);
+            deferred.resolve(lane.toObject());
         });
         return deferred.promise;            
     },
@@ -32,7 +33,7 @@ var methods = {
         var deferred = q.defer();
         Lane.findOne({
             _id: laneID
-        }, function(err, lane){
+        }).lean().exec(function(err, lane){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
@@ -45,7 +46,7 @@ var methods = {
         var deferred = q.defer();
         Lane.find({
             compID: compID
-        }, function(err, lanes){
+        }).lean().exec(function(err, lanes){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
