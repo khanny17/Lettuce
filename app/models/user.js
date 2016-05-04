@@ -15,7 +15,15 @@ var UserSchema = new Schema({
 	password: {
 			type: String,
 			required: true
-	} 
+	}, 
+	summoner: {
+			type: String,
+			required: true
+	},
+	teamname: {
+			type: String,
+			required: true
+	}
 });
 
 UserSchema.pre('save', function (next){
