@@ -11,6 +11,7 @@ var logger = require('../utilities/logger');
 var init = function(router){
     router.post('/create', endpoints.createComp);
     router.get('/get', endpoints.get);
+    router.get('/getTeamComps', endpoints.getTeamComps);
 };
 
 
@@ -18,15 +19,15 @@ var endpoints = {
     createComp: function(req, res){
         var compID;
 
-        Comp.create(req.body.comp.name) 
+        Comp.create(req.body.comp.name, req.body.comp.teamname) 
         .then(function(comp){
             compID = comp._id;
             var promises = [
-                Lane.create('top', comp._id),
-                Lane.create('jungle', comp._id),
-                Lane.create('mid', comp._id),
-                Lane.create('sup', comp._id),
-                Lane.create('adc', comp._id)
+                Lane.create('Top', comp._id),
+                Lane.create('Jungle', comp._id),
+                Lane.create('Mid', comp._id),
+                Lane.create('Sup', comp._id),
+                Lane.create('ADC', comp._id)
             ];
             return q.all(promises);
         })
@@ -55,6 +56,15 @@ var endpoints = {
         })
         .catch(function(reason){
             res.status(500).send(reason);
+        });
+    },
+    getTeamComps: function(req, res) {
+        Comp.getByTeam(req.params.teamname)
+        .then(function(comps){
+            res.status(200).send(comps);
+        })
+        .catch(function(err){
+            res.status(500).send(err);
         });
     }
 };

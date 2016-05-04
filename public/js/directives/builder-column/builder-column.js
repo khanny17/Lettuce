@@ -16,6 +16,8 @@ angular.module('BuilderColumn',
             //The different kinds of filters we can add
             scope.filterOptions = BuilderFilter.getOptions();
 
+            scope.getPlaceholder = BuilderFilter.getPlaceholder;
+
             //Add a filter to our list
             //TODO connect this to the server
             scope.addFilter = function addFilter(filterOption) {

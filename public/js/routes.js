@@ -57,7 +57,12 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         .state('team.comps', {
             url: '/comps',
             templateUrl: 'views/team/comps.html',
-            controller: 'compsController'
+            controller: 'compsController',
+            resolve: {
+                comps: ['compService', function(compService){
+                    return compService.getTeamComps();
+                }]
+            }
         })
         .state('team.comp', {
             url: '/comp/:compID',

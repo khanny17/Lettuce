@@ -43,6 +43,10 @@ angular.module('BuilderFilterFactory', [])
         return filterOptions;
     };
 
+    BuilderFilter.getPlaceholder = function(type){
+        return filterOptions[type].placeholder;
+    };
+
 
     return BuilderFilter;
 });

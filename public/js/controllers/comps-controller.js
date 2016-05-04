@@ -1,36 +1,14 @@
 'use strict';
-angular.module('CompsController', ['CompService'])
+angular.module('CompsController', ['CompService', 'CreateCompModal'])
 
-.controller('compsController', ['$scope', '$uibModal',
+.controller('compsController', ['$scope', '$uibModal', 'comps', 'createCompModal',
 
+function($scope, $uibModal, comps, createCompModal) {
 
-function($scope, $uibModal) {
+    $scope.comps = comps;
 
     $scope.openCreateCompModal = function() {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'views/templates/create-comp-modal.html',
-            size: 'sm',
-            controller: ['$scope', 'compService', '$state',
-            function($modalScope, compService, $state){
-                $modalScope.comp = {
-                    name: ''
-                };
-
-                $modalScope.create = function() {
-                    compService.create($modalScope.comp)
-                    .then(function(comp) {
-                        modalInstance.close();
-                        $state.go('team.comp', { compID:comp._id });
-                    }, function(errMsg) {
-                        console.error(errMsg);
-                    });
-                };
-                
-                $modalScope.cancel = function() {
-                    modalInstance.close();
-                };
-            }]
-        });
+        createCompModal.open();
     };
 
 }]);

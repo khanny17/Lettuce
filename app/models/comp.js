@@ -7,15 +7,17 @@ var q = require('q');
 //Set up a mongoose model
 
 var Comp = mongoose.model('comp', {
-    name: String
+    name: String,
+    teamname: String
 });
 
 
 var methods = {
-    create:function(name){
+    create:function(name, teamname){
         var deferred  = q.defer();      
         Comp.create({
             name: name,
+            teamname: teamname
         }, function(err, comp){
             if(err){
                 logger.error(err);
@@ -39,6 +41,19 @@ var methods = {
             deferred.resolve(comp);
         });
         return deferred.promise;
+    },
+    getByTeam: function(teamname) {
+        var deferred = q.defer();
+        Comp.find({
+            teamname: teamname
+        }).lean().exec(function(err, comps){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            } 
+            deferred.resolve(comps);
+        });
+        return deferred.promise;
     }
 };
 
@@ -46,6 +61,6 @@ var methods = {
 
 module.exports = {
     create: methods.create,
-    get: methods.get
-
+    get: methods.get,
+    getByTeam: methods.getByTeam
 };
