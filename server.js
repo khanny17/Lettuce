@@ -52,7 +52,8 @@ require(__dirname + '/app/routes')(app); // configure our routes
 var apiServices = [
     { route: '/riot', service: require(__dirname + '/app/api/riot') },
     { route: '/team', service: require(__dirname + '/app/api/team') },
-    { route: '/auth', service: require(__dirname + '/app/api/auth') }
+    { route: '/auth', service: require(__dirname + '/app/api/auth') },
+    { route: '/comp', service: require(__dirname + '/app/api/comp') }
 ];
 
 //For each sub-api:

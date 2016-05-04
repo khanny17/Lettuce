@@ -11,6 +11,8 @@ angular.module('Lettuce', [
     'NotfoundController', 
     'NavbarController', 
     'BuilderController', 
+    'CompsController', 
+    'CompController', 
 
     'OnEnterDirective',
     'TeamSearchResultDirective',

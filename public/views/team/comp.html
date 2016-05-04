@@ -1,7 +1,7 @@
-<div class="builder-page">
-    Builder Page
+<div class="comp-page">
+    {{comp.name}}
     <div class="lanes">
-        <div class="lane" ng-repeat="lane in lanes">
+        <div class="lane" ng-repeat="lane in comp.lanes">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <p>{{lane.name}}</p>
@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <builder-column champions="champions"></builder-column>
+                    <builder-column champions="champions" filters="lane.filters"></builder-column>
                 </div>
             </div>
         </div>

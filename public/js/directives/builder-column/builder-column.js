@@ -7,18 +7,16 @@ angular.module('BuilderColumn',
         replace: true,
         restrict: 'E',
         scope: {
-            champions: '='
+            champions: '=',
+            filters: '='
         },
         templateUrl: 'js/directives/builder-column/builder-column.html',
         link: function(scope) {
-
             //The different kinds of filters we can add
             scope.filterOptions = BuilderFilter.getOptions();
 
-            //Start our list with the summoner filter added
-            scope.filters = [new BuilderFilter(BuilderFilter.getTypes().summoner)]; 
-
             //Add a filter to our list
+            //TODO connect this to the server
             scope.addFilter = function addFilter(filterOption) {
                 //Check to make sure we dont already have the maximum # added
                 if(maxNumberOfFilterTypeReached(filterOption)){

@@ -54,10 +54,15 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
             url: '/',
             templateUrl: 'views/team/home.html'
         })
-        .state('team.builder', {
-            url: '/builder',
-            templateUrl: 'views/team/builder.html',
-            controller: 'builderController'
+        .state('team.comps', {
+            url: '/comps',
+            templateUrl: 'views/team/comps.html',
+            controller: 'compsController'
+        })
+        .state('team.comp', {
+            url: '/comp/:compID',
+            templateUrl: 'views/team/comp.html',
+            controller: 'compController'
         })
 
 
