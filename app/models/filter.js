@@ -1,6 +1,6 @@
 'use strict';
 var mongoose    = require('mongoose');
-var Schema  = mongoose.Schema;
+
 var logger = require('../utilities/logger');
 var q = require('q');
 
@@ -12,23 +12,23 @@ var Filter = mongoose.model('Filter', {
         max: Number,
         laneID: Number
 });
-
+var types = {
+    summoner: {
+        max: 1
+    },
+    role: {
+        max: 5
+    }
+};
 
 var methods = {
-    create:function(type,model,max,laneID){
+    create:function(type,laneID){
         var deferred  = q.defer();      
-        FIlter.update({
+        Filter.create( {
             type: type,
-            model: model,
-            max: max,
-            laneID: ID
-        },{
-            type: type,
-            model: model,
-            max: max,
-            laneID: ID
-        },{
-            upsert: true //Creates if doesnt exist
+            model: null,
+            max: types[type].max,
+            laneID: laneID
         },  function(err){
             if(err){
                 logger.error(err);
@@ -38,11 +38,39 @@ var methods = {
             logger.info('Created/Updated filter ' + type);
             deferred.resolve(type + ' updated');
         });
-        return deffered.promise;            
+        return deferred.promise;            
+    },
+    get: function(filterID){
+        var deferred = q.defer();
+        Filter.findOne({
+            _id: filterID
+        }, function(err, filter){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            } 
+            deferred.resolve(filter); //only return ONE NO
+        });
+        return deferred.promise;
+    },
+    getByLaneID: function(laneID){
+        var deferred = q.defer();
+        Filter.find({
+            laneID: laneID
+        }, function(err, lanes){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            } 
+            deferred.resolve(lanes); 
+        });
+        return deferred.promise;
     }
-}
+};
 
 
 module.exports = {
-    create: methods.create
+    create: methods.create,
+    get: methods.get,
+    getByLaneID: methods.getByLaneID
 };
