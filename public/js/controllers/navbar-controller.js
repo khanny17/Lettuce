@@ -37,6 +37,32 @@ angular.module('NavbarController', ['AuthService'])
     		}]
     	});
     };
+
+    $scope.openRegisterModal = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/templates/register-modal.html',
+            size: 'sm',
+            controller: ['$scope', 'AuthService',
+            function($modalScope, AuthService){
+                $modalScope.user = {
+                    name: '',
+                    password: ''
+                };
+                $modalScope.register = function() {
+                    AuthService.register($modalScope.user)
+                    .then(function(msg) {
+                        modalInstance.close(msg);
+                    }, function(errMsg) {
+                        console.error(errMsg);
+                    });
+                };
+                $modalScope.cancel = function() {
+                    modalInstance.close();
+                };
+            }]
+        });
+    };
+
 }]);
 
 
