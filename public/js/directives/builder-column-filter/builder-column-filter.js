@@ -6,16 +6,15 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
         replace: true,
         restrict: 'E',
         scope: {
-            filter: '='
+            filter: '=',
+            placeholder: '='
         },
         templateUrl: 'js/directives/builder-column-filter/builder-column-filter.html',
         link: function(scope) {
             var valueWeJustReceived = null; //protects from infinite loop
-            socket.on('filter:updated', function(filterData){
-                if(filterData._id === scope.filter._id) {
-                    valueWeJustReceived = filterData.model;
-                    scope.filter.model = filterData.model;
-                }
+            socket.on('filter:updated:'+scope.filter._id, function(filterData){
+                valueWeJustReceived = filterData.model;
+                scope.filter.model = filterData.model;
             });
 
             scope.$watch('filter.model', function(newValue){

@@ -1,22 +1,55 @@
 'use strict';
-angular.module('BuilderColumn',
-    ['BuilderFilterFactory', 'ChampionOption', 'SummonerService', 'BuilderColumnFilter'])
+angular.module('BuilderColumn', [
+    'BuilderFilterFactory', 
+    'ChampionOption', 
+    'SummonerService', 
+    'BuilderColumnFilter',
+    'SocketFactory'
+    ])
 
-.directive('builderColumn', ['BuilderFilter', function(BuilderFilter){
+.directive('builderColumn', ['BuilderFilter', 'socket', function(BuilderFilter, socket){
     return {
         replace: true,
         restrict: 'E',
         scope: {
             champions: '=',
             filters: '=',
-            championName: '='
+            championName: '=',
+            laneID: '@laneId'
         },
         templateUrl: 'js/directives/builder-column/builder-column.html',
         link: function(scope) {
             //The different kinds of filters we can add
             scope.filterOptions = BuilderFilter.getOptions();
+            scope.championName = scope.championName || '';
 
             scope.getPlaceholder = BuilderFilter.getPlaceholder;
+
+            socket.on('filter:add:'+ scope.laneID, function(filter){
+                scope.filters.push(filter);
+            });
+
+
+            var valueWeJustGot = null;
+            socket.on('lane:champFilterUpdate:' + scope.laneID, function(laneData){
+                scope.championName = laneData.championNameFilter;
+                valueWeJustGot = laneData.championNameFilter;
+            });
+
+            scope.$watch('championName', function(newVal){
+                if(newVal !== valueWeJustGot){
+                    socket.emit('lane:champFilterUpdate', {
+                        _id: scope.laneID,
+                        championNameFilter: scope.championName
+                    });
+                } else {
+                    valueWeJustGot = null;
+                }
+            });
+
+
+
+
 
             //Add a filter to our list
             //TODO connect this to the server
@@ -26,7 +59,10 @@ angular.module('BuilderColumn',
                     return;
                 }
 
-                scope.filters.push(new BuilderFilter(filterOption.type));
+                socket.emit('filter:add', { 
+                    laneID: scope.laneID, 
+                    type: filterOption.type 
+                });
             };
 
             //Determines if the addFilter button should be disabled

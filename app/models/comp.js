@@ -44,6 +44,10 @@ var methods = {
     },
     getByTeam: function(teamname) {
         var deferred = q.defer();
+        if(!teamname) {
+            deferred.reject('No team name given!');
+            return deferred.promise;
+        }
         Comp.find({
             teamname: teamname
         }).lean().exec(function(err, comps){

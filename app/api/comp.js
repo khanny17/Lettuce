@@ -59,7 +59,8 @@ var endpoints = {
         });
     },
     getTeamComps: function(req, res) {
-        Comp.getByTeam(req.params.teamname)
+        logger.debug('/getTeamComps: ' + req.query.teamname);
+        Comp.getByTeam(req.query.teamname)
         .then(function(comps){
             res.status(200).send(comps);
         })

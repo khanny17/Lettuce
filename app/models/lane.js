@@ -54,6 +54,24 @@ var methods = {
             deferred.resolve(lanes); 
         });
         return deferred.promise;
+    },
+    updateChampFilter: function(laneID, championNameFilter){
+        var deferred = q.defer();
+        //Params: query, object, options, callback
+        Lane.update({
+            _id: laneID
+        }, {
+            championNameFilter: championNameFilter
+        }, function(err){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+                return;
+            }
+            logger.debug('Updated Filter: ' + laneID);
+            deferred.resolve();
+        });
+        return deferred.promise;
     }
 };
 
@@ -61,5 +79,6 @@ var methods = {
 module.exports = {
     create: methods.create,
     get: methods.get,
-    getByCompID: methods.getByCompID
+    getByCompID: methods.getByCompID,
+    updateChampFilter: methods.updateChampFilter
 };

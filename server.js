@@ -78,7 +78,8 @@ var server = app.listen(port);
 //Setup Socket
 var io = require('socket.io').listen(server);
 io.sockets.on('connection', function(socket){
-    require(__dirname + '/app/sockets/filter-socket')(socket);
+    require(__dirname + '/app/sockets/filter-socket')(socket, io);
+    require(__dirname + '/app/sockets/lane-socket')(socket, io);
 });
 
 // shoutout to the user                     
