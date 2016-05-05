@@ -108,10 +108,11 @@ angular.module('BuilderColumn', [
 
 .filter('champFilter', ['summonerService', 'BuilderFilter',
     function(summonerService, BuilderFilter){
-    var results;
+    
     //champions: master list of champions
     //filters: list of BuilderFilter objects
     return function(champions, filters) {
+        var results;
         if(!champions || champions.length <= 0){
             return champions;
         }
