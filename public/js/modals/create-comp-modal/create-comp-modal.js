@@ -4,7 +4,7 @@ angular.module('CreateCompModal', [])
 .service('createCompModal', ['$uibModal', function($uibModal){
     this.open = function(){
         var modalInstance = $uibModal.open({
-            templateUrl: 'views/templates/create-comp-modal.html',
+            templateUrl: 'js/modals/create-comp-modal/create-comp-modal.html',
             size: 'sm',
             controller: ['$scope', 'compService', '$state',
             function($modalScope, compService, $state){
