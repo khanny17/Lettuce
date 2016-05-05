@@ -22,7 +22,7 @@
         <input type="text" placeholder="Champion Name" class="form-control builder-filter"
                 ng-model="championName" />
 
-        <champion-option champion="champ" ng-repeat="champ in filteredChamps = (::champions
+        <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
                                                     | champFilter:filters
                                                     | filter:{name:championName}
                                                     | limitTo:8)"></champion-option>
