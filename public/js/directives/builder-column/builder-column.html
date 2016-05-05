@@ -1,8 +1,8 @@
 <div class="builder-column">
     <div class="filters">
-        <div class="input-group">
-            <builder-column-filter filter="filter" placeholder="getPlaceholder(filter.type)" ng-repeat="filter in filters"></builder-column-filter>
-        </div>
+        
+        <builder-column-filter filter="filter" placeholder="getPlaceholder(filter.type)"
+        delete-filter="deleteFilter" ng-repeat="filter in filters"></builder-column-filter>
 
         <!-- Add Filter -->
         <div class="input-group">

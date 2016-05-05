@@ -9,10 +9,16 @@ module.exports = function(socket, io) {
     });
 
     socket.on('filter:add', function(data){
-        console.log(data);
         Filter.create(data.type, data.laneID)
         .then(function(filter){
             io.sockets.emit('filter:add:' + filter.laneID, filter);
+        });
+    });
+
+    socket.on('filter:delete', function(data){
+        Filter.delete(data._id)
+        .then(function(){
+            io.sockets.emit('filter:delete:' + data.laneID, data._id);
         });
     });
 };

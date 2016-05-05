@@ -7,7 +7,8 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
         restrict: 'E',
         scope: {
             filter: '=',
-            placeholder: '='
+            placeholder: '=',
+            deleteFilter: '&'
         },
         templateUrl: 'js/directives/builder-column-filter/builder-column-filter.html',
         link: function(scope) {
@@ -27,6 +28,8 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
                     valueWeJustReceived = null;
                 }
             });
+
+            scope.delete = scope.deleteFilter();
         }
     };
 }]);

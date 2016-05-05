@@ -84,6 +84,24 @@ var methods = {
             deferred.resolve();
         });
         return deferred.promise;
+    },
+    delete: function(id) {
+        var deferred = q.defer();
+
+        Filter.find({
+            _id: id
+        })
+        .remove(function(err){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+                return;
+            }
+            logger.debug('Deleted Filter: ' + id);
+            deferred.resolve();
+        });
+
+        return deferred.promise;
     }
 };
 
@@ -92,5 +110,6 @@ module.exports = {
     create: methods.create,
     get: methods.get,
     getByLaneID: methods.getByLaneID,
-    updateModel: methods.updateModel
+    updateModel: methods.updateModel,
+    delete: methods.delete
 };

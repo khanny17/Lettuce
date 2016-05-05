@@ -25,11 +25,7 @@ angular.module('BuilderColumn', [
 
             scope.getPlaceholder = BuilderFilter.getPlaceholder;
 
-            socket.on('filter:add:'+ scope.laneID, function(filter){
-                scope.filters.push(filter);
-            });
-
-
+            //Update Champion Name Filter
             var valueWeJustGot = null;
             socket.on('lane:champFilterUpdate:' + scope.laneID, function(laneData){
                 scope.championName = laneData.championNameFilter;
@@ -46,13 +42,13 @@ angular.module('BuilderColumn', [
                     valueWeJustGot = null;
                 }
             });
+            //End update Champion Name Filter
 
 
 
 
 
-            //Add a filter to our list
-            //TODO connect this to the server
+            //Add Filter
             scope.addFilter = function addFilter(filterOption) {
                 //Check to make sure we dont already have the maximum # added
                 if(maxNumberOfFilterTypeReached(filterOption)){
@@ -64,6 +60,29 @@ angular.module('BuilderColumn', [
                     type: filterOption.type 
                 });
             };
+
+            socket.on('filter:add:'+ scope.laneID, function(filter){
+                scope.filters.push(filter);
+            });
+            //End Add Filter
+
+            //Delete Filter
+            scope.deleteFilter = function deleteFilter(id) {
+                socket.emit('filter:delete', {
+                    _id: id,
+                    laneID: scope.laneID
+                });
+            };
+
+            socket.on('filter:delete:'+ scope.laneID, function(id){
+                _.remove(scope.filters, function(filter){
+                    return filter._id === id;
+                });
+            });
+            //End Delete Filter
+
+
+
 
             //Determines if the addFilter button should be disabled
             scope.isDisabled = function isDisabled(selectedFilter) {

@@ -15,15 +15,6 @@
     text-align: center;
 }
 
-.input-group {
-    .input-delete {
-        display: none;
-    }
-
-    &:hover {
-        .input-delete {
-            display: block;
-            cursor: pointer;
-        }
-    }
+.builder-column-filter {
+    margin-bottom: 5px;
 }
