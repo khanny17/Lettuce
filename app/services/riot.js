@@ -13,6 +13,7 @@ var Summoner = require('../models/summoner');
 var Champion = require('../models/champion');
 var Version = require('../models/version');
 var MatchDetail = require('../models/matchDetail');
+var ChampionMastery = require('../models/champMastery');
 
 
 //Read the docs: https://www.npmjs.com/package/cron
@@ -36,7 +37,8 @@ var RunUpdate = function(){
     var promises = [
         update.summoners(config.riot.ourTeam),
         update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-        update.champions()
+        update.champions(),
+        update.masteries()
     ];
 
     //Save our promises and print any errors we have
@@ -192,6 +194,42 @@ var update = {
                                 modelData.id, modelData.opposingTeamName, teamName));
                     }
                 }
+            });
+            return q.all(promises);
+        })
+        .then(deferred.resolve)
+        .fail(deferred.reject);
+        return deferred.promise;
+    },
+    masteries: function(){
+        var deferred = q.defer();
+        Summoner.getAll()
+        .then(function(summoners){
+            var error;
+            if(!summoners || summoners.length===0) {
+                error = 'No Summoners  found';
+                logger.warn(error);
+                deferred.reject(error);    
+            }
+            summoners = lodash.map(summoners, function(summoner){
+                return summoner.id;
+            });
+            var base = config.riot.endpointUrls.champMastery;
+            var promises = [];
+            summoners.forEach(function(id){
+                var url = base + id + '/champions';
+                promises.push(apiCall(url));
+            });
+            return q.all(promises);
+        })
+        .then(function(masteries){
+            masteries = lodash.flatten(masteries);
+            var promises = [];
+            masteries.forEach(function(championMastery){
+            console.log(championMastery);
+
+            promises.push(
+                ChampionMastery.create(championMastery));
             });
             return q.all(promises);
         })
