@@ -22,7 +22,7 @@ module.exports = {
     riot: {
         apiKey: process.env.RIOT_API_KEY,
         //The interval at which to pull data from riot
-        updateInterval: '00 00 * * * *', //should hopefully execute every hour
+        updateInterval: '00 * * * * *', //should hopefully execute every hour
 
 
 
@@ -43,7 +43,8 @@ module.exports = {
                                                                     '?champData=image',
             match: 'https://na.api.pvp.net/api/lol/na/v2.2/match/',
             summoner: 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/',
-            team: 'https://na.api.pvp.net/api/lol/na/v2.4/team/'
+            team: 'https://na.api.pvp.net/api/lol/na/v2.4/team/',
+            champMastery: 'https://na.api.pvp.net/championmastery/location/NA1/player/'
         }
     }
 

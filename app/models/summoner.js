@@ -67,5 +67,6 @@ var methods = {
 
 module.exports = {
     create: methods.create,
-    getOneByName: methods.getOneByName
+    getOneByName: methods.getOneByName,
+    getAll: methods.getAll
 };
