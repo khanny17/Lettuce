@@ -35,10 +35,10 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-        update.summoners(config.riot.ourTeam),
-        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-        update.champions(),
-        update.masteries()
+    update.summoners(config.riot.ourTeam),
+    update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+    update.champions(),
+    update.masteries()
     ];
 
     //Save our promises and print any errors we have
@@ -71,7 +71,7 @@ var update = {
                 //Then save the new version
                 //return so the chain will pass on the failure if it happens
                 return Version.saveVersionNumber(config.riot.versionNames.champion,
-                                                 thisVersionNumber);
+                   thisVersionNumber);
             }
             var d = q.defer();
             d.resolve('Same Version numbers, no need to update');
@@ -226,10 +226,9 @@ var update = {
             masteries = lodash.flatten(masteries);
             var promises = [];
             masteries.forEach(function(championMastery){
-            console.log(championMastery);
-
-            promises.push(
-                ChampionMastery.create(championMastery));
+                promises.push(
+                    ChampionMastery.create(championMastery)
+                );
             });
             return q.all(promises);
         })

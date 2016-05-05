@@ -32,8 +32,8 @@ angular.module('BuilderColumn', [
                 valueWeJustGot = laneData.championNameFilter;
             });
 
-            scope.$watch('championName', function(newVal){
-                if(newVal !== valueWeJustGot){
+            scope.$watch('championName', function(newVal, oldVal){
+                if(newVal !== valueWeJustGot && newVal !== oldVal){
                     socket.emit('lane:champFilterUpdate', {
                         _id: scope.laneID,
                         championNameFilter: scope.championName
@@ -108,34 +108,51 @@ angular.module('BuilderColumn', [
 
 .filter('champFilter', ['summonerService', 'BuilderFilter',
     function(summonerService, BuilderFilter){
-
+    var results;
     //champions: master list of champions
     //filters: list of BuilderFilter objects
     return function(champions, filters) {
-        var results = champions;
+        if(!champions || champions.length <= 0){
+            return champions;
+        }
 
         //Filter by Role
 
-        //Get all the role filters
-        var roleFilters = _.filter(filters, {type: BuilderFilter.getTypes().role});
-        //Get an array of just the role names
-        var roles = _.map(roleFilters, 'model'); 
-        //Remove champs that dont have matching roles
-        results = _.filter(results, function(champ){
-            return _.intersection(champ.Roles, roles); //TODO fix this
-        });
+        // //Get all the role filters
+        // var roleFilters = _.filter(filters, {type: BuilderFilter.getTypes().role});
+        // //Get an array of just the role names
+        // var roles = _.map(roleFilters, 'model'); 
+        // //Remove champs that dont have matching roles
+        // results = _.filter(results, function(champ){
+        //     return _.intersection(champ.Roles, roles); //TODO fix this
+        // });
 
-        //Sort by champion mastery if we have the summoner
+
+
+
+        //Sort by champion mastery if we have the summoner filter
         var summonerFilter = _.find(filters, function(filter){
             return filter.type === BuilderFilter.getTypes().summoner;
         });
 
         if(summonerFilter && summonerFilter.model){
-            results = _.sortBy(results, function(champ){
-                return summonerService.getMastery(summonerFilter.model, champ);
-            });    
+            var masteries = summonerService
+            .getSummonerMasteriesSynch(summonerFilter.model);
+
+            if(masteries){
+            // champions.sort(function(champA, champB){
+            //     var a = masteries[champA.id] ? masteries[champA.id].championPoints: 0;
+            //     var b = masteries[champB.id] ? masteries[champB.id].championPoints: 0;
+            //     return a > b ? -1 : 1;
+            // });
+                results = _.sortBy(champions, function(champion){
+                    return masteries[champion.id] ? 
+                        masteries[champion.id].championPoints*-1 :
+                        0;
+                });      
+            }
         }
 
-        return results;
+        return results || champions;
     };
 }]);

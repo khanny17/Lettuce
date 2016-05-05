@@ -1,6 +1,6 @@
 'use strict';
 
-var User        = require('../models/user');
+var User        = require('../models/user').User;
 var config      = require('../../config/config');
 var jwt         = require('jwt-simple');    
 var logger = require('../utilities/logger');
@@ -20,7 +20,6 @@ var endpoints = {
                 summoner: req.body.summoner,
                 teamname: req.body.teamname,
                 password: req.body.password
-                
             });
             logger.debug(newUser);
     // save the user

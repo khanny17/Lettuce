@@ -71,6 +71,18 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
             resolve: {
                 comp: ['compService', '$stateParams', function(compService, $stateParams){
                     return compService.get($stateParams.compID);
+                }],
+                summonerChampionMasteries: ['$q', 'summonerService', 
+                function($q, summonerService){
+                    return summonerService.getTeamSummoners()
+                    .then(function(summoners){
+                        var promises = [];
+                        summoners.forEach(function(summoner){
+                            promises.push(summonerService
+                                .getSummonerMasteries(summoner.name));
+                        });
+                        return $q.all(promises);
+                    });
                 }]
             }
         })

@@ -22,33 +22,54 @@ var ChampMastery = mongoose.model('ChampMastery', {
 var methods = {
     create: function(championMastery){
         var deferred = q.defer();
-        console.log('DAD');
         ChampMastery.update({
             $and: [
-                {playerId: championMastery.playerId},
-                {championId: championMastery.championId}
+            {playerId: championMastery.playerId},
+            {championId: championMastery.championId}
             ]
-        },
-            championMastery,
-        {
+        }, championMastery, {
             upsert: true //Create if its not there bro ;)
-        }, function(err, mastery){
+        }, function(err){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
                 return;
             }
-            logger.info('Added ChampMastery for ' +mastery.playerId + ' ' + 
-                mastery.championId);
-            deferred.resolve(mastery);
+
+            logger.debug('Created/Updated ChampMastery for ' +
+                championMastery.playerId + ' ' + championMastery.championId);
+            deferred.resolve();
         });
+        return deferred.promise;
+    },
+    getByPlayerId: function(playerId) {
+        var deferred = q.defer();
+
+        if(!playerId){
+            deferred.reject('No playerId given');
+            logger.warn('No playerId given');
             return deferred.promise;
+        }
+
+
+        ChampMastery.find({
+            playerId: playerId
+        }, function(err, results){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            }
+            deferred.resolve(results);
+        });
+
+        return deferred.promise;
     }
 };
 
 
 module.exports = {
-    create: methods.create
+    create: methods.create,
+    getByPlayerId: methods.getByPlayerId
 };
 
 

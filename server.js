@@ -53,6 +53,8 @@ var apiServices = [
     { route: '/riot', service: require(__dirname + '/app/api/riot') },
     { route: '/team', service: require(__dirname + '/app/api/team') },
     { route: '/auth', service: require(__dirname + '/app/api/auth') },
+    { route: '/champ-mastery', service: require(__dirname + '/app/api/champMastery') },
+    { route: '/summoner', service: require(__dirname + '/app/api/summoner') },
     { route: '/comp', service: require(__dirname + '/app/api/comp') }
 ];
 
