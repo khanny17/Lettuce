@@ -1,46 +1,47 @@
 'use strict';
 
-angular.module('AuthService', [])
- 
-.service('AuthService', ['$q', '$http','TeamName',
-  function($q, $http, TeamName) {
-  var API_ENDPOINT    = 'api/auth';
-  var LOCAL_TOKEN_KEY = 'yourTokenKey';
-  var isAuthenticated = false;
-  var authToken;
- 
-  function loadUserCredentials() {
-    var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
-    if (token) {
+angular.module('AuthService', ['NotificationService'])
+
+.service('AuthService', ['$q', '$http','TeamName', 'notificationService',
+  function($q, $http, TeamName, notificationService) {
+    var API_ENDPOINT    = 'api/auth';
+    var LOCAL_TOKEN_KEY = 'yourTokenKey';
+    var isAuthenticated = false;
+    var authToken;
+    
+    function loadUserCredentials() {
+      var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
+      if (token) {
+        useCredentials(token);
+      }
+    }
+    
+    function storeUserCredentials(token) {
+      window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
       useCredentials(token);
     }
-  }
- 
-  function storeUserCredentials(token) {
-    window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-    useCredentials(token);
-  }
- 
-  function useCredentials(token) {
-    isAuthenticated = true;
-    authToken = token;
- 
+    
+    function useCredentials(token) {
+      isAuthenticated = true;
+      authToken = token;
+      
     // Set the token as header for your requests!
     $http.defaults.headers.common.Authorization = authToken;
   }
- 
+  
   function destroyUserCredentials() {
     authToken = undefined;
     isAuthenticated = false;
     $http.defaults.headers.common.Authorization = undefined;
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
- 
+  
   var register = function(user) {
     user.teamname = TeamName.val;
     return $q(function(resolve, reject) {
       $http.post(API_ENDPOINT + '/signup', user).then(function(result) {
         if (result.data.success) {
+          notificationService.notify('authenticated');
           resolve(result.data.msg);
         } else {
           reject(result.data.msg);
@@ -48,26 +49,30 @@ angular.module('AuthService', [])
       });
     });
   };
- 
+  
   var login = function(user) {
+    user.teamname = TeamName.val;
     return $q(function(resolve, reject) {
       $http.post(API_ENDPOINT + '/authenticate', user).then(function(result) {
         if (result.data.success) {
           storeUserCredentials(result.data.token);
+          notificationService.notify('authenticated');
           resolve(result.data.msg);
         } else {
+          notificationService.notify('unauthenticated');
           reject(result.data.msg);
         }
       });
     });
   };
- 
+  
   var logout = function() {
+    notificationService.notify('unauthenticated');
     destroyUserCredentials();
   };
- 
+  
   loadUserCredentials();
- 
+  
   return {
     login: login,
     register: register,
@@ -75,7 +80,7 @@ angular.module('AuthService', [])
     isAuthenticated: function() {return isAuthenticated;},
   };
 }])
- 
+
 .factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
   return {
     responseError: function (response) {
@@ -86,7 +91,7 @@ angular.module('AuthService', [])
     }
   };
 })
- 
+
 .config(function ($httpProvider) {
   $httpProvider.interceptors.push('AuthInterceptor');
 });

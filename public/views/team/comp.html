@@ -13,7 +13,8 @@
 
                 <div class="panel-body">
                     <builder-column champions="champions" filters="lane.filters"
-                                    lane-id="{{lane._id}}" champion-name="lane.championNameFilter"></builder-column>
+                                    lane-id="{{lane._id}}" champion-name="lane.championNameFilter"
+                                    read-only="!authenticated"></builder-column>
                 </div>
             </div>
         </div>

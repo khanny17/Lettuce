@@ -51,6 +51,9 @@ angular.module('SummonerService', [])
     //summoner name again unless you pass a truthy value as
     //forceRefresh
     this.getSummonerMasteries = function(summonerName, forceRefresh) {
+        //lowercase the summoner name
+        summonerName = (summonerName || '').toLowerCase();
+
         if(championMasteryCache[summonerName] && !forceRefresh) {
             return $q.when(championMasteryCache[summonerName]);
         }
@@ -76,6 +79,7 @@ angular.module('SummonerService', [])
     //already loaded the summoner masteries
     //for that summoner
     this.getSummonerMasteriesSynch = function(summonerName) {
+        summonerName = (summonerName || '').toLowerCase();
         return championMasteryCache[summonerName];
     };
 }]);

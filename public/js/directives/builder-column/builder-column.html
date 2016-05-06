@@ -2,28 +2,28 @@
     <div class="filters">
         
         <builder-column-filter filter="filter" placeholder="getPlaceholder(filter.type)"
-        delete-filter="deleteFilter" ng-repeat="filter in filters"></builder-column-filter>
+        delete-filter="deleteFilter" ng-repeat="filter in filters" read-only="readOnly"></builder-column-filter>
 
         <!-- Add Filter -->
         <div class="input-group">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="addFilter(selectedFilter)"
-                        ng-disabled="isDisabled(selectedFilter)">
+                        ng-disabled="isDisabled(selectedFilter) || readOnly">
                     <i class="fa fa-plus"></i>
                 </button>
             </div>
 
-            <select ng-model="selectedFilter" class="form-control"
+            <select ng-model="selectedFilter" class="form-control" ng-disabled="readOnly"
                     ng-options="f.placeholder for f in filterOptions track by f.type"></select>
         </div>
     </div>
 
     <div class="results">
         <input type="text" placeholder="Champion Name" class="form-control builder-filter"
-                ng-model="championName" />
+                ng-model="championName" ng-disabled="readOnly"/>
 
         <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
-                                                    | champFilter:filters
+                                                    | sortByMastery:getSummonerName()
                                                     | filter:{name:championName}
                                                     | limitTo:8)"></champion-option>
 

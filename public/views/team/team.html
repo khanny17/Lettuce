@@ -1,10 +1,9 @@
 <!-- The root template for the team specific pages -->
 
 <div class="team-page">
-    <ng-include src="'views/templates/navbar.html'"></ng-include>
+    <navbar team="{{team.name}}"></navbar>
     
     <div class="container navbar-offset">
-
         <div ui-view></div>
     </div>
 </div>

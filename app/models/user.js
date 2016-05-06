@@ -10,7 +10,6 @@ var logger = require('../utilities/logger');
 var UserSchema = new Schema({
 	name: {
 		type: String,
-		unique: true,
 		required: true 
 	},
 	password: {
@@ -26,6 +25,10 @@ var UserSchema = new Schema({
 		required: true
 	}
 });
+
+//Make the username/teamname combo unique
+UserSchema.index({ name: 1, teamname: 1 }, { unique: true });
+
 
 UserSchema.pre('save', function (next){
 	var user = this;
@@ -71,8 +74,23 @@ var methods = {
 				logger.error(err);
 				return deferred.reject(err);
 			}
-            deferred.resolve(teams);
+			deferred.resolve(teams);
 		});
+		return deferred.promise;
+	},
+
+	create: function(user){
+		var deferred = q.defer();
+		var newUser = new User(user);
+		logger.debug(newUser);
+    	// save the user
+    	newUser.save(function(err) {
+    		if (err) {
+    			logger.debug(err);
+    			return deferred.reject('Username already exists.');
+    		}
+    		return deferred.resolve('Successful created new user.');
+    	});
 		return deferred.promise;
 	}
 };
@@ -81,5 +99,6 @@ var methods = {
 
 module.exports= {
 	User: User,
-	getByTeam: methods.getByTeam
+	getByTeam: methods.getByTeam,
+	create: methods.create
 };

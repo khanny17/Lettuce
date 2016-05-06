@@ -11,14 +11,14 @@ angular.module('Lettuce', [
     'CreateController', 
     'TeamController', 
     'NotfoundController', 
-    'NavbarController', 
     'CompsController', 
     'CompController', 
 
     'OnEnterDirective',
     'TeamSearchResultDirective',
     'BuilderColumn',
-    'Inputs'
+    'Inputs',
+    'Navbar'
 ])
 .constant('AUTH_EVENTS', {
     notAuthenticated: 'auth-not-authenticated'

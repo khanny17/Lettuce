@@ -8,7 +8,8 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
         scope: {
             filter: '=',
             placeholder: '=',
-            deleteFilter: '&'
+            deleteFilter: '&',
+            readOnly: '='
         },
         templateUrl: 'js/directives/builder-column-filter/builder-column-filter.html',
         link: function(scope) {
