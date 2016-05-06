@@ -28,9 +28,9 @@ var endpoints = {
 
     createTeam: function(req, res){
         //TODO: Authenticate this shit!
-        Team.create(req.body.team)
+        Team.create(req.body)
         .then(function(team){
-            res.send(team);
+            res.status(200).send(team);
         })
         .catch(res.status(500).send);
     },

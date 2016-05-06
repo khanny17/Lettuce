@@ -3,8 +3,8 @@ angular.module('SearchController', ['TeamService'])
 
 //Controller for "search.html"
 
-.controller('searchController', ['$scope', '$location', 'teamService', 'TeamName',
-    function($scope, $location, teamService, teamName){
+.controller('searchController', ['$scope', '$location', 'teamService',
+    function($scope, $location, teamService){
 
         //This gets the query param from the url
         //ex: if the url is this: http://localhost:8080/search?query=abcDEFghi
@@ -28,10 +28,6 @@ angular.module('SearchController', ['TeamService'])
 
         //function to open a new tab to the "team specific" page
         $scope.goToTeamPage = function goToTeamPage(name) {
-
-            //window.location.replace(teamService.buildTeamUrl(name, teamName.val));
-
-            //open in new tab/window
-            window.open(teamService.buildTeamUrl(name, teamName.val), '_blank'); 
+            teamService.goToTeamPage(name); 
         };
     }]);

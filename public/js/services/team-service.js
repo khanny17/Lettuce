@@ -3,7 +3,8 @@ angular.module('TeamService', [])
 
 //This service handles all the server calls related to the team
 
-.service('teamService', ['$http', '$location', function($http, $location){
+.service('teamService', ['$http', '$location', 'TeamName',
+    function($http, $location, teamName){
     var teamNames;
 
     //Get a list of all the team names that have registered with our site
@@ -102,5 +103,9 @@ angular.module('TeamService', [])
         }
 
         return newUrl;
+    };
+
+    this.goToTeamPage = function(name) {
+        window.open(this.buildTeamUrl(name, teamName.val), '_blank'); 
     };
 }]);
