@@ -35,10 +35,11 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-    update.summoners(config.riot.ourTeam),
-    update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-    update.champions(),
-    update.masteries()
+    //update.summoners(config.riot.ourTeam),
+    //update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+    //update.champions(),
+    //update.masteries()
+    update.winRate
     ];
 
     //Save our promises and print any errors we have
@@ -235,6 +236,36 @@ var update = {
         .then(deferred.resolve)
         .fail(deferred.reject);
         return deferred.promise;
+    },
+    winRate: function(){
+        var deferred = q.defer();
+        Summoner.getAll()
+        .then(function(summoners){
+            var error;
+            if(!summoners || summoners.length===0) {
+                error = 'No Summoners  found';
+                logger.warn(error);
+                deferred.reject(error);    
+            }
+            summoners = lodash.map(summoners, function(summoner){
+                return summoner.id;
+            });
+            var base = config.riot.endpointUrls.matchList;
+            var promises = [];
+            summoners.forEach(function(id){
+                var url = base + id  +'?beginIndex=0&endIndex=15';
+                promises.push(apiCall(url));
+            });
+            console.log(promises);
+            
+            return q.all(promises);
+        })
+        .then(function(matches){
+            matches = lodash.flatten(matches);
+            matches.forEach(function(championWinRate){
+                console.log(championWinRate);
+            });
+        });
     }
 };
 

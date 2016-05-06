@@ -36,8 +36,8 @@ var methods = {
                 return;
             }
 
-            logger.debug('Created/Updated ChampMastery for ' +
-                championMastery.playerId + ' ' + championMastery.championId);
+            //logger.debug('Created/Updated ChampMastery for ' +
+              //  championMastery.playerId + ' ' + championMastery.championId);
             deferred.resolve();
         });
         return deferred.promise;
