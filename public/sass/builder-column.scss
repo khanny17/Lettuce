@@ -17,4 +17,13 @@
 
 .builder-column-filter {
     margin-bottom: 5px;
+
+    .input-group {
+        .input-group-btn {
+            display: none;
+        }
+        &:hover > .input-group-btn {
+            display: table-cell;
+        }
+    }
 }

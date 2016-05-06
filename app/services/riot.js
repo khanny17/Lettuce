@@ -38,7 +38,7 @@ var RunUpdate = function(){
     //update.summoners(config.riot.ourTeam),
     //update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
     //update.champions(),
-    //update.masteries()
+    //update.champMasteries()
     update.winRate
     ];
 
@@ -202,12 +202,16 @@ var update = {
         .fail(deferred.reject);
         return deferred.promise;
     },
-    masteries: function(){
+    champMasteries: function(summonerName){
         var deferred = q.defer();
-        Summoner.getAll()
+        //if they give a name, get just that one's masteries.
+        //if they dont, get them all
+        (summonerName ?
+        Summoner.getOneByName(summonerName) :
+        Summoner.getAll())
         .then(function(summoners){
             var error;
-            if(!summoners || summoners.length===0) {
+            if(!summoners || summoners.length <= 0) {
                 error = 'No Summoners  found';
                 logger.warn(error);
                 deferred.reject(error);    

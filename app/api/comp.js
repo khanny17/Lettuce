@@ -98,7 +98,6 @@ function getFullComp(compID){
         return q.all(promises);
     })
     .then(function(){
-        console.log(fullComp.lanes[0]);
         deferred.resolve(fullComp);
     });
     return deferred.promise;

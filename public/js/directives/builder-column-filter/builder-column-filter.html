@@ -1,8 +1,11 @@
 <div class="builder-column-filter">
     <div class="input-group">
+        <span class="input-group-addon hidden-sm hidden-xs">
+            <i class="fa fa-user"></i>
+        </span>
         <input type="text" placeholder="{{::placeholder}}" class="form-control builder-filter" ng-model="filter.model" ng-disabled="readOnly"/>
         <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="delete(filter._id)" ng-disabled="readOnly">
+            <button class="btn btn-danger" ng-click="delete(filter._id)" ng-disabled="readOnly">
                 <i class="fa fa-times"></i>
             </button>
         </span>

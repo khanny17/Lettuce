@@ -8,6 +8,8 @@ var jwt         = require('jwt-simple');
 var logger      = require('../utilities/logger');
 var apiCall = require('../utilities/apiHandler.js');
 
+var riotUpdateService = require('../services/riot');
+
 var init = function(router){
     //These are mounted on /api/auth
     router.post('/signup', endpoints.signup);
@@ -19,27 +21,30 @@ var endpoints = {
             return res.json({success: false, msg: 'Please pass name and password.'});
         }
 
-        User.create({
-            name: req.body.name,
-            summoner: req.body.summoner,
-            teamname: req.body.teamname,
-            password: req.body.password
-        })
-        .then(function(){
-            //Now that we created a user, we need to create a summoner
-            var base = config.riot.endpointUrls.summoner;
-            var url = base + req.body.name;
-            return apiCall(url);
-        })
+        //First, validate the summoner name
+        var base = config.riot.endpointUrls.summoner;
+        var url = base + req.body.name;
+
+        apiCall(url)
         .then(function(summonerData){
-            console.log(summonerData);
             return Summoner.create(
                 summonerData[req.body.name].id,
                 summonerData[req.body.name].name 
             );
         })
         .then(function(){
+            return User.create({
+                name: req.body.name,
+                summoner: req.body.summoner,
+                teamname: req.body.teamname,
+                password: req.body.password
+            });
+        })
+        .then(function(){
+            //Send a response - we made the user.
             res.json({success: true, msg: 'Successfully created user'});
+            //Now that the user is free, lets get their data
+            return riotUpdateService.update.champMasteries(req.body.summoner);
         })
         .fail(function(msg){
             return res.json({success: false, msg: msg});
