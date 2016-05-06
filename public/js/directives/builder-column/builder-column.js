@@ -2,7 +2,8 @@
 angular.module('BuilderColumn', [
     'BuilderFilterFactory', 
     'ChampionOption', 
-    'SummonerService', 
+    'SummonerService',
+    'ChampionService',
     'BuilderColumnFilter',
     'SocketFactory',
     'SortByMastery',
@@ -10,8 +11,12 @@ angular.module('BuilderColumn', [
     'FilterByChamp'
 ])
 
-.directive('builderColumn', ['BuilderFilter', 'socket', 'summonerService',
-    function(BuilderFilter, socket, summonerService){
+.directive('builderColumn', [
+    'BuilderFilter', 
+    'socket', 
+    'summonerService', 
+    'championService',
+    function(BuilderFilter, socket, summonerService, championService){
     return {
         replace: true,
         restrict: 'E',
@@ -142,14 +147,21 @@ angular.module('BuilderColumn', [
 
             scope.filters.forEach(initFilter);
             function initFilter(filter) {
-                if(filter.type === BuilderFilter.getTypes().summoner){
+                var types = BuilderFilter.getTypes();
+                if(filter.type === types.summoner){
                     //TODO come back and eliminate the need for getTeamSummonersSynch()
                     //Too hacky and too much coupling 
                     var summoners = summonerService.getTeamSummonersSynch(); 
                     filter.options = _.map(summoners, function(summoner){
                         return summoner.name;
                     });
-                } else {
+                } else if(filter.type === types.ban){ 
+                    championService.getChampions(function(champions){
+                        filter.options = _.map(champions, function(champ){
+                            return champ.name;
+                        });
+                    });
+                }else {
                     filter.options = BuilderFilter.getFilterTypeOptions(filter.type);
                 }
             }

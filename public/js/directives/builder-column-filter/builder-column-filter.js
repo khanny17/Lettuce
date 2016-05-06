@@ -32,12 +32,16 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
 
             scope.delete = scope.deleteFilter();
 
+            //TODO maybe define this elsewhere?
+            //dont use hardcoded strings?
             scope.getIcon = function() {
                 switch(scope.filter.type) {
                     case 'summoner':
                         return 'fa-user';
                     case 'role' :
                         return 'fa-fire';
+                    case 'ban' :
+                        return 'fa-ban';
                 }
                 return 'fa-circle';
             };
