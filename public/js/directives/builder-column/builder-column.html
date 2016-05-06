@@ -23,6 +23,7 @@
                 ng-model="championName" ng-disabled="readOnly"/>
 
         <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
+                                                    | sortByRole:getRoles()
                                                     | sortByMastery:getSummonerName()
                                                     | filter:{name:championName}
                                                     | limitTo:8)"></champion-option>

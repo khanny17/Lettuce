@@ -8,23 +8,19 @@ var Champion = mongoose.model('Champion', {
     id: Number, //This is taken from the "gameId" field
     name: String,
     title: String, //eg "The Dark Child"
-    image: Object
+    image: Object,
+    roles: [String] //eg Tank, Fighter, Support
 });
 
 
 var methods = {
     //Creates Champion or updates if already exists
-    createOrUpdate: function(id, name, title, image){
+    createOrUpdate: function(champion){
         var deferred = q.defer();
         //Params: query, object, options, callback
         Champion.update({
-            id: id
-        }, {
-            id: id,
-            name: name,
-            title: title,
-            image: image
-        } ,{
+            id: champion.id
+        }, champion, {
             upsert: true //Create if it doesn't exist
         }, function(err){
             if(err){
@@ -32,7 +28,7 @@ var methods = {
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created/Updated Champion: ' + id);
+            logger.info('Created/Updated Champion: ' + champion.name);
             deferred.resolve();
         });
         return deferred.promise;

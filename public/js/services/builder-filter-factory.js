@@ -7,7 +7,7 @@ angular.module('BuilderFilterFactory', [])
 //Anyways, this defines the different types of filters that we can have on the
 //comp builder page. 
 
-//TODO this should be linked to the backend eventually
+//TODO this should be linked to the backend!!!
 .factory('BuilderFilter', function(){
     var types = {
         summoner: 'summoner',
@@ -29,7 +29,9 @@ angular.module('BuilderFilterFactory', [])
                 'Mage',
                 'Assassin',
                 'Tank',
-                'Support'
+                'Support',
+                'Fighter',
+                'Marksman'
             ]
         }
     };

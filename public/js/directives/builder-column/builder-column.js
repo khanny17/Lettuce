@@ -5,7 +5,8 @@ angular.module('BuilderColumn', [
     'SummonerService', 
     'BuilderColumnFilter',
     'SocketFactory',
-    'SortByMastery'
+    'SortByMastery',
+    'SortByRole'
 ])
 
 .directive('builderColumn', ['BuilderFilter', 'socket', 'summonerService',
@@ -114,7 +115,18 @@ angular.module('BuilderColumn', [
                }) || {}).model;
             };
 
-
+            scope.getRoles = function() {
+                var roleType = BuilderFilter.getTypes().role;
+                var roleFilters = _.filter(scope.filters, {
+                    type: roleType
+                });
+                //Return an array of just the role names
+                var roles = _.map(roleFilters, 'model'); 
+                //Get the valid options for role names
+                var validRoles = BuilderFilter.getFilterTypeOptions(roleType);
+                //Return only the roles that are valid options
+                return _.intersection(roles, validRoles);
+            };
 
 
             scope.filters.forEach(initFilter);

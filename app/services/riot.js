@@ -35,11 +35,11 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-    //update.summoners(config.riot.ourTeam),
-    //update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-    //update.champions(),
-    //update.champMasteries()
-    update.winRate
+        update.summoners(config.riot.ourTeam),
+        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+        update.champions(),
+        update.champMasteries(),
+        // update.winRate()
     ];
 
     //Save our promises and print any errors we have
@@ -66,8 +66,13 @@ var update = {
                 //Okay, we need to update then.
                 //Create or update each champion
                 lodash.forEach(champions, function(champion){
-                    Champion.createOrUpdate(champion.id, champion.name,
-                        champion.title, champion.image);
+                    Champion.createOrUpdate({
+                        id: champion.id,
+                        name: champion.name,
+                        title: champion.title,
+                        image: champion.image,
+                        roles: champion.tags
+                    });
                 }); 
                 //Then save the new version
                 //return so the chain will pass on the failure if it happens

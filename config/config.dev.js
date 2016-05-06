@@ -40,7 +40,7 @@ module.exports = {
 
         endpointUrls: {
             champion: 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion' + 
-                                                                    '?champData=image',
+                                                                '?champData=image,tags',
             match: 'https://na.api.pvp.net/api/lol/na/v2.2/match/',
             summoner: 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/',
             team: 'https://na.api.pvp.net/api/lol/na/v2.4/team/',
