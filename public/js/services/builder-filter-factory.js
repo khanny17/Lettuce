@@ -11,7 +11,8 @@ angular.module('BuilderFilterFactory', [])
 .factory('BuilderFilter', function(){
     var types = {
         summoner: 'summoner',
-        role: 'role'
+        role: 'role',
+        ban: 'ban'
     };
 
     var filterOptions = {
@@ -24,7 +25,7 @@ angular.module('BuilderFilterFactory', [])
         role: {
             type: 'role',
             placeholder: 'Role',
-            max: null,
+            max: 5,
             options: [
                 'Mage',
                 'Assassin',
@@ -33,6 +34,12 @@ angular.module('BuilderFilterFactory', [])
                 'Fighter',
                 'Marksman'
             ]
+        },
+
+        ban: {
+            type: 'ban',
+            placeholder: 'Ban',
+            max: null
         }
     };
 

@@ -19,6 +19,9 @@ var types = {
     },
     role: {
         max: 5
+    },
+    ban: {
+        max: null
     }
 };
 

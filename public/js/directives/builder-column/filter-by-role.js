@@ -1,7 +1,7 @@
 'use strict';
-angular.module('SortByRole', [])
+angular.module('FilterByRole', [])
 
-.filter('sortByRole', [function(){
+.filter('filterByRole', [function(){
 
     //champions: master list of champions
     //roles: list of role strings
@@ -9,7 +9,7 @@ angular.module('SortByRole', [])
         if(!roles || roles.length <= 0) {
             return champions;
         }
-        
+
         var results = [];
 
         //Remove champs that dont have matching roles

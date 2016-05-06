@@ -6,7 +6,8 @@ angular.module('BuilderColumn', [
     'BuilderColumnFilter',
     'SocketFactory',
     'SortByMastery',
-    'SortByRole'
+    'FilterByRole',
+    'FilterByChamp'
 ])
 
 .directive('builderColumn', ['BuilderFilter', 'socket', 'summonerService',
@@ -109,6 +110,7 @@ angular.module('BuilderColumn', [
             }
 
 
+            //Filter helpers for ng-repeat
             scope.getSummonerName = function(){
                 return (_.find(scope.filters, function(filter){
                    return filter.type === BuilderFilter.getTypes().summoner;
@@ -128,6 +130,15 @@ angular.module('BuilderColumn', [
                 return _.intersection(roles, validRoles);
             };
 
+            scope.getBannedChamps = function() {
+                var banType = BuilderFilter.getTypes().ban;
+                var banFilters = _.filter(scope.filters, {
+                    type: banType
+                });
+                //array of champ names to ban
+                return _.map(banFilters, 'model'); 
+            };
+            //End filter helpers
 
             scope.filters.forEach(initFilter);
             function initFilter(filter) {

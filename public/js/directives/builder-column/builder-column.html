@@ -23,10 +23,11 @@
                 ng-model="championName" ng-disabled="readOnly"/>
 
         <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
-                                                    | sortByRole:getRoles()
-                                                    | sortByMastery:getSummonerName()
-                                                    | filter:{name:championName}
-                                                    | limitTo:8)"></champion-option>
+                    | filterByChamp:getBannedChamps()
+                    | filterByRole:getRoles()
+                    | sortByMastery:getSummonerName()
+                    | filter:{name:championName}
+                    | limitTo:8)"></champion-option>
 
         <p class="text-danger no-results" ng-if="!filteredChamps.length">No Results</p>
     </div>
