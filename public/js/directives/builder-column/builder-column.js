@@ -8,7 +8,8 @@ angular.module('BuilderColumn', [
     'SortByMastery'
 ])
 
-.directive('builderColumn', ['BuilderFilter', 'socket', function(BuilderFilter, socket){
+.directive('builderColumn', ['BuilderFilter', 'socket', 'summonerService',
+    function(BuilderFilter, socket, summonerService){
     return {
         replace: true,
         restrict: 'E',
@@ -64,6 +65,7 @@ angular.module('BuilderColumn', [
             };
 
             socket.on('filter:add:'+ scope.laneID, function(filter){
+                initFilter(filter);
                 scope.filters.push(filter);
             });
             //End Add Filter
@@ -111,6 +113,23 @@ angular.module('BuilderColumn', [
                    return filter.type === BuilderFilter.getTypes().summoner;
                }) || {}).model;
             };
+
+
+
+
+            scope.filters.forEach(initFilter);
+            function initFilter(filter) {
+                if(filter.type === BuilderFilter.getTypes().summoner){
+                    //TODO come back and eliminate the need for getTeamSummonersSynch()
+                    //Too hacky and too much coupling 
+                    var summoners = summonerService.getTeamSummonersSynch(); 
+                    filter.options = _.map(summoners, function(summoner){
+                        return summoner.name;
+                    });
+                } else {
+                    filter.options = BuilderFilter.getFilterTypeOptions(filter.type);
+                }
+            }
         }
     };
 }]);

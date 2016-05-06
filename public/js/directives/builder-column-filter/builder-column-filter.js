@@ -31,6 +31,16 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
             });
 
             scope.delete = scope.deleteFilter();
+
+            scope.getIcon = function() {
+                switch(scope.filter.type) {
+                    case 'summoner':
+                        return 'fa-user';
+                    case 'role' :
+                        return 'fa-fire';
+                }
+                return 'fa-circle';
+            };
         }
     };
 }]);

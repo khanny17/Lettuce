@@ -24,7 +24,13 @@ angular.module('BuilderFilterFactory', [])
         role: {
             type: 'role',
             placeholder: 'Role',
-            max: null
+            max: null,
+            options: [
+                'Mage',
+                'Assassin',
+                'Tank',
+                'Support'
+            ]
         }
     };
 
@@ -39,8 +45,14 @@ angular.module('BuilderFilterFactory', [])
         return types;
     };
 
+    //Returns the different kinds of filters that you can have
     BuilderFilter.getOptions = function(){
         return filterOptions;
+    };
+
+    //Returns the options property on a filter, if any
+    BuilderFilter.getFilterTypeOptions = function(type){
+        return filterOptions[type].options;
     };
 
     BuilderFilter.getPlaceholder = function(type){

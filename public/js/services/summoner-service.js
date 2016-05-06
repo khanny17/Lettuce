@@ -32,6 +32,13 @@ angular.module('SummonerService', [])
         return $q.when(teamSummoners);
     };
 
+    //WARNING - this will get whatever we have at the time
+    //Make sure you have already called "getTeamSummoners"
+    //I know this is bad practice :(
+    this.getTeamSummonersSynch = function (){
+        return teamSummoners;
+    };
+
 
 
 
