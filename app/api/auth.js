@@ -23,13 +23,18 @@ var endpoints = {
 
         //First, validate the summoner name
         var base = config.riot.endpointUrls.summoner;
-        var url = base + req.body.name;
+        var url = base + req.body.summoner;
+        //Forcing it lowercase. If the users ask, we can look into
+        //keeping the capitalization. Otherwise, 
+        //it is not worth our trouble for the summoner name
+        req.body.summoner = req.body.summoner.toLowerCase();
 
         apiCall(url)
         .then(function(summonerData){
+            console.log(summonerData);
             return Summoner.create(
-                summonerData[req.body.name].id,
-                summonerData[req.body.name].name 
+                summonerData[req.body.summoner].id,
+                req.body.summoner 
             );
         })
         .then(function(){
@@ -43,10 +48,13 @@ var endpoints = {
         .then(function(){
             //Send a response - we made the user.
             res.json({success: true, msg: 'Successfully created user'});
+            logger.debug('Success creating ' + req.body.name);
             //Now that the user is free, lets get their data
-            return riotUpdateService.update.champMasteries(req.body.summoner);
+            return riotUpdateService.update
+            .champMasteries(req.body.summoner);
         })
         .fail(function(msg){
+            logger.warn(msg);
             return res.json({success: false, msg: msg});
         });
         
