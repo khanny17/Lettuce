@@ -71,7 +71,7 @@ var endpoints = {
             }
             if (!user) {
                 var msg = 'Authentication failed. User not found.';
-                res.send({success: false, msg: msg});
+                res.send({success: false, msg: msg, field: 'name'});
                 logger.debug(msg);
             } else {
                 // check if password matches
@@ -86,7 +86,7 @@ var endpoints = {
                     } else {
                         var msg = 'Authentication failed. Wrong password.';
                         logger.debug(msg);
-                        res.send({success: false, msg: msg});
+                        res.send({success: false, msg: msg, field: 'password'});
                     }
                 });
             }

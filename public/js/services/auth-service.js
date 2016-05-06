@@ -44,7 +44,7 @@ angular.module('AuthService', ['NotificationService'])
           notificationService.notify('authenticated');
           resolve(result.data.msg);
         } else {
-          reject(result.data.msg);
+          reject(result.data);
         }
       });
     });
@@ -60,7 +60,7 @@ angular.module('AuthService', ['NotificationService'])
           resolve(result.data.msg);
         } else {
           notificationService.notify('unauthenticated');
-          reject(result.data.msg);
+          reject(result.data);
         }
       });
     });

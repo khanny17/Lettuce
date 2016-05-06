@@ -19,8 +19,11 @@ function(authService, $location, $uibModal){
                     AuthService.login($modalScope.user)
                     .then(function(msg) {
                         modalInstance.close(msg);
-                    }, function(errMsg) {
-                        console.error(errMsg);
+                        $modalScope.validationErrors = {};
+                    }, function(error) {
+                        $modalScope.validationErrors = {};
+                        $modalScope.validationErrors[error.field] = error.msg;
+                        console.error(error.msg);
                     });
                 };
                 $modalScope.cancel = function() {
