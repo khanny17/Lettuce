@@ -8,7 +8,7 @@ var q = require('q');
 
 var ChampWinRate = mongoose.model('ChampWinRate', {
     championId: Number,
-    normWinRate: Number,
+    normalWinRate: Number,
     masteryWinRate: Number
 });
 

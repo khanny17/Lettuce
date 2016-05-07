@@ -14,6 +14,7 @@ var Champion = require('../models/champion');
 var Version = require('../models/version');
 var MatchDetail = require('../models/matchDetail');
 var ChampionMastery = require('../models/champMastery');
+var winRate = require('../models/winRate');
 
 
 //Read the docs: https://www.npmjs.com/package/cron
@@ -35,11 +36,11 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-        update.summoners(config.riot.ourTeam),
-        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-        update.champions(),
-        update.champMasteries(),
-        // update.winRate()
+        // update.summoners(config.riot.ourTeam),
+        // update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+        // update.champions(),
+        // update.champMasteries(),
+        update.winRateFinder()
     ];
 
     //Save our promises and print any errors we have
@@ -246,7 +247,7 @@ var update = {
         .fail(deferred.reject);
         return deferred.promise;
     },
-    winRate: function(){
+winRateFinder: function(){
         var deferred = q.defer();
         Summoner.getAll()
         .then(function(summoners){
@@ -259,25 +260,65 @@ var update = {
             summoners = lodash.map(summoners, function(summoner){
                 return summoner.id;
             });
-            var base = config.riot.endpointUrls.matchList;
+            var base = config.riot.endpointUrls.game;
             var promises = [];
+            //console.log(summoners);
             summoners.forEach(function(id){
-                var url = base + id  +'?beginIndex=0&endIndex=15';
+                //console.log(id);
+                var url = base + id  +'/recent';
                 promises.push(apiCall(url));
             });
-            console.log(promises);
-            
+            //console.log(promises);
             return q.all(promises);
         })
-        .then(function(matches){
-            matches = lodash.flatten(matches);
-            matches.forEach(function(championWinRate){
-                console.log(championWinRate);
+        .then(function(summonerGamePairs){
+            var arrayOfArrays = lodash.map(summonerGamePairs, function(summonerGamePair){
+                return summonerGamePair.games;
             });
+            //console.log(arrayOfArrays); // This is a array of game arrays
+            var arrayOfGames = lodash.flatten(arrayOfArrays);
+            //console.log(arrayOfGames); // A array of Game objects
+            var champWinRateArray = [{
+                championId: 8,
+                normalWinRate: 1,
+                masteryWinRate: 1
+            }]; 
+            var totalGames = 0;
+            arrayOfGames.forEach(function(game){ // Iterating though a list of games
+                //console.log(game);
+              
+                if (String(game.stats.win) === 'true'){
+                      totalGames++;
+                    var found = champWinRateArray.some(function(partOfArray){
+                        return partOfArray.championId === game.championId;
+                    });
+                    if (!found ){
+                        champWinRateArray.push({
+                            championId: game.championId,
+                            normalWinRate: 1,
+                            masteryWinRate: 1
+                        });
+                    } else {
+                        for (var i = 0; i < champWinRateArray.length; i++){
+                            if (champWinRateArray[i].championId === game.championId){
+                                champWinRateArray[i].normalWinRate++;
+                                //console.log(champWinRateArray[i].championId);
+                            }
+                        }
+                    } 
+                } 
+            });
+           //console.log(champWinRateArray);
+            console.log(totalGames);
+            champWinRateArray.forEach(function(champWinRate){
+            // console.log(champWinRate);
+                winRate.create(champWinRate);
+           });
+           
+
         });
     }
 };
-
 
 
 //Set which functions to make available
