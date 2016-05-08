@@ -36,6 +36,11 @@ var methods = {
 
     getOneByName: function(name){
         var deferred = q.defer();
+        if(!name) {
+            var msg = 'No summoner name given';
+            logger.error(msg);
+            return deferred.reject(msg);
+        }
         Summoner.find({
             name: name
         }, function(err, summoners){
@@ -44,6 +49,10 @@ var methods = {
                 deferred.reject(err);
             } else if(summoners > 1){
                 logger.warn('More than one summoner exists with name: ' + name);
+            } else if(summoners <= 0) {
+                var msg = 'No Summoner found';
+                logger.error(msg);
+                deferred.reject(msg);
             }
 
             deferred.resolve(summoners[0]); //only return ONE

@@ -39,7 +39,7 @@ var methods = {
                 deferred.reject(err);
                 return;
             }
-            logger.info('Created filter');
+            logger.debug('Created filter');
             deferred.resolve(filter.toObject());
         });
         return deferred.promise;            

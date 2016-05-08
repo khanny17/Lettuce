@@ -36,10 +36,10 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-        // update.summoners(config.riot.ourTeam),
-        // update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-        // update.champions(),
-        // update.champMasteries(),
+        update.summoners(config.riot.ourTeam),
+        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+        update.champions(),
+        update.champMasteries(),
         update.winRateFinder()
     ];
 
@@ -212,11 +212,19 @@ var update = {
         var deferred = q.defer();
         //if they give a name, get just that one's masteries.
         //if they dont, get them all
+        logger.info('Updating champion masteries for ' +
+                    (summonerName ? summonerName : 'all summoners'));
         (summonerName ?
         Summoner.getOneByName(summonerName) :
         Summoner.getAll())
         .then(function(summoners){
             var error;
+            //Hack for when we call getOneByName
+            //to turn it into an array
+            if(!summoners.length){
+                summoners = [summoners];
+            }
+
             if(!summoners || summoners.length <= 0) {
                 error = 'No Summoners  found';
                 logger.warn(error);
@@ -234,6 +242,7 @@ var update = {
             return q.all(promises);
         })
         .then(function(masteries){
+            console.log(masteries);
             masteries = lodash.flatten(masteries);
             var promises = [];
             masteries.forEach(function(championMastery){

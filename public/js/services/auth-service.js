@@ -41,6 +41,7 @@ angular.module('AuthService', ['NotificationService'])
     return $q(function(resolve, reject) {
       $http.post(API_ENDPOINT + '/signup', user).then(function(result) {
         if (result.data.success) {
+          storeUserCredentials(result.data.token);
           notificationService.notify('authenticated');
           resolve(result.data.msg);
         } else {
