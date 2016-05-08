@@ -45,7 +45,8 @@ module.exports = {
             summoner: 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/',
             team: 'https://na.api.pvp.net/api/lol/na/v2.4/team/',
             champMastery: 'https://na.api.pvp.net/championmastery/location/NA1/player/',
-            game: 'https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/'
+            game: 'https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/',
+            stats: 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/'
         }
     }
 

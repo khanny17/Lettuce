@@ -14,7 +14,8 @@ var Champion = require('../models/champion');
 var Version = require('../models/version');
 var MatchDetail = require('../models/matchDetail');
 var ChampionMastery = require('../models/champMastery');
-var winRate = require('../models/winRate');
+var WinRate = require('../models/winRate');
+var Stats = require('../models/stats');
 
 
 //Read the docs: https://www.npmjs.com/package/cron
@@ -36,11 +37,12 @@ var init = function(updateRate){
 var RunUpdate = function(){
     logger.info('Riot update job is running');
     var promises = [
-        update.summoners(config.riot.ourTeam),
-        update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
-        update.champions(),
-        update.champMasteries(),
-        update.winRateFinder()
+        // update.summoners(config.riot.ourTeam),
+        // update.teamMatches(config.riot.teamId, config.riot.ourTeamName),
+        // update.champions(),
+        // update.champMasteries(),
+        // update.winRateFinder(),
+        update.statFinder()
     ];
 
     //Save our promises and print any errors we have
@@ -242,7 +244,7 @@ var update = {
             return q.all(promises);
         })
         .then(function(masteries){
-            console.log(masteries);
+            //console.log(masteries);
             masteries = lodash.flatten(masteries);
             var promises = [];
             masteries.forEach(function(championMastery){
@@ -307,11 +309,11 @@ winRateFinder: function(){
                             normalWinRate: 1,
                             masteryWinRate: 1
                         });
-                    } else {
+                    } else{
                         for (var i = 0; i < champWinRateArray.length; i++){
                             if (champWinRateArray[i].championId === game.championId){
                                 champWinRateArray[i].normalWinRate++;
-                                //console.log(champWinRateArray[i].championId);
+                                
                             }
                         }
                     } 
@@ -321,10 +323,50 @@ winRateFinder: function(){
             console.log(totalGames);
             champWinRateArray.forEach(function(champWinRate){
             // console.log(champWinRate);
-                winRate.create(champWinRate);
+                WinRate.create(champWinRate);
            });
            
 
+        });
+    },
+    statFinder: function(){
+        var deferred = q.defer();
+        Summoner.getAll()
+        .then(function(summoners){
+            var error;
+            if(!summoners || summoners.length===0) {
+                error = 'No Summoners  found';
+                logger.warn(error);
+                deferred.reject(error);    
+            }
+            summoners = lodash.map(summoners, function(summoner){
+                return summoner.id;
+            });
+            var base = config.riot.endpointUrls.stats;
+            var promises = [];
+            //console.log(summoners);
+            summoners.forEach(function(id){
+                //console.log(id);
+                var url = base + id  +'/ranked?season=SEASON2016';
+                promises.push(apiCall(url));
+            });
+            //console.log(promises);
+            return q.all(promises);
+        })
+        .then(function(summonerStats){
+            var champStats = [];
+            summonerStats.forEach(function(sumStats){
+                // console.log(sumStats.summonerId);
+                // console.log(sumStats.champions);
+                champStats.push({
+                    summonerId: sumStats.summonerId,
+                    listOfChamps: sumStats.champions
+                });
+            });
+            champStats.forEach(function(ChampStats){
+                //console.log(ChampStats);
+                Stats.create(ChampStats);
+            });
         });
     }
 };
