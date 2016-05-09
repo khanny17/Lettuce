@@ -48,7 +48,7 @@ var methods = {
         Lane.find({
             compID: compID
         }).lean().exec(function(err, lanes){
-            if(err){
+            if(err) {
                 logger.error(err);
                 deferred.reject(err);
             } 

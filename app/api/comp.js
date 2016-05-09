@@ -4,6 +4,7 @@ var Filter      = require('../models/filter');
 var Lane        = require('../models/lane');
 var Comp        = require('../models/comp');
 var q           = require('q');
+var _           = require('lodash');
 var logger = require('../utilities/logger');
 
 
@@ -60,9 +61,25 @@ var endpoints = {
     },
     getTeamComps: function(req, res) {
         logger.debug('/getTeamComps: ' + req.query.teamname);
+        var teamComps;
         Comp.getByTeam(req.query.teamname)
         .then(function(comps){
-            res.status(200).send(comps);
+            teamComps = comps;
+            var promises = [];
+            comps.forEach(function(comp){
+                promises.push(Lane.getByCompID(comp._id));
+            });
+            return q.all(promises);
+        })
+        .then(function(arrayOfLanes){
+            var lanes = _.flatten(arrayOfLanes);
+            lanes.forEach(function(lane){
+                var comp = _.find(teamComps, function(c){
+                    return c._id.toString() === lane.compID.toString();
+                });
+                (comp.lanes || (comp.lanes = [])).push(lane);
+            });
+            res.status(200).send(teamComps);
         })
         .catch(function(err){
             res.status(500).send(err);

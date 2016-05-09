@@ -39,12 +39,20 @@ function(authService, $location, $uibModal){
             size: 'sm',
             controller: ['$scope', 'AuthService',
             function($modalScope, AuthService){
+                $modalScope.errors = {};
                 $modalScope.user = {
                     name: '',
                     summoner:'',
                     password: ''
                 };
+
+                $modalScope.backupPassword = '';
+
                 $modalScope.register = function() {
+                    if($modalScope.backupPassword !== $modalScope.user.password) {
+                        return;
+                    }
+
                     AuthService.register($modalScope.user)
                     .then(function(msg) {
                         modalInstance.close(msg);
@@ -52,9 +60,25 @@ function(authService, $location, $uibModal){
                         console.error(errMsg);
                     });
                 };
+
                 $modalScope.cancel = function() {
                     modalInstance.close();
                 };
+
+                $modalScope.$watch('user.password', function(newVal){
+                    if(newVal !== $modalScope.backupPassword) {
+                        $modalScope.errors.password = 'Passwords do not match';
+                    } else {
+                        $modalScope.errors.password = null;
+                    }
+                });
+                $modalScope.$watch('backupPassword', function(newVal){
+                    if(newVal !== $modalScope.user.password) {
+                        $modalScope.errors.password = 'Passwords do not match';
+                    } else {
+                        $modalScope.errors.password = null;
+                    }
+                });
             }]
         });
     };

@@ -13,7 +13,7 @@ var Comp = mongoose.model('comp', {
 
 
 var methods = {
-    create:function(name, teamname){
+    create: function(name, teamname){
         var deferred  = q.defer();      
         Comp.create({
             name: name,

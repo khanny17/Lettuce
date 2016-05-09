@@ -1,7 +1,8 @@
 'use strict';
 angular.module('BuilderColumnFilter', ['SocketFactory'])
 
-.directive('builderColumnFilter', ['socket', function(socket){
+.directive('builderColumnFilter', ['socket',
+    function(socket){
     return {
         replace: true,
         restrict: 'E',

@@ -3,12 +3,14 @@
             <h3 class="modal-title">Register Friends!</h3>
         </div>
         <div class="modal-body">
-            <input type="text" class="form-control" placeholder="Username" ng-model="user.name" />
-            <input type="text" class="form-control" placeholder="Summoner Name" ng-model="user.summoner" />
-            <input type="password" class="form-control" placeholder="Password" ng-model="user.password" />
+            <text-input label="Username" model="user.name" error="user.name ? null : 'No name given'"></text-input>
+            <text-input label="Summoner Name" model="user.summoner" error="user.summoner ? null : 'No name given'"></text-input>
+            <password-input label="Password" model="user.password" error="errors.password"></password-input>
+            <password-input label="Password (Again)" model="backupPassword" error="errors.password"></password-input>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="register()">Register</button>
+            <button class="btn btn-primary" type="button" ng-click="register()" 
+            ng-disabled="user.password !== backupPassword">Register</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
 </div>

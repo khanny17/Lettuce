@@ -1,6 +1,8 @@
 <div class="comps-page">
-    <div ng-repeat="comp in comps">
-        <a ui-sref="team.comp({compID:comp._id})" ng-bind="::comp.name"></a>
+    <div class="row" ng-repeat="comp in comps">
+        <div class="col-md-12">
+            <h2><a ui-sref="team.comp({compID:comp._id})" ng-bind="::comp.name"></a></h2>
+        </div>
     </div>
     
     <button ng-if="comps.length > 0" class="btn btn-primary" ng-click="openCreateCompModal()">Create new Comp</button>
