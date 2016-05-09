@@ -113,6 +113,43 @@ var update = {
         return deferred.promise;
     },
 
+    //Update our summoner data
+    summoners: function(names){
+        var deferred = q.defer();
+        var error;
+        if(!names){
+            error = 'No summoner names provided, not updating any!';
+            logger.warn(error);
+            deferred.reject(error);
+            return deferred.promise;
+        }
+        if(!names.length){
+            error = 'Names is not an array!';
+            logger.error(error);
+            deferred.reject(error);
+            return deferred.promise;
+        }
+        //convert array to csv list
+        names = names.join(',');
+        
+        var base = config.riot.endpointUrls.summoner;
+        var url = base + names;
+
+        apiCall(url)
+        .then(function(summonerData){
+            //Convert json object with key-value to an array of just values
+            var values = lodash.values(summonerData);
+            var promises = [];
+            lodash.forEach(values, function(summoner){
+                promises.push(Summoner.create(summoner.id, summoner.name));
+            });
+            return q.all(promises);
+        })
+        .then(deferred.resolve)
+        .fail(deferred.reject);
+        return deferred.promise;
+    },
+
     champMasteries: function(summonerName){
         var deferred = q.defer();
         //if they give a name, get just that one's masteries.
