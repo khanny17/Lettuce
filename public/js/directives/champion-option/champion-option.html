@@ -1,5 +1,6 @@
 <div class="champion-option">
-    <div class="image-wrapper">
+    <div class="image-wrapper" ng-click="select()(champion)"
+    ng-class="{ selected: isSelected()(champion) }">
         <img class="champion-image" ng-src="{{::getImageUrl(champion)}}" />
         <span class="champion-mastery" ng-bind="masteryLevel" ng-if="masteryLevel"></span>
     </div>

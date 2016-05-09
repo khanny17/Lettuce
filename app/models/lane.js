@@ -8,7 +8,8 @@ var q = require('q');
 var Lane = mongoose.model('Lane', {
     name: String,
     compID: String,
-    championNameFilter: String
+    championNameFilter: String,
+    selectedChampion: Number
 });
 
 
@@ -72,6 +73,24 @@ var methods = {
             deferred.resolve();
         });
         return deferred.promise;
+    },
+    selectChampion: function(laneID, championID) {
+        var deferred = q.defer();
+        //Params: query, object, options, callback
+        Lane.update({
+            _id: laneID
+        }, {
+            selectedChampion: championID
+        }, function(err){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+                return;
+            }
+            logger.debug(laneID + ' selected Champion: ' + championID);
+            deferred.resolve();
+        });
+        return deferred.promise;
     }
 };
 
@@ -80,5 +99,6 @@ module.exports = {
     create: methods.create,
     get: methods.get,
     getByCompID: methods.getByCompID,
-    updateChampFilter: methods.updateChampFilter
+    updateChampFilter: methods.updateChampFilter,
+    selectChampion: methods.selectChampion
 };

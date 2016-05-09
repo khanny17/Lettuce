@@ -1,14 +1,14 @@
 <div class="builder-column-filter">
     <!-- The type of the filter doesnt change in its lifetime -->
     <!-- We can use this knowledge to optimize with bind once -->
-    <div class="input-group">
+    <div class="input-group" ng-class="{'has-error': hasError()}">
         <span class="input-group-addon hidden-sm hidden-xs">
             <i class="fa" ng-class="::getIcon()"></i>
         </span>
         
         <input type="text" placeholder="{{::placeholder}}" ng-model="filter.model"
         class="form-control builder-filter"  ng-disabled="readOnly"
-        uib-typeahead="option for option in ::filter.options | filter:$viewValue | limitTo:3"/>
+        uib-typeahead="option for option in ::filter.options | filter:$viewValue | limitTo:3" />
 
         <span class="input-group-btn">
             <button class="btn btn-danger" ng-click="delete(filter._id)" ng-disabled="readOnly">

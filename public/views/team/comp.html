@@ -5,16 +5,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <p>{{lane.name}}</p>
-                    <div title="Lock to external edits">
+                    <!-- <div title="Lock to external edits">
                         <i class="fa clickable" ng-click="locked = !locked"
                         ng-class="{'fa-unlock': !locked, 'fa-lock': locked}"></i>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="panel-body">
                     <builder-column champions="champions" filters="lane.filters"
-                                    lane-id="{{lane._id}}" champion-name="lane.championNameFilter"
-                                    read-only="!authenticated"></builder-column>
+                        lane="lane" champion-name="lane.championNameFilter"
+                        read-only="!authenticated"></builder-column>
                 </div>
             </div>
         </div>

@@ -24,7 +24,7 @@ angular.module('BuilderColumn', [
             champions: '=',
             filters: '=',
             championName: '=',
-            laneID: '@laneId',
+            lane: '=',
             readOnly: '='
         },
         templateUrl: 'js/directives/builder-column/builder-column.html',
@@ -37,7 +37,7 @@ angular.module('BuilderColumn', [
 
             //Update Champion Name Filter
             var valueWeJustGot = null;
-            socket.on('lane:champFilterUpdate:' + scope.laneID, function(laneData){
+            socket.on('lane:champFilterUpdate:' + scope.lane._id, function(laneData){
                 scope.championName = laneData.championNameFilter;
                 valueWeJustGot = laneData.championNameFilter;
             });
@@ -45,7 +45,7 @@ angular.module('BuilderColumn', [
             scope.$watch('championName', function(newVal, oldVal){
                 if(newVal !== valueWeJustGot && newVal !== oldVal){
                     socket.emit('lane:champFilterUpdate', {
-                        _id: scope.laneID,
+                        _id: scope.lane._id,
                         championNameFilter: scope.championName
                     });
                 } else {
@@ -66,12 +66,12 @@ angular.module('BuilderColumn', [
                 }
 
                 socket.emit('filter:add', { 
-                    laneID: scope.laneID, 
+                    laneID: scope.lane._id, 
                     type: filterOption.type 
                 });
             };
 
-            socket.on('filter:add:'+ scope.laneID, function(filter){
+            socket.on('filter:add:'+ scope.lane._id, function(filter){
                 initFilter(filter);
                 scope.filters.push(filter);
             });
@@ -81,11 +81,11 @@ angular.module('BuilderColumn', [
             scope.deleteFilter = function deleteFilter(id) {
                 socket.emit('filter:delete', {
                     _id: id,
-                    laneID: scope.laneID
+                    laneID: scope.lane._id
                 });
             };
 
-            socket.on('filter:delete:'+ scope.laneID, function(id){
+            socket.on('filter:delete:'+ scope.lane._id, function(id){
                 _.remove(scope.filters, function(filter){
                     return filter._id === id;
                 });
@@ -161,7 +161,7 @@ angular.module('BuilderColumn', [
                             return champ.name;
                         });
                     });
-                }else {
+                } else {
                     filter.options = BuilderFilter.getFilterTypeOptions(filter.type);
                 }
             }
@@ -173,6 +173,26 @@ angular.module('BuilderColumn', [
                     return null;
                 }
                 return mastery.championLevel;
+            };
+
+
+
+
+            //Selecting champion
+            scope.select = function selectChampion(champion) {
+                scope.lane.selectedChampion = champion.id;
+                socket.emit('lane:selectChampion', { 
+                    laneID: scope.lane._id, 
+                    championID: champion.id 
+                });
+            };
+
+            socket.on('lane:selectChampion:' + scope.lane._id, function(championID){
+                scope.lane.selectedChampion = championID;
+            });
+
+            scope.isSelected = function(champion) {
+                return champion.id === scope.lane.selectedChampion;
             };
         }
     };

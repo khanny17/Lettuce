@@ -23,7 +23,7 @@
                 ng-model="championName" ng-disabled="readOnly"/>
 
         <champion-option champion="champ" mastery-level="{{getMasteryLevel(champ)}}"
-
+        select="select" is-selected="isSelected"
         ng-repeat="champ in filteredChamps = (champions
                     | filterByChamp:getBannedChamps()
                     | filterByRole:getRoles()

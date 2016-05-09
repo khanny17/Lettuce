@@ -45,6 +45,13 @@ angular.module('BuilderColumnFilter', ['SocketFactory'])
                 }
                 return 'fa-circle';
             };
+
+            scope.hasError = function hasError() {
+                if(scope.filter.options) {
+                    return !_.includes(scope.filter.options, scope.filter.model);
+                }
+                return false;
+            };
         }
     };
 }]);
