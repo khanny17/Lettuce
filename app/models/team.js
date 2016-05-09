@@ -5,10 +5,9 @@ var logger = require('../utilities/logger');
 var lodash = require('lodash');
 var q = require('q');
 var Team = mongoose.model('Team', {
-    name: { type: String, unique: true, required: true }, 
-    nameLower: { type: String, unique: true, required: true } //lowercase copy of the name
-    //TODO this is not being validated somehow... 
-    //I think it is because we need to wipe our db or something
+    name: { type: String, unique: true, required: true, validate: /^[a-zA-Z0-9]+$/ }, 
+    //lowercase copy of the name
+    nameLower: { type: String, unique: true, required: true,  validate: /^[a-z0-9]+$/ }
 });
 
 

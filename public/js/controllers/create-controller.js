@@ -22,6 +22,11 @@ angular.module('CreateController', ['TeamService'])
             return;
         }
 
+        if(newVal && !/^[a-zA-Z0-9]+$/.test(newVal)) {
+            $scope.validationErrors.name = 'Only letters and numbers are allowed';
+            return;
+        }
+
         //Get the team names and check to see if the name is taken yet
         teamService.getTeamNames(function(teamNames){
             if(teamNames.indexOf(newVal) >= 0){
@@ -36,7 +41,6 @@ angular.module('CreateController', ['TeamService'])
 
     $scope.createTeam = function() {
         teamService.createTeam($scope.team, function(data){
-            teamService.goToTeamPage(data.name); //opens in new tab
             $scope.success = true;
             $scope.teamPageUrl = teamService.buildTeamUrl(data.name);
         });
