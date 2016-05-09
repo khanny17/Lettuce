@@ -7,7 +7,8 @@ var q = require('q');
 var Team = mongoose.model('Team', {
     name: { type: String, unique: true, required: true, validate: /^[a-zA-Z0-9]+$/ }, 
     //lowercase copy of the name
-    nameLower: { type: String, unique: true, required: true,  validate: /^[a-z0-9]+$/ }
+    nameLower: { type: String, unique: true, required: true,  validate: /^[a-z0-9]+$/ },
+    tag: { type: String, required: true }
 });
 
 
@@ -16,11 +17,8 @@ var methods = {
     create: function(team){
         var deferred = q.defer();
 
-        //TODO validation!!
-
         //Save lowercase copy of name
         team.nameLower = team.name.toLowerCase();
-        //We should remove weird characters
 
         Team.create(team, function(err, result){
             if(err){

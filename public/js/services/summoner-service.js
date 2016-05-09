@@ -9,6 +9,7 @@ function($q, $http, TeamName, notificationService){
     var that = this;
     //Current promise of request to get team summoners
     var teamSummoners = null;
+    var teamSummonersPromise = null;
 
     var championMasteryCache = {
         //summonerName: {
@@ -19,8 +20,8 @@ function($q, $http, TeamName, notificationService){
 
     //"soft cache" the summoners on this team
     that.getTeamSummoners = function getTeamSummoners(forceRefresh) {
-        if(!teamSummoners || forceRefresh) {
-            teamSummoners = $http({
+        if(!teamSummonersPromise || forceRefresh) {
+            teamSummonersPromise = $http({
                 url: '/api/summoner/get-by-team',
                 method: 'GET',
                 params: { teamname: TeamName.val } 
@@ -29,10 +30,10 @@ function($q, $http, TeamName, notificationService){
                 teamSummoners = response.data;
                 return teamSummoners;
             });
-            return teamSummoners;
+            return teamSummonersPromise;
         }
 
-        return teamSummoners;
+        return teamSummonersPromise;
     };
 
     //WARNING - this will get whatever we have at the time
@@ -73,6 +74,8 @@ function($q, $http, TeamName, notificationService){
                 promises.push(that.getSummonerMasteries(summoner.name), forceRefresh);
             });
             return $q.all(promises);
+        }, function(e){
+            console.log(e);
         });
     };
 

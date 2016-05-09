@@ -18,8 +18,10 @@
                 even need to think about it, you just give it a model and voila!
 
                 -->
-                <text-input model="team.name" label="Team Name" error="validationErrors.name"
-                success="validationSuccess.name"></text-input>
+                <text-input model="team.name" label="Team Name" error="validationErrors.name"></text-input>
+
+                <text-input model="team.tag" label="Tag" error="validationErrors.tag"></text-input>
+
                 <button class="btn btn-primary" ng-disabled="hasErrors()" ng-click="createTeam()">Create</button>
                 <p class="text-success" ng-if="success">Success! Your team page can be found at: <a ng-href="{{teamPageUrl}}">{{teamPageUrl}}</a></p>
             </div>
