@@ -1,8 +1,8 @@
 'use strict';
 angular.module('CreateController', ['TeamService'])
 
-.controller('createController', ['$scope', '$state', 'teamService',
-    function($scope, $state, teamService){
+.controller('createController', ['$scope', '$state', 'teamService', 'TeamName',
+    function($scope, $state, teamService, TeamName){
 
     //This is an empty JSON object to start, but as you add inputs with
     //  "ng-model=team.exampleProperty" it will populate those values in this object
@@ -42,7 +42,7 @@ angular.module('CreateController', ['TeamService'])
     $scope.createTeam = function() {
         teamService.createTeam($scope.team, function(data){
             $scope.success = true;
-            $scope.teamPageUrl = teamService.buildTeamUrl(data.name);
+            $scope.teamPageUrl = teamService.buildTeamUrl(data.name, TeamName.val);
         });
     };
 
