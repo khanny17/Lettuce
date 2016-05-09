@@ -39,6 +39,16 @@ angular.module('CreateController', ['TeamService'])
         });
     });
 
+    $scope.$watch('team.tag', function(newVal){
+        if(!newVal){
+            $scope.validationErrors.tag = 'Tag is required';
+        } else if(newVal.length > 5){
+            $scope.validationErrors.tag = 'Max of 5 characters allowed';
+        } else {
+            $scope.validationErrors.tag = null;
+        }
+    });
+
     $scope.createTeam = function() {
         teamService.createTeam($scope.team, function(data){
             $scope.success = true;
