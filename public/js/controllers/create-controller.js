@@ -36,7 +36,13 @@ angular.module('CreateController', ['TeamService'])
 
     $scope.createTeam = function() {
         teamService.createTeam($scope.team, function(data){
-            teamService.goToTeamPage(data.name);
+            teamService.goToTeamPage(data.name); //opens in new tab
+            $scope.success = true;
+            $scope.teamPageUrl = teamService.buildTeamUrl(data.name);
         });
+    };
+
+    $scope.hasErrors = function() {
+        return !$scope.team.name || $scope.validationErrors.name;
     };
 }]);
