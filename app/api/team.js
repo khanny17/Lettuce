@@ -1,6 +1,10 @@
 'use strict';
 
+var q = require('q');
+var _ = require('lodash');
 var Team = require('../models/team');
+var User = require('../models/user');
+var logger = require('../utilities/logger');
 
 //Maps functions to endpoints
 var init = function(router){
@@ -36,9 +40,26 @@ var endpoints = {
     },
 
     find: function(req, res){
+        logger.debug('/find: ' + req.query.name);
+        var foundTeams;
         Team.findByName(req.query.name)
         .then(function(teams){
-            res.status(200).send(teams);
+            var promises = [];
+            foundTeams = teams;
+            foundTeams.forEach(function(team){
+                promises.push(User.getByTeam(team.nameLower));
+            });
+            return q.all(promises);
+        })
+        .then(function(arrayofUsers){
+            var users = _.flatten(arrayofUsers);
+            users.forEach(function(user){
+                var team = _.find(foundTeams, function(team){
+                    return team.nameLower === user.teamname;
+                });
+                (team.users || (team.users = [])).push(user);
+            });
+            res.status(200).send(foundTeams);
         })
         .catch(res.status(500).send);
     },

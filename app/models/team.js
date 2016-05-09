@@ -68,7 +68,7 @@ var methods = {
                 '$regex': name,
                 '$options': 'i'
             }
-        }, function(err, results){
+        }).lean().exec(function(err, results){
             if(err){
                 logger.error(err);
                 deferred.reject(err);

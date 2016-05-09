@@ -68,13 +68,17 @@ var methods = {
 		var deferred = q.defer();
 
 		User.find({
-			teamname: teamname
-		}).lean().exec(function(err, teams){
+			teamname: teamname.toLowerCase()
+		}).lean().exec(function(err, users){
 			if(err){
 				logger.error(err);
 				return deferred.reject(err);
 			}
-			deferred.resolve(teams);
+			users.forEach(function(user){
+				delete user.password;
+				delete user._id;
+			});
+			deferred.resolve(users);
 		});
 		return deferred.promise;
 	},
