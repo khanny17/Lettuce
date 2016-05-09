@@ -1,13 +1,15 @@
 'use strict';
-angular.module('SummonerService', [])
+angular.module('SummonerService', ['NotificationService'])
 
 //This module handles server calls for summoner data
 
-.service('summonerService', ['$q', '$http', 'TeamName',
+.service('summonerService', ['$q', '$http', 'TeamName', 'notificationService',
 
-    function($q, $http, TeamName){
-    
+function($q, $http, TeamName, notificationService){
+    var that = this;
+    //Current promise of request to get team summoners
     var teamSummoners = null;
+
     var championMasteryCache = {
         //summonerName: {
         //  championId: champMastery
@@ -16,9 +18,9 @@ angular.module('SummonerService', [])
 
 
     //"soft cache" the summoners on this team
-    this.getTeamSummoners = function getTeamSummoners() {
-        if(!teamSummoners) {
-            return $http({
+    that.getTeamSummoners = function getTeamSummoners(forceRefresh) {
+        if(!teamSummoners || forceRefresh) {
+            teamSummoners = $http({
                 url: '/api/summoner/get-by-team',
                 method: 'GET',
                 params: { teamname: TeamName.val } 
@@ -27,15 +29,16 @@ angular.module('SummonerService', [])
                 teamSummoners = response.data;
                 return teamSummoners;
             });
+            return teamSummoners;
         }
 
-        return $q.when(teamSummoners);
+        return teamSummoners;
     };
 
     //WARNING - this will get whatever we have at the time
     //Make sure you have already called "getTeamSummoners"
     //I know this is bad practice :(
-    this.getTeamSummonersSynch = function (){
+    that.getTeamSummonersSynch = function (){
         return teamSummoners;
     };
 
@@ -45,20 +48,32 @@ angular.module('SummonerService', [])
 
     //Gives you the mastery level 
     //that a summoner has with a champion
-    this.getMastery = function getMastery(summonerName, championID){
-        return this.getSummonerMasteries(summonerName)
+    that.getMastery = function getMastery(summonerName, championID){
+        return that.getSummonerMasteries(summonerName)
         .then(function(masteries){
             return masteries[championID];
         });
     };
 
     //I really hate that i keep doing this to myself
-    this.getMasterySynch = function getMasterySynch(summonerName, championID) {
-        var masteries = this.getSummonerMasteriesSynch(summonerName);
+    that.getMasterySynch = function getMasterySynch(summonerName, championID) {
+        var masteries = that.getSummonerMasteriesSynch(summonerName);
         if(!masteries) {
             return null;
         }
         return masteries[championID];
+    };
+
+    //Gets all champ masteries for the current team
+    that.getTeamSummonerMasteries = function getTeamSummonerMasteries(forceRefresh) {
+        that.getTeamSummoners(forceRefresh)
+        .then(function(summoners){
+            var promises = [];
+            summoners.forEach(function(summoner){
+                promises.push(that.getSummonerMasteries(summoner.name), forceRefresh);
+            });
+            return $q.all(promises);
+        });
     };
 
     //Retrieves a summoner's masteries from the server, then 
@@ -66,7 +81,7 @@ angular.module('SummonerService', [])
     //We wont hit the server for all the champ masteries for that
     //summoner name again unless you pass a truthy value as
     //forceRefresh
-    this.getSummonerMasteries = function(summonerName, forceRefresh) {
+    that.getSummonerMasteries = function(summonerName, forceRefresh) {
         //lowercase the summoner name
         summonerName = (summonerName || '').toLowerCase();
 
@@ -94,8 +109,12 @@ angular.module('SummonerService', [])
     //server yet. BE CAREFUL when using this that you have
     //already loaded the summoner masteries
     //for that summoner
-    this.getSummonerMasteriesSynch = function(summonerName) {
+    that.getSummonerMasteriesSynch = function(summonerName) {
         summonerName = (summonerName || '').toLowerCase();
         return championMasteryCache[summonerName];
     };
+
+    notificationService.on('registered', function(){
+        that.getTeamSummonerMasteries(true);
+    });
 }]);

@@ -43,6 +43,7 @@ angular.module('AuthService', ['NotificationService'])
         if (result.data.success) {
           storeUserCredentials(result.data.token);
           notificationService.notify('authenticated');
+          notificationService.notify('registered');
           resolve(result.data.msg);
         } else {
           reject(result.data);

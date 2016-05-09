@@ -47,11 +47,13 @@ var endpoints = {
         })
         .then(function(){
             //Send a response - we made the user.
-            res.json({success: true, msg: 'Successfully created user'});
             logger.debug('Success creating ' + req.body.name);
             //Now that the user is free, lets get their data
             return riotUpdateService.update
             .champMasteries(req.body.summoner);
+        })
+        .then(function(){
+            res.json({success: true, msg: 'Successfully created user'});
         })
         .fail(function(msg){
             logger.warn(msg);

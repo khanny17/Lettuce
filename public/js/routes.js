@@ -74,15 +74,7 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
                 }],
                 summonerChampionMasteries: ['$q', 'summonerService', 
                 function($q, summonerService){
-                    return summonerService.getTeamSummoners()
-                    .then(function(summoners){
-                        var promises = [];
-                        summoners.forEach(function(summoner){
-                            promises.push(summonerService
-                                .getSummonerMasteries(summoner.name));
-                        });
-                        return $q.all(promises);
-                    });
+                    return summonerService.getTeamSummonerMasteries();
                 }]
             }
         })
