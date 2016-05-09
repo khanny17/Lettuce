@@ -165,6 +165,15 @@ angular.module('BuilderColumn', [
                     filter.options = BuilderFilter.getFilterTypeOptions(filter.type);
                 }
             }
+
+            scope.getMasteryLevel = function getMasteryLevel(champ) {
+                var summoner = scope.getSummonerName();
+                var mastery = summonerService.getMasterySynch(summoner, champ.id);
+                if(!mastery){
+                    return null;
+                }
+                return mastery.championLevel;
+            };
         }
     };
 }]);

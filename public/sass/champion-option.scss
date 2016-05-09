@@ -2,4 +2,21 @@
     .champion-image {
         width: 100%;
     }
+
+    .image-wrapper {
+        position: relative;
+    }
+
+    .champion-mastery {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        background: red;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 22px;
+    }
 }

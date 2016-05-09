@@ -7,7 +7,7 @@ angular.module('ChampionOption', ['ChampionService'])
         restrict: 'E',
         scope: {
             champion: '=',
-            masteryLevel: '='
+            masteryLevel: '@'
         },
         templateUrl: 'js/directives/champion-option/champion-option.html',
         link: function(scope) {

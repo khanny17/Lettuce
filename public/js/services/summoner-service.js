@@ -52,6 +52,15 @@ angular.module('SummonerService', [])
         });
     };
 
+    //I really hate that i keep doing this to myself
+    this.getMasterySynch = function getMasterySynch(summonerName, championID) {
+        var masteries = this.getSummonerMasteriesSynch(summonerName);
+        if(!masteries) {
+            return null;
+        }
+        return masteries[championID];
+    };
+
     //Retrieves a summoner's masteries from the server, then 
     //stores them locally - a type of "soft-cache" if you will
     //We wont hit the server for all the champ masteries for that

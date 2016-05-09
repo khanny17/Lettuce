@@ -22,7 +22,9 @@
         <input type="text" placeholder="Champion Name" class="form-control builder-filter"
                 ng-model="championName" ng-disabled="readOnly"/>
 
-        <champion-option champion="champ" ng-repeat="champ in filteredChamps = (champions
+        <champion-option champion="champ" mastery-level="{{getMasteryLevel(champ)}}"
+
+        ng-repeat="champ in filteredChamps = (champions
                     | filterByChamp:getBannedChamps()
                     | filterByRole:getRoles()
                     | sortByMastery:getSummonerName()
