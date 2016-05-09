@@ -25,6 +25,12 @@ angular.module('ChampionService', ['Configuration'])
         return callback(champions);
     };
 
+    this.getChampionName = function getChampionName(id) {
+        return _.find(champions, function(champ){
+            return champ.id === id;
+        }).name;
+    };
+
     this.getChampionImageUrl = function(champion) {
         return Config.championImageUrlBase + champion.image.full;
     };

@@ -12,4 +12,6 @@ angular.module('CompController', ['ChampionService'])
     championService.getChampions(function(champions){
         $scope.champions = champions;
     });
+
+    $scope.getChampName = championService.getChampionName;
 }]);
