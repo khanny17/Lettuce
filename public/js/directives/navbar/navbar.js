@@ -42,6 +42,8 @@ angular.module('Navbar', ['AuthModals', 'AuthService', 'NotificationService'])
             notificationService.on('unauthenticated', function(){
                 scope.authenticated = false;
             });
+
+            scope.collapsed = true;
         }
     };
 }]);

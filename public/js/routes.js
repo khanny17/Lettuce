@@ -52,7 +52,8 @@ function( $stateProvider,   $urlRouterProvider, $locationProvider) {
         })
         .state('team.home', {
             url: '/',
-            templateUrl: 'views/team/home.html'
+            templateUrl: 'views/team/home.html',
+            controller: 'homeController'
         })
         .state('team.comps', {
             url: '/comps',

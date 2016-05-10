@@ -1,0 +1,31 @@
+<div class="player-stats jumbotron">
+    <h4 ng-bind="::summoner.name"></h4>
+    <div class="champion" ng-click="showDetail(champ)"
+        ng-repeat="champ in summoner.stats.listOfChamps | orderBy:'-stats.'+orderProperty | limitTo:3">
+        <img class="champion-image" ng-src="{{getChampImage(champ.id)}}" />
+        <p class="champion-name">{{getChampName(champ.id)}}</p>
+    </div>
+    <div class="stats" ng-if="selectedChamp">
+        <h5>{{getChampName(selectedChamp.id)}} Current Season Ranked Stats:</h5>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <p>Number of Games: {{selectedChamp.stats.totalSessionsPlayed}}</p>
+                <p>Most Champions Killed: {{selectedChamp.stats.maxChampionsKilled}}</p>
+                <p>Double Kills: {{selectedChamp.stats.totalDoubleKills}}</p>
+                <p>Penta Kills: {{selectedChamp.stats.totalPentaKills}}</p>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <p>Wins: {{selectedChamp.stats.totalSessionsWon}}</p>
+                <p>Most Deaths in One Game: {{selectedChamp.stats.maxNumDeaths}}</p>
+                
+                <p>Triple Kills: {{selectedChamp.stats.totalTripleKills}}</p>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <p>Losses: {{selectedChamp.stats.totalSessionsLost}}</p>
+                <p>Total Gold Earned: {{selectedChamp.stats.totalGoldEarned}}</p>
+                <p>Quadra Kills: {{selectedChamp.stats.totalQuadraKills}}</p>
+            </div>
+        </div>
+    </div>
+    <select class="order-select form-control" ng-model="orderProperty" ng-options="option.value as option.label for option in orderOptions"></select>
+</div>

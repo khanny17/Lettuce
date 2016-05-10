@@ -139,6 +139,14 @@ html, body {
     margin-top: 50px;
 }
 
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar-btn {
+    margin-right: 5px;
+}
+
 //End Team Page
 
 //Not found page
@@ -166,8 +174,51 @@ html, body {
 //Comps page
 
 .comps-page {
+
     .lane-data {
         display: inline-block;
+    }
+
+    h2 {
+        display: inline-block;
+    }
+
+    .champion-thumbnail {
+        position: relative;
+        display: inline-block;
+        margin-right: 5px;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .lane-name {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+            font-weight: bolder;
+            background: rgba(50, 50, 50, 0.6);
+            width: 40px;
+            height: 40px;
+            text-align: center;
+
+            p {
+                top: 6px;
+                position: relative;
+                font-size: 20px;
+                margin: 0;
+                cursor: normal;
+            }
+        }
+
+        &:hover {
+            .lane-name {
+                display: block;
+            }
+        }
     }
 }
 
@@ -207,3 +258,29 @@ html, body {
 }
 
 //End comp page
+
+.home {
+    .jumbotron {
+        text-align: left;
+    }
+
+    .champion {
+        display: inline-block;
+        margin-left: 5px;
+    }
+}
+
+.player-stats {
+    position: relative;
+
+    .order-select {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: auto;
+    }
+
+    .champion-image {
+        cursor: pointer;
+    }
+}

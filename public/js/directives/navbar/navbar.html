@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-static-top">
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
@@ -9,7 +9,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" ng-click="collapsed = !collapsed">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -18,53 +18,31 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="navbar-collapse" ng-class="{collapse: collapsed}">
       <ul class="nav navbar-nav">
         <li ng-class="{active: isActive('/comps')}"><a ui-sref="team.comps" href="">Comps</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
 
         <li ng-if="!authenticated">
           <p class="navbar-btn">
-            <button type="button" class="btn btn-default"ng-click="register()">Register</button>
+            <button type="button" class="btn btn-default" ng-click="register()">Register</button>
           </p>
         </li>
 
         <li ng-if="!authenticated">
           <p class="navbar-btn">
-            <button type="button" class="btn btn-default"ng-click="login()">Login</button>
+            <button type="button" class="btn btn-default" ng-click="login()">Login</button>
           </p>
         </li>
 
         <li ng-if="authenticated">
           <p class="navbar-btn">
-            <button type="button" class="btn btn-default"ng-click="logout()">Logout</button>
+            <button type="button" class="btn btn-default" ng-click="logout()">Logout</button>
           </p>
         </li>
 
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

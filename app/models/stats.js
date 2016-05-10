@@ -10,7 +10,6 @@ var q = require('q');
 var ChampStats = mongoose.model('ChampStats', {
     summonerId: Number,
     listOfChamps: {}
-    
 });
 
 /**
@@ -31,14 +30,29 @@ var methods = {
                 deferred.reject(err);
                 return;
             }
-            logger.info('Added Stats for ' + champStat.summonerId);
+            logger.debug('Added Stats for ' + champStat.summonerId);
             deferred.resolve(champStat);
         });
         return deferred.promise;
-        
+    },
+
+    getBySummonerId: function(id) {
+        var deferred = q.defer();
+        if(!id) {
+            deferred.reject('No id given!');
+            return deferred.promise;
+        }
+        ChampStats.findOne({
+            summonerId: id
+        }).lean().exec(function(err, stats){
+            if(err){
+                logger.error(err);
+                deferred.reject(err);
+            } 
+            deferred.resolve(stats);
+        });
+        return deferred.promise;
     }
 };
 
-module.exports = {
-    create: methods.create
-};
+module.exports = methods;

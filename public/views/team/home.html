@@ -1,3 +1,13 @@
-<div>
-    Team Page Home
+<div class="home">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>{{team.name}} Home</h3>
+        </div>
+    </div>
+
+    <div class="row" ng-repeat="summoner in summoners">
+        <div class="col-md-12">
+            <player-stats summoner="summoner"></player-stats>
+        </div>
+    </div>
 </div>

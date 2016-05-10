@@ -13,10 +13,12 @@ angular.module('Lettuce', [
     'NotfoundController', 
     'CompsController', 
     'CompController', 
+    'HomeController',
 
     'OnEnterDirective',
     'TeamSearchResultDirective',
     'BuilderColumn',
+    'PlayerStats',
     'Inputs',
     'Navbar'
 ])

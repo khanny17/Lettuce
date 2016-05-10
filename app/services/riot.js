@@ -89,7 +89,7 @@ var update = {
         return deferred.promise;
     },
 
-//Pulls Match data from a id from RIOT API then called MatchDetail to play with response!
+    //Pulls Match data from a id from RIOT API then called MatchDetail to play with
     match: function(id, winningTeamName, losingTeamName){
         var deferred = q.defer();
         var error;
@@ -113,13 +113,13 @@ var update = {
 
         return deferred.promise;
     },
-/**
-*Update our summoner data
-**/   
+    /**
+    *Update our summoner data
+    **/   
     summoners: function(names){
         var deferred = q.defer();
         var error;
-        if(!names){
+        if(!names || names.length <= 0){
             error = 'No summoner names provided, not updating any!';
             logger.warn(error);
             deferred.reject(error);
@@ -151,10 +151,10 @@ var update = {
         .fail(deferred.reject);
         return deferred.promise;
     },
-/**
-*Pulls champ mastery data from RIOT API using summoner Id's 
-*and calls our ChampionMastery Model!
-**/
+    /**
+    *Pulls champ mastery data from RIOT API using summoner Id's 
+    *and calls our ChampionMastery Model!
+    **/
     champMasteries: function(summonerName){
         var deferred = q.defer();
         //if they give a name, get just that one's masteries.
@@ -168,15 +168,17 @@ var update = {
             var error;
             //Hack for when we call getOneByName
             //to turn it into an array
-            if(!summoners.length){
+            if(!(summoners.length >= 0)){
                 summoners = [summoners];
             }
 
             if(!summoners || summoners.length <= 0) {
                 error = 'No Summoners  found';
                 logger.warn(error);
-                deferred.reject(error);    
+                deferred.resolve(error); 
+                throw 'No Summoners'; 
             }
+
             summoners = lodash.map(summoners, function(summoner){
                 return summoner.id;
             });
@@ -199,19 +201,21 @@ var update = {
             return q.all(promises);
         })
         .then(deferred.resolve)
-        .fail(deferred.reject);
+        .fail(function(err){
+            deferred.reject(err);
+        });
         return deferred.promise;
     },
-/**
-*Takes summoners and finds there matches and pulls if they won or not and stores 
-*it in database to determine winRate for a summoner on a champion
-**/
-winRateFinder: function(){
+    /**
+    *Takes summoners and finds there matches and pulls if they won or not and stores 
+    *it in database to determine winRate for a summoner on a champion
+    **/
+    winRateFinder: function(){
         var deferred = q.defer();
         Summoner.getAll()
         .then(function(summoners){
             var error;
-            if(!summoners || summoners.length===0) {
+            if(!summoners || summoners.length === 0) {
                 error = 'No Summoners  found';
                 logger.warn(error);
                 deferred.reject(error);    
@@ -268,10 +272,10 @@ winRateFinder: function(){
 
         });
     },
-/**
-*This will pull champion stats for each summoner in our database.
-*Once pulled we store them using our stats model so they can be displayed.
-**/
+    /**
+    *This will pull champion stats for each summoner in our database.
+    *Once pulled we store them using our stats model so they can be displayed.
+    **/
     statFinder: function(){
         var deferred = q.defer();
         Summoner.getAll()

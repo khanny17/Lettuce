@@ -4,6 +4,7 @@ angular.module('ChampionService', ['Configuration'])
 //Handles champion data
 
 .service('championService', ['$http', 'Config', function($http, Config){
+    var that = this;
     var champions; //local copy of the list of champions
 
     //This function gets the champion data once
@@ -13,7 +14,7 @@ angular.module('ChampionService', ['Configuration'])
     //IF you call it really fast, it will hit the server again.
     //long term, a better, more generic solution for all of these
     //one time service calls is needed.
-    this.getChampions = function(callback) {
+    that.getChampions = function(callback) {
         if(!champions) {
             return $http.get('/api/riot/getChampions')
             .then(function(response){
@@ -25,13 +26,22 @@ angular.module('ChampionService', ['Configuration'])
         return callback(champions);
     };
 
-    this.getChampionName = function getChampionName(id) {
-        return _.find(champions, function(champ){
+    that.getChampionName = function getChampionName(id) {
+        var champ = _.find(champions, function(champ){
             return champ.id === id;
-        }).name;
+        });
+
+        return champ ? champ.name : null;
     };
 
-    this.getChampionImageUrl = function(champion) {
+    that.getImageByChampID = function(champID) {
+        var champ = _.find(champions, function(champ){
+            return champ.id === champID;
+        });
+        return that.getChampionImageUrl(champ);
+    };
+
+    that.getChampionImageUrl = function(champion) {
         return Config.championImageUrlBase + champion.image.full;
     };
 }]);

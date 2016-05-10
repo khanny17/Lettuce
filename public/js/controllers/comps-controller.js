@@ -1,14 +1,28 @@
 'use strict';
-angular.module('CompsController', ['CompService', 'CreateCompModal'])
+angular.module('CompsController', ['CompService', 'CreateCompModal', 'ChampionService'])
 
-.controller('compsController', ['$scope', '$uibModal', 'comps', 'createCompModal',
+.controller('compsController', [
+    '$scope',
+    'comps', 
+    'createCompModal', 
+    'championService',
 
-function($scope, $uibModal, comps, createCompModal) {
+    function($scope, comps, createCompModal, championService) {
 
-    $scope.comps = comps;
+        $scope.comps = comps;
 
-    $scope.openCreateCompModal = function() {
-        createCompModal.open();
-    };
+        $scope.openCreateCompModal = function() {
+            createCompModal.open();
+        };
 
-}]);
+        championService.getChampions(function(){
+
+            $scope.getImage = function(id){
+                if(!id) {
+                    return '';
+                }
+                return championService.getImageByChampID(id);
+            };
+        });
+    }
+]);

@@ -22,14 +22,17 @@ angular.module('CreateController', ['TeamService'])
             return;
         }
 
-        if(newVal && !/^[a-zA-Z0-9]+$/.test(newVal)) {
+        if(newVal && !/^[a-zA-Z0-9-\s]+$/.test(newVal)) {
             $scope.validationErrors.name = 'Only letters and numbers are allowed';
             return;
         }
 
         //Get the team names and check to see if the name is taken yet
         teamService.getTeamNames(function(teamNames){
-            if(teamNames.indexOf(newVal) >= 0){
+            var exists = _.find(teamNames, function(name){
+                return name.toLowerCase() === newVal.toLowerCase();
+            });
+            if(exists){
                 //Its taken, give them a niceish message about the error
                 $scope.validationErrors.name = 'That team already has a page';
             } else {
