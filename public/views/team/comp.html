@@ -4,7 +4,7 @@
         <div class="lane" ng-repeat="lane in comp.lanes">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p>{{lane.name}} - {{getChampName(lane.selectedChampion)}}</p>
+                    <p>{{lane.name}} - <b>{{getChampName(lane.selectedChampion)}}</b></p>
                     <!-- <div title="Lock to external edits">
                         <i class="fa clickable" ng-click="locked = !locked"
                         ng-class="{'fa-unlock': !locked, 'fa-lock': locked}"></i>

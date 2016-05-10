@@ -18,7 +18,11 @@ function(championService){
                 {label: 'Wins', value: 'totalSessionsWon'},
                 {label: 'Losses', value: 'totalSessionsLost'},
                 {label: 'Most Deaths', value: 'maxNumDeaths'},
-                {label: 'Total Gold Earned', value: 'totalGoldEarned'}
+                {label: 'Total Gold Earned', value: 'totalGoldEarned'},
+                {label: 'Double Kills', value: 'totalDoubleKills'},
+                {label: 'Triple Kills', value: 'totalTripleKills'},
+                {label: 'Quadra Kills', value: 'totalQuadraKills'},
+                {label: 'Penta Kills', value: 'totalPentaKills'},
             ];
 
             scope.showDetail = function(champ){

@@ -1,9 +1,6 @@
 .builder-column {
     .filters {
-        padding-bottom: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-bottom: 10px;
+        padding: 10px;
         overflow-y: auto;
         overflow-x: visible;
         max-height: 300px;
@@ -11,8 +8,7 @@
     }
 
     .results {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 10px;
     }
 }
 
