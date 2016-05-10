@@ -168,7 +168,8 @@ var update = {
             var error;
             //Hack for when we call getOneByName
             //to turn it into an array
-            if(!(summoners.length >= 0)){
+            var checkLen = summoners.length >= 0;
+            if(!checkLen){
                 summoners = [summoners];
             }
 

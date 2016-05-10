@@ -53,6 +53,7 @@ var endpoints = {
         })
         .then(function(){
             res.json({success: true, msg: 'Successfully created user'});
+            riotUpdateService.update.statFinder(); //start this off
         })
         .fail(function(msg){
             logger.warn(msg);
@@ -60,7 +61,8 @@ var endpoints = {
         });
         
     },
-//This goes into the database and finds users who have created accounts previously
+    
+    //This goes into the database and finds users who have created accounts previously
     authenticate: function(req, res) {
         logger.debug('Attempting to authenticate ' + req.body.name +
             ' on team ' + req.body.teamname);

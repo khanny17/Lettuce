@@ -21,7 +21,7 @@ module.exports = {
     riot: {
         apiKey: process.env.RIOT_API_KEY,
         //The interval at which to pull data from riot
-        updateInterval: '00 * * * * *', //should hopefully execute every hour
+        updateInterval: '00 00 * * * *', //should hopefully execute every hour
 
         rateLimit : 1000, //rate limit in milliseconds
 
