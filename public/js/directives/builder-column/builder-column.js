@@ -180,6 +180,9 @@ angular.module('BuilderColumn', [
 
             //Selecting champion
             scope.select = function selectChampion(champion) {
+                if(scope.readOnly){
+                    return;
+                }
                 scope.lane.selectedChampion = champion.id;
                 socket.emit('lane:selectChampion', { 
                     laneID: scope.lane._id, 
