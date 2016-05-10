@@ -89,6 +89,7 @@ var update = {
         return deferred.promise;
     },
 
+//Pulls Match data from a id from RIOT API then called MatchDetail to play with response!
     match: function(id, winningTeamName, losingTeamName){
         var deferred = q.defer();
         var error;
@@ -112,8 +113,9 @@ var update = {
 
         return deferred.promise;
     },
-
-    //Update our summoner data
+/**
+*Update our summoner data
+**/   
     summoners: function(names){
         var deferred = q.defer();
         var error;
@@ -149,7 +151,10 @@ var update = {
         .fail(deferred.reject);
         return deferred.promise;
     },
-
+/**
+*Pulls champ mastery data from RIOT API using summoner Id's 
+*and calls our ChampionMastery Model!
+**/
     champMasteries: function(summonerName){
         var deferred = q.defer();
         //if they give a name, get just that one's masteries.
@@ -184,7 +189,6 @@ var update = {
             return q.all(promises);
         })
         .then(function(masteries){
-            //console.log(masteries);
             masteries = lodash.flatten(masteries);
             var promises = [];
             masteries.forEach(function(championMastery){
@@ -198,6 +202,10 @@ var update = {
         .fail(deferred.reject);
         return deferred.promise;
     },
+/**
+*Takes summoners and finds there matches and pulls if they won or not and stores 
+*it in database to determine winRate for a summoner on a champion
+**/
 winRateFinder: function(){
         var deferred = q.defer();
         Summoner.getAll()
@@ -213,22 +221,17 @@ winRateFinder: function(){
             });
             var base = config.riot.endpointUrls.game;
             var promises = [];
-            //console.log(summoners);
             summoners.forEach(function(id){
-                //console.log(id);
                 var url = base + id  +'/recent';
                 promises.push(apiCall(url));
             });
-            //console.log(promises);
             return q.all(promises);
         })
         .then(function(summonerGamePairs){
             var arrayOfArrays = lodash.map(summonerGamePairs, function(summonerGamePair){
                 return summonerGamePair.games;
             });
-            //console.log(arrayOfArrays); // This is a array of game arrays
-            var arrayOfGames = lodash.flatten(arrayOfArrays);
-            //console.log(arrayOfGames); // A array of Game objects
+            var arrayOfGames = lodash.flatten(arrayOfArrays); // A list of Games
             var champWinRateArray = [{
                 championId: 8,
                 normalWinRate: 1,
@@ -236,13 +239,13 @@ winRateFinder: function(){
             }]; 
             var totalGames = 0;
             arrayOfGames.forEach(function(game){ // Iterating though a list of games
-                //console.log(game);
               
                 if (String(game.stats.win) === 'true'){
                       totalGames++;
                     var found = champWinRateArray.some(function(partOfArray){
                         return partOfArray.championId === game.championId;
                     });
+                    // Checking for duplicate chamions in the array
                     if (!found ){
                         champWinRateArray.push({
                             championId: game.championId,
@@ -253,22 +256,22 @@ winRateFinder: function(){
                         for (var i = 0; i < champWinRateArray.length; i++){
                             if (champWinRateArray[i].championId === game.championId){
                                 champWinRateArray[i].normalWinRate++;
-                                
                             }
                         }
                     } 
                 } 
             });
-           //console.log(champWinRateArray);
-            console.log(totalGames);
             champWinRateArray.forEach(function(champWinRate){
-            // console.log(champWinRate);
                 WinRate.create(champWinRate);
            });
            
 
         });
     },
+/**
+*This will pull champion stats for each summoner in our database.
+*Once pulled we store them using our stats model so they can be displayed.
+**/
     statFinder: function(){
         var deferred = q.defer();
         Summoner.getAll()
@@ -284,27 +287,22 @@ winRateFinder: function(){
             });
             var base = config.riot.endpointUrls.stats;
             var promises = [];
-            //console.log(summoners);
             summoners.forEach(function(id){
-                //console.log(id);
                 var url = base + id  +'/ranked?season=SEASON2016';
                 promises.push(apiCall(url));
             });
-            //console.log(promises);
             return q.all(promises);
         })
         .then(function(summonerStats){
             var champStats = [];
             summonerStats.forEach(function(sumStats){
-                // console.log(sumStats.summonerId);
-                // console.log(sumStats.champions);
+                // Passing in the summonerId and them a list of champions stats.
                 champStats.push({
                     summonerId: sumStats.summonerId,
                     listOfChamps: sumStats.champions
                 });
             });
             champStats.forEach(function(ChampStats){
-                //console.log(ChampStats);
                 Stats.create(ChampStats);
             });
         });

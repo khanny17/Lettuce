@@ -1,9 +1,9 @@
 'use strict';
 
-var q = require('q');
-var User = require('../models/user');
-var Summoner = require('../models/summoner');
-var logger = require('../utilities/logger');
+var q                   = require('q');
+var User              = require('../models/user');
+var Summoner    = require('../models/summoner');
+var logger            = require('../utilities/logger');
 
 //Maps functions to endpoints
 var init = function(router){

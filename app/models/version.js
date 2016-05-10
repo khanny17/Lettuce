@@ -1,5 +1,5 @@
 'use strict';
-//models//Champion.js
+
 
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');

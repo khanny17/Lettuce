@@ -12,6 +12,12 @@ var Comp = mongoose.model('comp', {
 });
 
 
+/**
+*This model handles a Comp and storing that information in the database.
+*When a comp is created it allows us to store it in the database and then find it 
+*either by compID or teamname.
+**/
+
 var methods = {
     create: function(name, teamname){
         var deferred  = q.defer();      

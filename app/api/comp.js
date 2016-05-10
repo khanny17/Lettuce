@@ -1,11 +1,11 @@
 'use strict';
 
-var Filter      = require('../models/filter');
-var Lane        = require('../models/lane');
-var Comp        = require('../models/comp');
-var q           = require('q');
-var _           = require('lodash');
-var logger = require('../utilities/logger');
+var Filter        = require('../models/filter');
+var Lane         = require('../models/lane');
+var Comp       = require('../models/comp');
+var q               = require('q');
+var _               = require('lodash');
+var logger      = require('../utilities/logger');
 
 
 
@@ -19,7 +19,6 @@ var init = function(router){
 var endpoints = {
     createComp: function(req, res){
         var compID;
-
         Comp.create(req.body.comp.name, req.body.comp.teamname) 
         .then(function(comp){
             compID = comp._id;
@@ -88,7 +87,7 @@ var endpoints = {
 };
 
 
-//i still love you
+//This takes in a CompID and returns a full Comp
 function getFullComp(compID){
     if(!compID) {
         return q.reject('No Comp ID given');

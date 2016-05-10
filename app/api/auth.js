@@ -1,12 +1,12 @@
 'use strict';
 
-var User        = require('../models/user');
-var UserModel   = User.User;
-var Summoner        = require('../models/summoner');
-var config      = require('../../config/config');
-var jwt         = require('jwt-simple');    
-var logger      = require('../utilities/logger');
-var apiCall = require('../utilities/apiHandler.js');
+var User                = require('../models/user');
+var UserModel      = User.User;
+var Summoner      = require('../models/summoner');
+var config              = require('../../config/config');
+var jwt                   = require('jwt-simple');    
+var logger              = require('../utilities/logger');
+var apiCall             = require('../utilities/apiHandler.js');
 
 var riotUpdateService = require('../services/riot');
 
@@ -31,7 +31,6 @@ var endpoints = {
 
         apiCall(url)
         .then(function(summonerData){
-            console.log(summonerData);
             return Summoner.create(
                 summonerData[req.body.summoner].id,
                 req.body.summoner 
@@ -61,6 +60,7 @@ var endpoints = {
         });
         
     },
+//This goes into the database and finds users who have created accounts previously
     authenticate: function(req, res) {
         logger.debug('Attempting to authenticate ' + req.body.name +
             ' on team ' + req.body.teamname);

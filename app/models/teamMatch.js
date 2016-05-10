@@ -1,5 +1,5 @@
 'use strict';
-//models/teamMatch.js
+
 
 /**
  * This model holds a short summary of the matches for a given team

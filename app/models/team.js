@@ -11,7 +11,9 @@ var Team = mongoose.model('Team', {
     tag: { type: String, required: true }
 });
 
-
+/**
+*This model handles the teams in the database as they are created.
+**/
 var methods = {
     //Creates team, throwing error if it already exists
     create: function(team){

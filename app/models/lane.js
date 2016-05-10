@@ -12,7 +12,10 @@ var Lane = mongoose.model('Lane', {
     selectedChampion: Number
 });
 
-
+/**
+*This model handles lanes that are being set by filters. We can grab the lane a champ
+*is being set on and then store that in the database or pull ir out for displaying.
+**/
 var methods = {
     create:function(name, compID){
         var deferred  = q.defer();      

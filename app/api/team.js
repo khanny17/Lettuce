@@ -1,10 +1,10 @@
 'use strict';
 
-var q = require('q');
-var _ = require('lodash');
-var Team = require('../models/team');
-var User = require('../models/user');
-var logger = require('../utilities/logger');
+var q               = require('q');
+var _               = require('lodash');
+var Team       = require('../models/team');
+var User         = require('../models/user');
+var logger      = require('../utilities/logger');
 
 //Maps functions to endpoints
 var init = function(router){
@@ -31,7 +31,6 @@ var endpoints = {
     },
 
     createTeam: function(req, res){
-        //TODO: Authenticate this shit!
         Team.create(req.body)
         .then(function(team){
             res.status(200).send(team);
@@ -63,6 +62,7 @@ var endpoints = {
         })
         .catch(res.status(500).send);
     },
+
 
     get: function(req, res){
         Team.get(req.query.name)

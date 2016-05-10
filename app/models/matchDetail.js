@@ -1,5 +1,5 @@
 'use strict';
-//models/matchDetail.js
+
 
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
@@ -28,7 +28,6 @@ var methods = {
     createFromApiData: function(id, apiData, winningTeamName, losingTeamName){
         var deferred = q.defer();
         var normalized = helpers.normalize(id,apiData,winningTeamName,losingTeamName);
-        //DO THE THING
         MatchDetail.update({
             id: id
         }, normalized,{
@@ -46,7 +45,7 @@ var methods = {
         return deferred.promise;
     }
 };
-
+// This is where we take apart the data. eg: matchDuration, matchCreation, etc..
 var helpers = {
     normalize: function(id, matchDetails, winningTeamName, losingTeamName){
         var normalized = {};
@@ -66,8 +65,6 @@ var helpers = {
         }
         //move to BlueTeam/PurpleTeam objects
         if(matchDetails.teams[0].id === 100){
-            //NOT SURE IF 100 IS BLUE
-            //I'm just guessing
             normalized.BlueTeam = matchDetails.teams[0];
             normalized.PurpleTeam = matchDetails.teams[1];
         } else {
