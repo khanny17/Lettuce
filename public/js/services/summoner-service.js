@@ -120,4 +120,18 @@ function($q, $http, TeamName, notificationService){
     notificationService.on('registered', function(){
         that.getTeamSummonerMasteries(true);
     });
+
+
+    that.getSummonerChampStats = function(summonerName) {
+        return $http({
+            url: '/api/summoner/get-champ-stats',
+            method: 'GET',
+            params: { summoner: summonerName } 
+        })
+        .then(function(response){
+            return response.data;
+        }, function(e){
+            console.error(e);
+        });
+    };
 }]);

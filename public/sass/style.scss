@@ -207,3 +207,24 @@ html, body {
 }
 
 //End comp page
+
+.home {
+    .jumbotron {
+        text-align: left;
+    }
+
+    .champion {
+        display: inline-block;
+        margin-left: 5px;
+    }
+}
+
+.player-stats {
+    position: relative;
+
+    .order-select {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+}
