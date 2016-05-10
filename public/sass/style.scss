@@ -166,8 +166,19 @@ html, body {
 //Comps page
 
 .comps-page {
+
     .lane-data {
         display: inline-block;
+    }
+
+    h2 {
+        display: inline-block;
+    }
+
+    .champion-thumbnail {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
     }
 }
 

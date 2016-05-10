@@ -2,6 +2,7 @@
     <div class="row" ng-repeat="comp in comps">
         <div class="col-md-12">
             <h2><a ui-sref="team.comp({compID:comp._id})" ng-bind="::comp.name"></a></h2>
+            <img class="champion-thumbnail" ng-repeat="lane in comp.lanes" ng-src="{{getImage(lane.selectedChampion)}}" />
         </div>
     </div>
     
