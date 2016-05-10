@@ -22,7 +22,7 @@ angular.module('CreateController', ['TeamService'])
             return;
         }
 
-        if(newVal && !/^[a-zA-Z0-9-\s]+$/.test(newVal)) {
+        if(newVal && !/^[a-zA-Z0-9\s]+$/.test(newVal)) {
             $scope.validationErrors.name = 'Only letters and numbers are allowed';
             return;
         }

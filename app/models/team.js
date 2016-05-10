@@ -5,9 +5,9 @@ var logger = require('../utilities/logger');
 var lodash = require('lodash');
 var q = require('q');
 var Team = mongoose.model('Team', {
-    name: { type: String, unique: true, required: true, validate: /^[a-zA-Z0-9]+$/ }, 
+    name: { type: String, unique: true, required: true, validate: /^[a-zA-Z0-9\s]+$/ }, 
     //lowercase copy of the name
-    nameLower: { type: String, unique: true, required: true,  validate: /^[a-z0-9]+$/ },
+    nameLower: { type: String, unique: true, required: true,  validate: /^[a-z0-9\s]+$/},
     tag: { type: String, required: true }
 });
 

@@ -65,7 +65,9 @@ var endpoints = {
 
 
     get: function(req, res){
-        Team.get(req.query.name)
+        var name = req.query.name.split('-').join(' ');
+        console.log(name);
+        Team.get(name)
         .then(function(team){
             res.status(200).send(team);
         })

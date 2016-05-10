@@ -82,7 +82,7 @@ angular.module('TeamService', [])
     //#struggle
     this.buildTeamUrl = function(teamName, currentTeamName) {
         var domains = $location.host().split('.');
-
+        teamName = teamName.split(' ').join('-');
         var subdomain;
         if(domains.length >= 2) {
             subdomain = $location.host().split('.')[0];
