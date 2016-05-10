@@ -134,7 +134,7 @@ gulp.task('config', function(){
 gulp.task('config-passport', function(){
     return gulp.src(sources.passportConfig)
     .pipe(gulp.dest(dest.config));
-})
+});
 
 //Runs tasks associated with moving or compiling code
 gulp.task('compile', ['sass', 'app','config-passport', 'config', 'test', 
