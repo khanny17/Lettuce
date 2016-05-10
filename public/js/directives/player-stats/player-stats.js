@@ -13,6 +13,13 @@ function(championService){
         templateUrl: 'js/directives/player-stats/player-stats.html',
         link: function(scope) {
             scope.orderProperty = 'maxNumDeaths';
+            scope.orderOptions = [
+                {label: 'Number of Games', value: 'totalSessionsPlayed'},
+                {label: 'Wins', value: 'totalSessionsWon'},
+                {label: 'Losses', value: 'totalSessionsLost'},
+                {label: 'Most Deaths', value: 'maxNumDeaths'},
+                {label: 'Total Gold Earned', value: 'totalGoldEarned'}
+            ];
 
             scope.showDetail = function(champ){
                 if(scope.selectedChamp && scope.selectedChamp.id === champ.id){
@@ -26,6 +33,7 @@ function(championService){
                 scope.getChampName = championService.getChampionName;
                 scope.getChampImage = championService.getImageByChampID;
             });
+
         }
     };
 }]);
