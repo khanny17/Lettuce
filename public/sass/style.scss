@@ -11,6 +11,15 @@ html, body {
     width: 100%;
 }
 
+.disclaimer {
+    position: fixed;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    &:hover {
+        background: white;
+    }
+}
+
 .page-wrapper {
     height: 100%;
     width: 100%;
