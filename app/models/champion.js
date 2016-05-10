@@ -1,9 +1,11 @@
 'use strict';
-//models//Champion.js
+
 
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');
+
+//Set up a mongoose model
 var Champion = mongoose.model('Champion', {
     id: Number, //This is taken from the "gameId" field
     name: String,
@@ -11,6 +13,10 @@ var Champion = mongoose.model('Champion', {
     image: Object,
     roles: [String] //eg Tank, Fighter, Support
 });
+
+/**
+*This model handles champion data taken from the RIOT API. 
+**/
 
 
 var methods = {
@@ -21,7 +27,7 @@ var methods = {
         Champion.update({
             id: champion.id
         }, champion, {
-            upsert: true //Create if it doesn't exist
+            upsert: true 
         }, function(err){
             if(err){
                 logger.error(err);

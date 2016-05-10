@@ -5,13 +5,16 @@ var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
 var q = require('q');
 
-// This will store champion stats for a summer based on mastery. 
+
+
 var ChampStats = mongoose.model('ChampStats', {
     summonerId: Number,
     listOfChamps: {}
 });
 
-
+/**
+*This will store champion stats for a summoner.
+**/
 var methods = {
     create: function(champStats){
         var deferred = q.defer();

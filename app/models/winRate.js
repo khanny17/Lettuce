@@ -11,7 +11,9 @@ var ChampWinRate = mongoose.model('ChampWinRate', {
     normalWinRate: Number,
     masteryWinRate: Number
 });
-
+/**
+*This is where we take the winRateArray we created and store it in the database.
+**/
 
 var methods = {
     create: function(champWinRate){

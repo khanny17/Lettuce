@@ -25,6 +25,13 @@ var types = {
     }
 };
 
+
+/**
+*This model handles filters on the Comp building page and stores them when created.
+*We can grab filters form the database after they are stored when we need them to
+*be displayed by the model.
+**/
+
 var methods = {
     create:function(type, laneID){
         var deferred  = q.defer();      
@@ -103,7 +110,6 @@ var methods = {
             logger.debug('Deleted Filter: ' + id);
             deferred.resolve();
         });
-
         return deferred.promise;
     }
 };

@@ -1,9 +1,10 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var logger = require('../utilities/logger');
-var q = require('q');
+var mongoose        = require('mongoose');
+var logger               = require('../utilities/logger');
+var q                       = require('q');
 
+//Set up a mongoose model
 var ChampMastery = mongoose.model('ChampMastery', {
     championId: Number,
     championLevel: Number,
@@ -16,7 +17,9 @@ var ChampMastery = mongoose.model('ChampMastery', {
     playerId: Number
 });
 
-
+/**
+*This model handles champion mastery in relation to the database.
+**/
 
 
 var methods = {
@@ -28,20 +31,18 @@ var methods = {
             {championId: championMastery.championId}
             ]
         }, championMastery, {
-            upsert: true //Create if its not there bro ;)
+            upsert: true 
         }, function(err){
             if(err){
                 logger.error(err);
                 deferred.reject(err);
                 return;
             }
-
-            //logger.debug('Created/Updated ChampMastery for ' +
-              //  championMastery.playerId + ' ' + championMastery.championId);
             deferred.resolve();
         });
         return deferred.promise;
     },
+
     getByPlayerId: function(playerId) {
         var deferred = q.defer();
 
@@ -50,8 +51,6 @@ var methods = {
             logger.warn('No playerId given');
             return deferred.promise;
         }
-
-
         ChampMastery.find({
             playerId: playerId
         }, function(err, results){
@@ -71,14 +70,3 @@ module.exports = {
     create: methods.create,
     getByPlayerId: methods.getByPlayerId
 };
-
-
- // "highestGrade": "S+",
- //      "championPoints": 114969,
- //      "playerId": 54680051,
- //      "championPointsUntilNextLevel": 0,
- //      "chestGranted": true,
- //      "championLevel": 5,
- //      "championId": 99,
- //      "championPointsSinceLastLevel": 93369,
- //      "lastPlayTime": 1461644811000

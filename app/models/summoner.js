@@ -1,5 +1,5 @@
 'use strict';
-//models/summoner.js
+
 
 var mongoose = require('mongoose');
 var logger = require('../utilities/logger');
@@ -9,7 +9,10 @@ var Summoner = mongoose.model('Summoner', {
     name: String
 });
 
-
+/**
+*This model handles summoner informationand stores it in the database.
+*Allows us to grab summoners out of database when we need to show them.
+**/
 var methods = {
     //Creates Summoner or updates if already exists
     create: function(id, name){
@@ -21,7 +24,7 @@ var methods = {
             id: id,
             name: name
         },{
-            upsert: true //Create if it doesn't exist
+            upsert: true 
         }, function(err){
             if(err){
                 logger.error(err);

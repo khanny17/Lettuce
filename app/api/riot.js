@@ -1,10 +1,10 @@
 //app/api/riot.js
 'use strict';
-var Summoner = require('../models/summoner');
-var Champion = require('../models/champion');
-var teamMatch = require('../models/teamMatch');
-var config = require('../../config/config.js');
-var Version = require('../models/version');
+var Summoner        = require('../models/summoner');
+var Champion         = require('../models/champion');
+var teamMatch       = require('../models/teamMatch');
+var config                = require('../../config/config.js');
+var Version             = require('../models/version');
 
 //Maps functions to endpoints
 var init = function(router){
